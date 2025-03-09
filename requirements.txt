@@ -1,6 +1,5 @@
 # For the python program
 comtypes ; sys_platform == 'win32'
-psutil
 
 # to generate the docs
 mkdocs

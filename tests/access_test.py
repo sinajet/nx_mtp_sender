@@ -7,7 +7,6 @@ import os
 import platform
 import sys
 import time
-import psutil
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
@@ -61,11 +60,6 @@ if __name__ == "__main__":
         else:
             print(f"{root} not found")
 
-    def memory() -> int:
-        """get used memory"""
-        process = psutil.Process(os.getpid())
-        return process.memory_info().rss
-
     def main() -> None:
         """Hauptprogramm"""
         locale.setlocale(locale.LC_ALL, "")
@@ -73,7 +67,6 @@ if __name__ == "__main__":
         print("Devices:")
         devicelist = mtp_access.get_portable_devices()
         for _ in range(1):
-            # print(memory())
             time.sleep(0.01)
             for dev in devicelist:
                 device_name, device_desc = dev.get_description()
