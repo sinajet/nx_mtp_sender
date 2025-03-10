@@ -4,6 +4,7 @@ start_virtual_environment.cmd
 create_docs.sh
 create_docs.cmd
 requirements_other.txt
+mkdocs.yml
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

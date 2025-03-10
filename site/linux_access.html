@@ -815,7 +815,7 @@ OS:
     size: The size of the file in bytes
     content_type: Type of the entry. One of the WPD_CONTENT_TYPE_ constants</p>
 <p>Exceptions:
-    comtypes.COMError: If something went wrong</p>
+    IOError: If something went wrong</p>
 </li>
 <li>
 <p>'PortableDevice' - Class for one portable device found connected
@@ -1020,8 +1020,8 @@ get_content</p>
 <span class="sd">            A tuple with of name, description. Both are &quot;&quot; if no device was found</span>
 
 <span class="sd">        Examples:</span>
-<span class="sd">            &gt;&gt;&gt; import win_mtp.mtp_access</span>
-<span class="sd">            &gt;&gt;&gt; dev = win_mtp.mtp_access.get_portable_devices()</span>
+<span class="sd">            &gt;&gt;&gt; import mtp.linux_access</span>
+<span class="sd">            &gt;&gt;&gt; dev = mtp.linux_access.get_portable_devices()</span>
 <span class="sd">            &gt;&gt;&gt; dev[0].get_description()</span>
 <span class="sd">            (&#39;Nokia 6&#39;, &#39;Nokia 6&#39;)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1038,8 +1038,8 @@ get_content</p>
 <span class="sd">            A list of instances of PortableDeviceContent, one for each storage</span>
 
 <span class="sd">        Examples:</span>
-<span class="sd">            &gt;&gt;&gt; import win_mtp.mtp_access</span>
-<span class="sd">            &gt;&gt;&gt; dev = win_mtp.mtp_access.get_portable_devices()</span>
+<span class="sd">            &gt;&gt;&gt; import mtp.linux_access</span>
+<span class="sd">            &gt;&gt;&gt; dev = mtp.linux_access.get_portable_devices()</span>
 <span class="sd">            &gt;&gt;&gt; str(dev[0].get_content())[:33]</span>
 <span class="sd">            &#39;&lt;PortableDeviceContent c_wchar_p(&#39;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1192,8 +1192,8 @@ get_content</p>
 
 
 <p><span class="doc-section-title">Examples:</span></p>
-    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">win_mtp.mtp_access</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dev</span> <span class="o">=</span> <span class="n">win_mtp</span><span class="o">.</span><span class="n">mtp_access</span><span class="o">.</span><span class="n">get_portable_devices</span><span class="p">()</span>
+    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">mtp.linux_access</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dev</span> <span class="o">=</span> <span class="n">mtp</span><span class="o">.</span><span class="n">linux_access</span><span class="o">.</span><span class="n">get_portable_devices</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">dev</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_content</span><span class="p">())[:</span><span class="mi">33</span><span class="p">]</span>
 <span class="go">&#39;&lt;PortableDeviceContent c_wchar_p(&#39;</span>
 </code></pre></div>
@@ -1228,8 +1228,8 @@ get_content</p>
 <span class="sd">        A list of instances of PortableDeviceContent, one for each storage</span>
 
 <span class="sd">    Examples:</span>
-<span class="sd">        &gt;&gt;&gt; import win_mtp.mtp_access</span>
-<span class="sd">        &gt;&gt;&gt; dev = win_mtp.mtp_access.get_portable_devices()</span>
+<span class="sd">        &gt;&gt;&gt; import mtp.linux_access</span>
+<span class="sd">        &gt;&gt;&gt; dev = mtp.linux_access.get_portable_devices()</span>
 <span class="sd">        &gt;&gt;&gt; str(dev[0].get_content())[:33]</span>
 <span class="sd">        &#39;&lt;PortableDeviceContent c_wchar_p(&#39;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1288,8 +1288,8 @@ name and description will be identical.</p>
 
 
 <p><span class="doc-section-title">Examples:</span></p>
-    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">win_mtp.mtp_access</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dev</span> <span class="o">=</span> <span class="n">win_mtp</span><span class="o">.</span><span class="n">mtp_access</span><span class="o">.</span><span class="n">get_portable_devices</span><span class="p">()</span>
+    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">mtp.linux_access</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dev</span> <span class="o">=</span> <span class="n">mtp</span><span class="o">.</span><span class="n">linux_access</span><span class="o">.</span><span class="n">get_portable_devices</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dev</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_description</span><span class="p">()</span>
 <span class="go">(&#39;Nokia 6&#39;, &#39;Nokia 6&#39;)</span>
 </code></pre></div>
@@ -1317,8 +1317,8 @@ name and description will be identical.</p>
 <span class="sd">        A tuple with of name, description. Both are &quot;&quot; if no device was found</span>
 
 <span class="sd">    Examples:</span>
-<span class="sd">        &gt;&gt;&gt; import win_mtp.mtp_access</span>
-<span class="sd">        &gt;&gt;&gt; dev = win_mtp.mtp_access.get_portable_devices()</span>
+<span class="sd">        &gt;&gt;&gt; import mtp.linux_access</span>
+<span class="sd">        &gt;&gt;&gt; dev = mtp.linux_access.get_portable_devices()</span>
 <span class="sd">        &gt;&gt;&gt; dev[0].get_description()</span>
 <span class="sd">        (&#39;Nokia 6&#39;, &#39;Nokia 6&#39;)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1851,8 +1851,8 @@ content_type: Type of the entry. One of the WPD_CONTENT_TYPE_ constants</p>
 <span class="sd">                        WPD_CONTENT_TYPE_DEVICE</span>
 
 <span class="sd">        Examples:</span>
-<span class="sd">            &gt;&gt;&gt; import win_mtp.mtp_access</span>
-<span class="sd">            &gt;&gt;&gt; dev = win_mtp.mtp_access.get_portable_devices()</span>
+<span class="sd">            &gt;&gt;&gt; import mtp.linux_access</span>
+<span class="sd">            &gt;&gt;&gt; dev = mtp.linux_access.get_portable_devices()</span>
 <span class="sd">            &gt;&gt;&gt; cont = dev[0].get_content()</span>
 <span class="sd">            &gt;&gt;&gt; cont.get_properties()</span>
 <span class="sd">            (&#39;HSG1316&#39;, 0, -1, datetime.datetime(1970, 1, 1, 0, 0), -1, -1, &#39;DQVSSCM799999999&#39;)</span>
@@ -1874,8 +1874,8 @@ content_type: Type of the entry. One of the WPD_CONTENT_TYPE_ constants</p>
 <span class="sd">            A Generator of PortableDeviceContent instances each representing a child entry.</span>
 
 <span class="sd">        Examples:</span>
-<span class="sd">            &gt;&gt;&gt; import win_mtp.mtp_access</span>
-<span class="sd">            &gt;&gt;&gt; dev = win_mtp.mtp_access.get_portable_devices()</span>
+<span class="sd">            &gt;&gt;&gt; import mtp.linux_access</span>
+<span class="sd">            &gt;&gt;&gt; dev = mtp.linux_access.get_portable_devices()</span>
 <span class="sd">            &gt;&gt;&gt; cont = dev[0].get_content()</span>
 <span class="sd">            &gt;&gt;&gt; str(cont.get_children()[0])[:58]</span>
 <span class="sd">            &quot;&lt;PortableDeviceContent s10001: (&#39;Interner Speicher&#39;, 0, -1&quot;</span>
@@ -1902,8 +1902,8 @@ content_type: Type of the entry. One of the WPD_CONTENT_TYPE_ constants</p>
 <span class="sd">            found.</span>
 
 <span class="sd">        Examples:</span>
-<span class="sd">            &gt;&gt;&gt; import win_mtp.mtp_access</span>
-<span class="sd">            &gt;&gt;&gt; dev = win_mtp.mtp_access.get_portable_devices()</span>
+<span class="sd">            &gt;&gt;&gt; import mtp.linux_access</span>
+<span class="sd">            &gt;&gt;&gt; dev = mtp.linux_access.get_portable_devices()</span>
 <span class="sd">            &gt;&gt;&gt; cont = dev[0].get_content()</span>
 <span class="sd">            &gt;&gt;&gt; str(cont.get_child(&quot;Interner Speicher&quot;))[:58]</span>
 <span class="sd">            &quot;&lt;PortableDeviceContent s10001: (&#39;Interner Speicher&#39;, 0, -1&quot;</span>
@@ -1929,8 +1929,8 @@ content_type: Type of the entry. One of the WPD_CONTENT_TYPE_ constants</p>
 <span class="sd">            found.</span>
 
 <span class="sd">        Examples:</span>
-<span class="sd">            &gt;&gt;&gt; import win_mtp.mtp_access</span>
-<span class="sd">            &gt;&gt;&gt; dev = win_mtp.mtp_access.get_portable_devices()</span>
+<span class="sd">            &gt;&gt;&gt; import mtp.linux_access</span>
+<span class="sd">            &gt;&gt;&gt; dev = mtp.linux_access.get_portable_devices()</span>
 <span class="sd">            &gt;&gt;&gt; cont = dev[0].get_content()</span>
 <span class="sd">            &gt;&gt;&gt; str(cont.get_path(&quot;Interner Speicher\\Android\\data&quot;))[:41]</span>
 <span class="sd">            &quot;&lt;PortableDeviceContent oE: (&#39;data&#39;, 1, -1&quot;</span>
@@ -1954,8 +1954,8 @@ content_type: Type of the entry. One of the WPD_CONTENT_TYPE_ constants</p>
 <span class="sd">            dirname: Name of the directory that shall be created</span>
 
 <span class="sd">        Examples:</span>
-<span class="sd">            &gt;&gt;&gt; import win_mtp.mtp_access</span>
-<span class="sd">            &gt;&gt;&gt; dev = win_mtp.mtp_access.get_portable_devices()</span>
+<span class="sd">            &gt;&gt;&gt; import mtp.linux_access</span>
+<span class="sd">            &gt;&gt;&gt; dev = mtp.linux_access.get_portable_devices()</span>
 <span class="sd">            &gt;&gt;&gt; cont = dev[0].get_content()</span>
 <span class="sd">            &gt;&gt;&gt; mycont = cont.get_path(&quot;Interner Speicher\\Music\\MyMusic&quot;)</span>
 <span class="sd">            &gt;&gt;&gt; if mycont: _ = mycont.remove()</span>
@@ -1976,8 +1976,8 @@ content_type: Type of the entry. One of the WPD_CONTENT_TYPE_ constants</p>
 <span class="sd">            inputstream: open python file</span>
 
 <span class="sd">        Examples:</span>
-<span class="sd">            &gt;&gt;&gt; import win_mtp.mtp_access</span>
-<span class="sd">            &gt;&gt;&gt; dev = win_mtp.mtp_access.get_portable_devices()</span>
+<span class="sd">            &gt;&gt;&gt; import mtp.linux_access</span>
+<span class="sd">            &gt;&gt;&gt; dev = mtp.linux_access.get_portable_devices()</span>
 <span class="sd">            &gt;&gt;&gt; cont = dev[0].get_content()</span>
 <span class="sd">            &gt;&gt;&gt; mycont = cont.get_path(&quot;Interner Speicher\\Music\\Test.mp3&quot;)</span>
 <span class="sd">            &gt;&gt;&gt; if mycont: _ = mycont.remove()</span>
@@ -1999,8 +1999,8 @@ content_type: Type of the entry. One of the WPD_CONTENT_TYPE_ constants</p>
 <span class="sd">            inputfilename: Name of the file that shall be uploaded</span>
 
 <span class="sd">        Examples:</span>
-<span class="sd">            &gt;&gt;&gt; import win_mtp.mtp_access</span>
-<span class="sd">            &gt;&gt;&gt; dev = win_mtp.mtp_access.get_portable_devices()</span>
+<span class="sd">            &gt;&gt;&gt; import mtp.linux_access</span>
+<span class="sd">            &gt;&gt;&gt; dev = mtp.linux_access.get_portable_devices()</span>
 <span class="sd">            &gt;&gt;&gt; cont = dev[0].get_content()</span>
 <span class="sd">            &gt;&gt;&gt; mycont = cont.get_path(&quot;Interner Speicher\\Music\\Test.mp3&quot;)</span>
 <span class="sd">            &gt;&gt;&gt; if mycont: _ = mycont.remove()</span>
@@ -2019,8 +2019,8 @@ content_type: Type of the entry. One of the WPD_CONTENT_TYPE_ constants</p>
 <span class="sd">            outputstream: Open python file for writing</span>
 
 <span class="sd">        Examples:</span>
-<span class="sd">            &gt;&gt;&gt; import win_mtp.mtp_access</span>
-<span class="sd">            &gt;&gt;&gt; dev = win_mtp.mtp_access.get_portable_devices()</span>
+<span class="sd">            &gt;&gt;&gt; import mtp.linux_access</span>
+<span class="sd">            &gt;&gt;&gt; dev = mtp.linux_access.get_portable_devices()</span>
 <span class="sd">            &gt;&gt;&gt; cont = dev[0].get_content()</span>
 <span class="sd">            &gt;&gt;&gt; cont = cont.get_path(&quot;Interner Speicher\\Ringtones\\hangouts_incoming_call.ogg&quot;)</span>
 <span class="sd">            &gt;&gt;&gt; name = &#39;..\\..\\Tests\\hangouts_incoming_call.ogg&#39;</span>
@@ -2040,8 +2040,8 @@ content_type: Type of the entry. One of the WPD_CONTENT_TYPE_ constants</p>
 <span class="sd">                            content will be replaced.</span>
 
 <span class="sd">        Examples:</span>
-<span class="sd">            &gt;&gt;&gt; import win_mtp.mtp_access</span>
-<span class="sd">            &gt;&gt;&gt; dev = win_mtp.mtp_access.get_portable_devices()</span>
+<span class="sd">            &gt;&gt;&gt; import mtp.linux_access</span>
+<span class="sd">            &gt;&gt;&gt; dev = mtp.linux_access.get_portable_devices()</span>
 <span class="sd">            &gt;&gt;&gt; cont = dev[0].get_content()</span>
 <span class="sd">            &gt;&gt;&gt; cont = cont.get_path(&quot;Interner Speicher\\Ringtones\\hangouts_incoming_call.ogg&quot;)</span>
 <span class="sd">            &gt;&gt;&gt; name = &#39;..\\..\\Tests\\hangouts_incoming_call.ogg&#39;</span>
@@ -2056,8 +2056,8 @@ content_type: Type of the entry. One of the WPD_CONTENT_TYPE_ constants</p>
 <span class="sd">            0 on OK, else a windows errorcode</span>
 
 <span class="sd">        Examples:</span>
-<span class="sd">            &gt;&gt;&gt; import win_mtp.mtp_access</span>
-<span class="sd">            &gt;&gt;&gt; dev = win_mtp.mtp_access.get_portable_devices()</span>
+<span class="sd">            &gt;&gt;&gt; import mtp.linux_access</span>
+<span class="sd">            &gt;&gt;&gt; dev = mtp.linux_access.get_portable_devices()</span>
 <span class="sd">            &gt;&gt;&gt; cont = dev[0].get_content()</span>
 <span class="sd">            &gt;&gt;&gt; mycont = cont.get_path(&quot;Interner Speicher\\Music\\Test.mp3&quot;)</span>
 <span class="sd">            &gt;&gt;&gt; if mycont: _ = mycont.remove()</span>
@@ -2214,8 +2214,8 @@ content_type: Type of the entry. One of the WPD_CONTENT_TYPE_ constants</p>
 
 
 <p><span class="doc-section-title">Examples:</span></p>
-    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">win_mtp.mtp_access</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dev</span> <span class="o">=</span> <span class="n">win_mtp</span><span class="o">.</span><span class="n">mtp_access</span><span class="o">.</span><span class="n">get_portable_devices</span><span class="p">()</span>
+    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">mtp.linux_access</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dev</span> <span class="o">=</span> <span class="n">mtp</span><span class="o">.</span><span class="n">linux_access</span><span class="o">.</span><span class="n">get_portable_devices</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cont</span> <span class="o">=</span> <span class="n">dev</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_content</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mycont</span> <span class="o">=</span> <span class="n">cont</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;Interner Speicher\Music\MyMusic&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">mycont</span><span class="p">:</span> <span class="n">_</span> <span class="o">=</span> <span class="n">mycont</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
@@ -2250,8 +2250,8 @@ content_type: Type of the entry. One of the WPD_CONTENT_TYPE_ constants</p>
 <span class="sd">        dirname: Name of the directory that shall be created</span>
 
 <span class="sd">    Examples:</span>
-<span class="sd">        &gt;&gt;&gt; import win_mtp.mtp_access</span>
-<span class="sd">        &gt;&gt;&gt; dev = win_mtp.mtp_access.get_portable_devices()</span>
+<span class="sd">        &gt;&gt;&gt; import mtp.linux_access</span>
+<span class="sd">        &gt;&gt;&gt; dev = mtp.linux_access.get_portable_devices()</span>
 <span class="sd">        &gt;&gt;&gt; cont = dev[0].get_content()</span>
 <span class="sd">        &gt;&gt;&gt; mycont = cont.get_path(&quot;Interner Speicher\\Music\\MyMusic&quot;)</span>
 <span class="sd">        &gt;&gt;&gt; if mycont: _ = mycont.remove()</span>
@@ -2316,8 +2316,8 @@ The used ProtableDeviceContent instance must be a file!</p>
 
 
 <p><span class="doc-section-title">Examples:</span></p>
-    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">win_mtp.mtp_access</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dev</span> <span class="o">=</span> <span class="n">win_mtp</span><span class="o">.</span><span class="n">mtp_access</span><span class="o">.</span><span class="n">get_portable_devices</span><span class="p">()</span>
+    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">mtp.linux_access</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dev</span> <span class="o">=</span> <span class="n">mtp</span><span class="o">.</span><span class="n">linux_access</span><span class="o">.</span><span class="n">get_portable_devices</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cont</span> <span class="o">=</span> <span class="n">dev</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_content</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cont</span> <span class="o">=</span> <span class="n">cont</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;Interner Speicher\Ringtones\hangouts_incoming_call.ogg&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;..\..\Tests\hangouts_incoming_call.ogg&#39;</span>
@@ -2351,8 +2351,8 @@ The used ProtableDeviceContent instance must be a file!</p>
 <span class="sd">                        content will be replaced.</span>
 
 <span class="sd">    Examples:</span>
-<span class="sd">        &gt;&gt;&gt; import win_mtp.mtp_access</span>
-<span class="sd">        &gt;&gt;&gt; dev = win_mtp.mtp_access.get_portable_devices()</span>
+<span class="sd">        &gt;&gt;&gt; import mtp.linux_access</span>
+<span class="sd">        &gt;&gt;&gt; dev = mtp.linux_access.get_portable_devices()</span>
 <span class="sd">        &gt;&gt;&gt; cont = dev[0].get_content()</span>
 <span class="sd">        &gt;&gt;&gt; cont = cont.get_path(&quot;Interner Speicher\\Ringtones\\hangouts_incoming_call.ogg&quot;)</span>
 <span class="sd">        &gt;&gt;&gt; name = &#39;..\\..\\Tests\\hangouts_incoming_call.ogg&#39;</span>
@@ -2413,8 +2413,8 @@ For easier usage use download_file</p>
 
 
 <p><span class="doc-section-title">Examples:</span></p>
-    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">win_mtp.mtp_access</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dev</span> <span class="o">=</span> <span class="n">win_mtp</span><span class="o">.</span><span class="n">mtp_access</span><span class="o">.</span><span class="n">get_portable_devices</span><span class="p">()</span>
+    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">mtp.linux_access</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dev</span> <span class="o">=</span> <span class="n">mtp</span><span class="o">.</span><span class="n">linux_access</span><span class="o">.</span><span class="n">get_portable_devices</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cont</span> <span class="o">=</span> <span class="n">dev</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_content</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cont</span> <span class="o">=</span> <span class="n">cont</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;Interner Speicher\Ringtones\hangouts_incoming_call.ogg&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;..\..\Tests\hangouts_incoming_call.ogg&#39;</span>
@@ -2453,8 +2453,8 @@ For easier usage use download_file</p>
 <span class="sd">        outputstream: Open python file for writing</span>
 
 <span class="sd">    Examples:</span>
-<span class="sd">        &gt;&gt;&gt; import win_mtp.mtp_access</span>
-<span class="sd">        &gt;&gt;&gt; dev = win_mtp.mtp_access.get_portable_devices()</span>
+<span class="sd">        &gt;&gt;&gt; import mtp.linux_access</span>
+<span class="sd">        &gt;&gt;&gt; dev = mtp.linux_access.get_portable_devices()</span>
 <span class="sd">        &gt;&gt;&gt; cont = dev[0].get_content()</span>
 <span class="sd">        &gt;&gt;&gt; cont = cont.get_path(&quot;Interner Speicher\\Ringtones\\hangouts_incoming_call.ogg&quot;)</span>
 <span class="sd">        &gt;&gt;&gt; name = &#39;..\\..\\Tests\\hangouts_incoming_call.ogg&#39;</span>
@@ -2550,8 +2550,8 @@ The search is case sensitive.</p>
 
 
 <p><span class="doc-section-title">Examples:</span></p>
-    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">win_mtp.mtp_access</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dev</span> <span class="o">=</span> <span class="n">win_mtp</span><span class="o">.</span><span class="n">mtp_access</span><span class="o">.</span><span class="n">get_portable_devices</span><span class="p">()</span>
+    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">mtp.linux_access</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dev</span> <span class="o">=</span> <span class="n">mtp</span><span class="o">.</span><span class="n">linux_access</span><span class="o">.</span><span class="n">get_portable_devices</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cont</span> <span class="o">=</span> <span class="n">dev</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_content</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">cont</span><span class="o">.</span><span class="n">get_child</span><span class="p">(</span><span class="s2">&quot;Interner Speicher&quot;</span><span class="p">))[:</span><span class="mi">58</span><span class="p">]</span>
 <span class="go">&quot;&lt;PortableDeviceContent s10001: (&#39;Interner Speicher&#39;, 0, -1&quot;</span>
@@ -2596,8 +2596,8 @@ The search is case sensitive.</p>
 <span class="sd">        found.</span>
 
 <span class="sd">    Examples:</span>
-<span class="sd">        &gt;&gt;&gt; import win_mtp.mtp_access</span>
-<span class="sd">        &gt;&gt;&gt; dev = win_mtp.mtp_access.get_portable_devices()</span>
+<span class="sd">        &gt;&gt;&gt; import mtp.linux_access</span>
+<span class="sd">        &gt;&gt;&gt; dev = mtp.linux_access.get_portable_devices()</span>
 <span class="sd">        &gt;&gt;&gt; cont = dev[0].get_content()</span>
 <span class="sd">        &gt;&gt;&gt; str(cont.get_child(&quot;Interner Speicher&quot;))[:58]</span>
 <span class="sd">        &quot;&lt;PortableDeviceContent s10001: (&#39;Interner Speicher&#39;, 0, -1&quot;</span>
@@ -2654,8 +2654,8 @@ The search is case sensitive.</p>
 
 
 <p><span class="doc-section-title">Examples:</span></p>
-    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">win_mtp.mtp_access</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dev</span> <span class="o">=</span> <span class="n">win_mtp</span><span class="o">.</span><span class="n">mtp_access</span><span class="o">.</span><span class="n">get_portable_devices</span><span class="p">()</span>
+    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">mtp.linux_access</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dev</span> <span class="o">=</span> <span class="n">mtp</span><span class="o">.</span><span class="n">linux_access</span><span class="o">.</span><span class="n">get_portable_devices</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cont</span> <span class="o">=</span> <span class="n">dev</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_content</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">cont</span><span class="o">.</span><span class="n">get_children</span><span class="p">()[</span><span class="mi">0</span><span class="p">])[:</span><span class="mi">58</span><span class="p">]</span>
 <span class="go">&quot;&lt;PortableDeviceContent s10001: (&#39;Interner Speicher&#39;, 0, -1&quot;</span>
@@ -2691,8 +2691,8 @@ The search is case sensitive.</p>
 <span class="sd">        A Generator of PortableDeviceContent instances each representing a child entry.</span>
 
 <span class="sd">    Examples:</span>
-<span class="sd">        &gt;&gt;&gt; import win_mtp.mtp_access</span>
-<span class="sd">        &gt;&gt;&gt; dev = win_mtp.mtp_access.get_portable_devices()</span>
+<span class="sd">        &gt;&gt;&gt; import mtp.linux_access</span>
+<span class="sd">        &gt;&gt;&gt; dev = mtp.linux_access.get_portable_devices()</span>
 <span class="sd">        &gt;&gt;&gt; cont = dev[0].get_content()</span>
 <span class="sd">        &gt;&gt;&gt; str(cont.get_children()[0])[:58]</span>
 <span class="sd">        &quot;&lt;PortableDeviceContent s10001: (&#39;Interner Speicher&#39;, 0, -1&quot;</span>
@@ -2792,8 +2792,8 @@ The search is case sensitive.</p>
 
 
 <p><span class="doc-section-title">Examples:</span></p>
-    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">win_mtp.mtp_access</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dev</span> <span class="o">=</span> <span class="n">win_mtp</span><span class="o">.</span><span class="n">mtp_access</span><span class="o">.</span><span class="n">get_portable_devices</span><span class="p">()</span>
+    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">mtp.linux_access</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dev</span> <span class="o">=</span> <span class="n">mtp</span><span class="o">.</span><span class="n">linux_access</span><span class="o">.</span><span class="n">get_portable_devices</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cont</span> <span class="o">=</span> <span class="n">dev</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_content</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">cont</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;Interner Speicher\Android\data&quot;</span><span class="p">))[:</span><span class="mi">41</span><span class="p">]</span>
 <span class="go">&quot;&lt;PortableDeviceContent oE: (&#39;data&#39;, 1, -1&quot;</span>
@@ -2837,8 +2837,8 @@ The search is case sensitive.</p>
 <span class="sd">        found.</span>
 
 <span class="sd">    Examples:</span>
-<span class="sd">        &gt;&gt;&gt; import win_mtp.mtp_access</span>
-<span class="sd">        &gt;&gt;&gt; dev = win_mtp.mtp_access.get_portable_devices()</span>
+<span class="sd">        &gt;&gt;&gt; import mtp.linux_access</span>
+<span class="sd">        &gt;&gt;&gt; dev = mtp.linux_access.get_portable_devices()</span>
 <span class="sd">        &gt;&gt;&gt; cont = dev[0].get_content()</span>
 <span class="sd">        &gt;&gt;&gt; str(cont.get_path(&quot;Interner Speicher\\Android\\data&quot;))[:41]</span>
 <span class="sd">        &quot;&lt;PortableDeviceContent oE: (&#39;data&#39;, 1, -1&quot;</span>
@@ -2959,8 +2959,8 @@ The search is case sensitive.</p>
 
 
 <p><span class="doc-section-title">Examples:</span></p>
-    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">win_mtp.mtp_access</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dev</span> <span class="o">=</span> <span class="n">win_mtp</span><span class="o">.</span><span class="n">mtp_access</span><span class="o">.</span><span class="n">get_portable_devices</span><span class="p">()</span>
+    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">mtp.linux_access</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dev</span> <span class="o">=</span> <span class="n">mtp</span><span class="o">.</span><span class="n">linux_access</span><span class="o">.</span><span class="n">get_portable_devices</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cont</span> <span class="o">=</span> <span class="n">dev</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_content</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cont</span><span class="o">.</span><span class="n">get_properties</span><span class="p">()</span>
 <span class="go">(&#39;HSG1316&#39;, 0, -1, datetime.datetime(1970, 1, 1, 0, 0), -1, -1, &#39;DQVSSCM799999999&#39;)</span>
@@ -3022,8 +3022,8 @@ The search is case sensitive.</p>
 <span class="sd">                    WPD_CONTENT_TYPE_DEVICE</span>
 
 <span class="sd">    Examples:</span>
-<span class="sd">        &gt;&gt;&gt; import win_mtp.mtp_access</span>
-<span class="sd">        &gt;&gt;&gt; dev = win_mtp.mtp_access.get_portable_devices()</span>
+<span class="sd">        &gt;&gt;&gt; import mtp.linux_access</span>
+<span class="sd">        &gt;&gt;&gt; dev = mtp.linux_access.get_portable_devices()</span>
 <span class="sd">        &gt;&gt;&gt; cont = dev[0].get_content()</span>
 <span class="sd">        &gt;&gt;&gt; cont.get_properties()</span>
 <span class="sd">        (&#39;HSG1316&#39;, 0, -1, datetime.datetime(1970, 1, 1, 0, 0), -1, -1, &#39;DQVSSCM799999999&#39;)</span>
@@ -3063,8 +3063,8 @@ The search is case sensitive.</p>
 </details>
 
 <p><span class="doc-section-title">Examples:</span></p>
-    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">win_mtp.mtp_access</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dev</span> <span class="o">=</span> <span class="n">win_mtp</span><span class="o">.</span><span class="n">mtp_access</span><span class="o">.</span><span class="n">get_portable_devices</span><span class="p">()</span>
+    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">mtp.linux_access</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dev</span> <span class="o">=</span> <span class="n">mtp</span><span class="o">.</span><span class="n">linux_access</span><span class="o">.</span><span class="n">get_portable_devices</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cont</span> <span class="o">=</span> <span class="n">dev</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_content</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mycont</span> <span class="o">=</span> <span class="n">cont</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;Interner Speicher\Music\Test.mp3&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">mycont</span><span class="p">:</span> <span class="n">_</span> <span class="o">=</span> <span class="n">mycont</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
@@ -3109,8 +3109,8 @@ The search is case sensitive.</p>
 <span class="sd">        0 on OK, else a windows errorcode</span>
 
 <span class="sd">    Examples:</span>
-<span class="sd">        &gt;&gt;&gt; import win_mtp.mtp_access</span>
-<span class="sd">        &gt;&gt;&gt; dev = win_mtp.mtp_access.get_portable_devices()</span>
+<span class="sd">        &gt;&gt;&gt; import mtp.linux_access</span>
+<span class="sd">        &gt;&gt;&gt; dev = mtp.linux_access.get_portable_devices()</span>
 <span class="sd">        &gt;&gt;&gt; cont = dev[0].get_content()</span>
 <span class="sd">        &gt;&gt;&gt; mycont = cont.get_path(&quot;Interner Speicher\\Music\\Test.mp3&quot;)</span>
 <span class="sd">        &gt;&gt;&gt; if mycont: _ = mycont.remove()</span>
@@ -3194,8 +3194,8 @@ The search is case sensitive.</p>
 
 
 <p><span class="doc-section-title">Examples:</span></p>
-    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">win_mtp.mtp_access</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dev</span> <span class="o">=</span> <span class="n">win_mtp</span><span class="o">.</span><span class="n">mtp_access</span><span class="o">.</span><span class="n">get_portable_devices</span><span class="p">()</span>
+    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">mtp.linux_access</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dev</span> <span class="o">=</span> <span class="n">mtp</span><span class="o">.</span><span class="n">linux_access</span><span class="o">.</span><span class="n">get_portable_devices</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cont</span> <span class="o">=</span> <span class="n">dev</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_content</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mycont</span> <span class="o">=</span> <span class="n">cont</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;Interner Speicher\Music\Test.mp3&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">mycont</span><span class="p">:</span> <span class="n">_</span> <span class="o">=</span> <span class="n">mycont</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
@@ -3231,8 +3231,8 @@ The search is case sensitive.</p>
 <span class="sd">        inputfilename: Name of the file that shall be uploaded</span>
 
 <span class="sd">    Examples:</span>
-<span class="sd">        &gt;&gt;&gt; import win_mtp.mtp_access</span>
-<span class="sd">        &gt;&gt;&gt; dev = win_mtp.mtp_access.get_portable_devices()</span>
+<span class="sd">        &gt;&gt;&gt; import mtp.linux_access</span>
+<span class="sd">        &gt;&gt;&gt; dev = mtp.linux_access.get_portable_devices()</span>
 <span class="sd">        &gt;&gt;&gt; cont = dev[0].get_content()</span>
 <span class="sd">        &gt;&gt;&gt; mycont = cont.get_path(&quot;Interner Speicher\\Music\\Test.mp3&quot;)</span>
 <span class="sd">        &gt;&gt;&gt; if mycont: _ = mycont.remove()</span>
@@ -3310,8 +3310,8 @@ For an easier usage use upload_file</p>
 
 
 <p><span class="doc-section-title">Examples:</span></p>
-    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">win_mtp.mtp_access</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dev</span> <span class="o">=</span> <span class="n">win_mtp</span><span class="o">.</span><span class="n">mtp_access</span><span class="o">.</span><span class="n">get_portable_devices</span><span class="p">()</span>
+    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">mtp.linux_access</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dev</span> <span class="o">=</span> <span class="n">mtp</span><span class="o">.</span><span class="n">linux_access</span><span class="o">.</span><span class="n">get_portable_devices</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cont</span> <span class="o">=</span> <span class="n">dev</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_content</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mycont</span> <span class="o">=</span> <span class="n">cont</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;Interner Speicher\Music\Test.mp3&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">mycont</span><span class="p">:</span> <span class="n">_</span> <span class="o">=</span> <span class="n">mycont</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
@@ -3356,8 +3356,8 @@ For an easier usage use upload_file</p>
 <span class="sd">        inputstream: open python file</span>
 
 <span class="sd">    Examples:</span>
-<span class="sd">        &gt;&gt;&gt; import win_mtp.mtp_access</span>
-<span class="sd">        &gt;&gt;&gt; dev = win_mtp.mtp_access.get_portable_devices()</span>
+<span class="sd">        &gt;&gt;&gt; import mtp.linux_access</span>
+<span class="sd">        &gt;&gt;&gt; dev = mtp.linux_access.get_portable_devices()</span>
 <span class="sd">        &gt;&gt;&gt; cont = dev[0].get_content()</span>
 <span class="sd">        &gt;&gt;&gt; mycont = cont.get_path(&quot;Interner Speicher\\Music\\Test.mp3&quot;)</span>
 <span class="sd">        &gt;&gt;&gt; if mycont: _ = mycont.remove()</span>
@@ -3494,10 +3494,10 @@ else None is returned.</p>
 
 
 <p><span class="doc-section-title">Examples:</span></p>
-    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">win_mtp.mtp_access</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dev</span> <span class="o">=</span> <span class="n">win_mtp</span><span class="o">.</span><span class="n">mtp_access</span><span class="o">.</span><span class="n">get_portable_devices</span><span class="p">()</span>
+    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">mtp.linux_access</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dev</span> <span class="o">=</span> <span class="n">mtp</span><span class="o">.</span><span class="n">linux_access</span><span class="o">.</span><span class="n">get_portable_devices</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="s2">&quot;HSG1316\Interner Speicher\Ringtones&quot;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">w</span> <span class="o">=</span><span class="n">win_mtp</span><span class="o">.</span><span class="n">mtp_access</span><span class="o">.</span><span class="n">get_content_from_device_path</span><span class="p">(</span><span class="n">dev</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">n</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">w</span> <span class="o">=</span><span class="n">mtp</span><span class="o">.</span><span class="n">linux_access</span><span class="o">.</span><span class="n">get_content_from_device_path</span><span class="p">(</span><span class="n">dev</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">n</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">w</span><span class="p">)[:</span><span class="mi">46</span><span class="p">]</span>
 <span class="go">&quot;&lt;PortableDeviceContent o3: (&#39;Ringtones&#39;, 1, -1&quot;</span>
 </code></pre></div>
@@ -3552,10 +3552,10 @@ else None is returned.</p>
 <span class="sd">        IOError: If something went wrong</span>
 
 <span class="sd">    Examples:</span>
-<span class="sd">        &gt;&gt;&gt; import win_mtp.mtp_access</span>
-<span class="sd">        &gt;&gt;&gt; dev = win_mtp.mtp_access.get_portable_devices()</span>
+<span class="sd">        &gt;&gt;&gt; import mtp.linux_access</span>
+<span class="sd">        &gt;&gt;&gt; dev = mtp.linux_access.get_portable_devices()</span>
 <span class="sd">        &gt;&gt;&gt; n = &quot;HSG1316\\Interner Speicher\\Ringtones&quot;</span>
-<span class="sd">        &gt;&gt;&gt; w =win_mtp.mtp_access.get_content_from_device_path(dev[0], n)</span>
+<span class="sd">        &gt;&gt;&gt; w =mtp.linux_access.get_content_from_device_path(dev[0], n)</span>
 <span class="sd">        &gt;&gt;&gt; str(w)[:46]</span>
 <span class="sd">        &quot;&lt;PortableDeviceContent o3: (&#39;Ringtones&#39;, 1, -1&quot;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -3650,8 +3650,8 @@ was found.</p>
 
 
 <p><span class="doc-section-title">Examples:</span></p>
-    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">win_mtp.mtp_access</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">win_mtp</span><span class="o">.</span><span class="n">mtp_access</span><span class="o">.</span><span class="n">get_portable_devices</span><span class="p">()</span>
+    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">mtp.linux_access</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mtp</span><span class="o">.</span><span class="n">linux_access</span><span class="o">.</span><span class="n">get_portable_devices</span><span class="p">()</span>
 <span class="go">[&lt;PortableDevice: (&#39;HSG1316&#39;, &#39;HSG1316&#39;)&gt;]</span>
 </code></pre></div>
 
@@ -3700,8 +3700,8 @@ was found.</p>
 <span class="sd">        IOError: If something went wrong</span>
 
 <span class="sd">    Examples:</span>
-<span class="sd">        &gt;&gt;&gt; import win_mtp.mtp_access</span>
-<span class="sd">        &gt;&gt;&gt; win_mtp.mtp_access.get_portable_devices()</span>
+<span class="sd">        &gt;&gt;&gt; import mtp.linux_access</span>
+<span class="sd">        &gt;&gt;&gt; mtp.linux_access.get_portable_devices()</span>
 <span class="sd">        [&lt;PortableDevice: (&#39;HSG1316&#39;, &#39;HSG1316&#39;)&gt;]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># On linux we can take a look into a directory</span>
@@ -3787,10 +3787,10 @@ will e created automatically.</p>
 
 
 <p><span class="doc-section-title">Examples:</span></p>
-    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">win_mtp.mtp_access</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dev</span> <span class="o">=</span> <span class="n">win_mtp</span><span class="o">.</span><span class="n">mtp_access</span><span class="o">.</span><span class="n">get_portable_devices</span><span class="p">()</span>
+    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">mtp.linux_access</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dev</span> <span class="o">=</span> <span class="n">mtp</span><span class="o">.</span><span class="n">linux_access</span><span class="o">.</span><span class="n">get_portable_devices</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="s2">&quot;HSG1316\Interner Speicher\Music\MyMusic\Test1&quot;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">win_mtp</span><span class="o">.</span><span class="n">mtp_access</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">dev</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">n</span><span class="p">))[:</span><span class="mi">22</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">mtp</span><span class="o">.</span><span class="n">linux_access</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">dev</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">n</span><span class="p">))[:</span><span class="mi">22</span><span class="p">]</span>
 <span class="go">&#39;&lt;PortableDeviceContent&#39;</span>
 </code></pre></div>
 
@@ -3831,10 +3831,10 @@ will e created automatically.</p>
 <span class="sd">        IOError: If something went wrong</span>
 
 <span class="sd">    Examples:</span>
-<span class="sd">        &gt;&gt;&gt; import win_mtp.mtp_access</span>
-<span class="sd">        &gt;&gt;&gt; dev = win_mtp.mtp_access.get_portable_devices()</span>
+<span class="sd">        &gt;&gt;&gt; import mtp.linux_access</span>
+<span class="sd">        &gt;&gt;&gt; dev = mtp.linux_access.get_portable_devices()</span>
 <span class="sd">        &gt;&gt;&gt; n = &quot;HSG1316\\Interner Speicher\\Music\\MyMusic\\Test1&quot;</span>
-<span class="sd">        &gt;&gt;&gt; str(win_mtp.mtp_access.makedirs(dev[0], n))[:22]</span>
+<span class="sd">        &gt;&gt;&gt; str(mtp.linux_access.makedirs(dev[0], n))[:22]</span>
 <span class="sd">        &#39;&lt;PortableDeviceContent&#39;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">dev_name</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">dev</span><span class="o">.</span><span class="n">get_description</span><span class="p">()</span>
@@ -4000,10 +4000,10 @@ A list of PortableDeviceContent for the files in the directory</p>
 
 
 <p><span class="doc-section-title">Examples:</span></p>
-    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">win_mtp.mtp_access</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dev</span> <span class="o">=</span> <span class="n">win_mtp</span><span class="o">.</span><span class="n">mtp_access</span><span class="o">.</span><span class="n">get_portable_devices</span><span class="p">()</span>
+    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">mtp.linux_access</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dev</span> <span class="o">=</span> <span class="n">mtp</span><span class="o">.</span><span class="n">linux_access</span><span class="o">.</span><span class="n">get_portable_devices</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="s2">&quot;HSG1316\Interner Speicher\Ringtones&quot;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">r</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">win_mtp</span><span class="o">.</span><span class="n">mtp_access</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">dev</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">n</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">r</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">mtp</span><span class="o">.</span><span class="n">linux_access</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">dev</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">n</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">for</span> <span class="n">f1</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
 <span class="gp">... </span>            <span class="nb">print</span><span class="p">(</span><span class="n">f1</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 <span class="gp">...</span>
@@ -4125,10 +4125,10 @@ A list of PortableDeviceContent for the files in the directory</p>
 <span class="sd">        IOError: If something went wrong</span>
 
 <span class="sd">    Examples:</span>
-<span class="sd">        &gt;&gt;&gt; import win_mtp.mtp_access</span>
-<span class="sd">        &gt;&gt;&gt; dev = win_mtp.mtp_access.get_portable_devices()</span>
+<span class="sd">        &gt;&gt;&gt; import mtp.linux_access</span>
+<span class="sd">        &gt;&gt;&gt; dev = mtp.linux_access.get_portable_devices()</span>
 <span class="sd">        &gt;&gt;&gt; n = &quot;HSG1316\\Interner Speicher\\Ringtones&quot;</span>
-<span class="sd">        &gt;&gt;&gt; for r, d, f in win_mtp.mtp_access.walk(dev[0], n):</span>
+<span class="sd">        &gt;&gt;&gt; for r, d, f in mtp.linux_access.walk(dev[0], n):</span>
 <span class="sd">        ...     for f1 in f:</span>
 <span class="sd">        ...             print(f1.name)</span>
 <span class="sd">        ...</span>
