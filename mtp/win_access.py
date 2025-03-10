@@ -3,7 +3,7 @@ A module to access Mobile Devices from Windows via USB connection.
 
 Author:  Heribert Füchtenhans
 
-Version: 2025.3.1
+Version: 2025.3.10
 
 Implements access to basic functions of the Windows WPD API
 Yes I know, there are a lot of pylint disable and type ignors :-)
@@ -353,7 +353,7 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
 
         Examples:
             >>> import mtp.win_access
-            >>> dev = mtp.winaccess.get_portable_devices()
+            >>> dev = mtp.win_access.get_portable_devices()
             >>> cont = dev[0].get_content()
             >>> str(cont.get_children()[0])[:58]
             "<PortableDeviceContent s10001: ('Interner Speicher', 0, -1"

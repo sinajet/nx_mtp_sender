@@ -14,10 +14,10 @@ The module contains the following classes:
 - 'AskDirectory' - Class to select a directory on an MTP device
 
 Examples:
-    >>> from win_mtp import mtp_dialog
+    >>> from mtp import dialog
     >>> root = tkinter.Tk()
     >>> root.title("mtp_dialogs")
-    >>> adir = mtp_dialog.AskDirectory(root, "Test ask_directory", ("Alls well", "Don't do it"))
+    >>> adir = dialog.AskDirectory(root, "Test ask_directory", ("Alls well", "Don't do it"))
 """
 
 import contextlib
@@ -77,7 +77,7 @@ class AskDirectory(tkinter.simpledialog.Dialog):  # pylint: disable=too-many-ins
         wpd_device: The PortableDevice that was selected
 
     Exceptions:
-        comtypes.COMError: exceptions if something went wrong
+        IOError: exceptions if something went wrong
     """
 
     def __init__(

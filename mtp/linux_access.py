@@ -56,8 +56,8 @@ The module contains the following classes:
 All functions through IOError when a communication fails.
 
 Examples:
-    >>> import mtp.access
-    >>> mtp.access.get_portable_devices()
+    >>> import mtp.linux_access
+    >>> mtp.linux_access.get_portable_devices()
     [<PortableDevice: ('HSG1316', 'HSG1316')>]
 """
 
