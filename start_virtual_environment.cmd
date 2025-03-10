@@ -22,6 +22,7 @@ if not exist venv (
     set AllwaysArgs=--trusted-host files.pythonhosted.org --trusted-host pypi.org --retries 1 --upgrade
     python.exe -m pip install %AllwaysArgs% --upgrade pip
     pip3 install %AllwaysArgs% -r requirements.txt
+    pip3 install %AllwaysArgs% -r requirements_other.txt
 ) else (
 	call venv\Scripts\activate.bat
 )

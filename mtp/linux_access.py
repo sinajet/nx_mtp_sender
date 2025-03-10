@@ -42,7 +42,7 @@ The module contains the following classes:
         content_type: Type of the entry. One of the WPD_CONTENT_TYPE_ constants
 
     Exceptions:
-        comtypes.COMError: If something went wrong
+        IOError: If something went wrong
 
 
 - 'PortableDevice' - Class for one portable device found connected
@@ -122,8 +122,8 @@ class PortableDevice:
             A tuple with of name, description. Both are "" if no device was found
 
         Examples:
-            >>> import win_mtp.mtp_access
-            >>> dev = win_mtp.mtp_access.get_portable_devices()
+            >>> import mtp.linux_access
+            >>> dev = mtp.linux_access.get_portable_devices()
             >>> dev[0].get_description()
             ('Nokia 6', 'Nokia 6')
         """
@@ -140,8 +140,8 @@ class PortableDevice:
             A list of instances of PortableDeviceContent, one for each storage
 
         Examples:
-            >>> import win_mtp.mtp_access
-            >>> dev = win_mtp.mtp_access.get_portable_devices()
+            >>> import mtp.linux_access
+            >>> dev = mtp.linux_access.get_portable_devices()
             >>> str(dev[0].get_content())[:33]
             '<PortableDeviceContent c_wchar_p('
         """
@@ -229,8 +229,8 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
                         WPD_CONTENT_TYPE_DEVICE
 
         Examples:
-            >>> import win_mtp.mtp_access
-            >>> dev = win_mtp.mtp_access.get_portable_devices()
+            >>> import mtp.linux_access
+            >>> dev = mtp.linux_access.get_portable_devices()
             >>> cont = dev[0].get_content()
             >>> cont.get_properties()
             ('HSG1316', 0, -1, datetime.datetime(1970, 1, 1, 0, 0), -1, -1, 'DQVSSCM799999999')
@@ -252,8 +252,8 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             A Generator of PortableDeviceContent instances each representing a child entry.
 
         Examples:
-            >>> import win_mtp.mtp_access
-            >>> dev = win_mtp.mtp_access.get_portable_devices()
+            >>> import mtp.linux_access
+            >>> dev = mtp.linux_access.get_portable_devices()
             >>> cont = dev[0].get_content()
             >>> str(cont.get_children()[0])[:58]
             "<PortableDeviceContent s10001: ('Interner Speicher', 0, -1"
@@ -280,8 +280,8 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             found.
 
         Examples:
-            >>> import win_mtp.mtp_access
-            >>> dev = win_mtp.mtp_access.get_portable_devices()
+            >>> import mtp.linux_access
+            >>> dev = mtp.linux_access.get_portable_devices()
             >>> cont = dev[0].get_content()
             >>> str(cont.get_child("Interner Speicher"))[:58]
             "<PortableDeviceContent s10001: ('Interner Speicher', 0, -1"
@@ -307,8 +307,8 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             found.
 
         Examples:
-            >>> import win_mtp.mtp_access
-            >>> dev = win_mtp.mtp_access.get_portable_devices()
+            >>> import mtp.linux_access
+            >>> dev = mtp.linux_access.get_portable_devices()
             >>> cont = dev[0].get_content()
             >>> str(cont.get_path("Interner Speicher\\Android\\data"))[:41]
             "<PortableDeviceContent oE: ('data', 1, -1"
@@ -332,8 +332,8 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             dirname: Name of the directory that shall be created
 
         Examples:
-            >>> import win_mtp.mtp_access
-            >>> dev = win_mtp.mtp_access.get_portable_devices()
+            >>> import mtp.linux_access
+            >>> dev = mtp.linux_access.get_portable_devices()
             >>> cont = dev[0].get_content()
             >>> mycont = cont.get_path("Interner Speicher\\Music\\MyMusic")
             >>> if mycont: _ = mycont.remove()
@@ -354,8 +354,8 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             inputstream: open python file
 
         Examples:
-            >>> import win_mtp.mtp_access
-            >>> dev = win_mtp.mtp_access.get_portable_devices()
+            >>> import mtp.linux_access
+            >>> dev = mtp.linux_access.get_portable_devices()
             >>> cont = dev[0].get_content()
             >>> mycont = cont.get_path("Interner Speicher\\Music\\Test.mp3")
             >>> if mycont: _ = mycont.remove()
@@ -377,8 +377,8 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             inputfilename: Name of the file that shall be uploaded
 
         Examples:
-            >>> import win_mtp.mtp_access
-            >>> dev = win_mtp.mtp_access.get_portable_devices()
+            >>> import mtp.linux_access
+            >>> dev = mtp.linux_access.get_portable_devices()
             >>> cont = dev[0].get_content()
             >>> mycont = cont.get_path("Interner Speicher\\Music\\Test.mp3")
             >>> if mycont: _ = mycont.remove()
@@ -397,8 +397,8 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             outputstream: Open python file for writing
 
         Examples:
-            >>> import win_mtp.mtp_access
-            >>> dev = win_mtp.mtp_access.get_portable_devices()
+            >>> import mtp.linux_access
+            >>> dev = mtp.linux_access.get_portable_devices()
             >>> cont = dev[0].get_content()
             >>> cont = cont.get_path("Interner Speicher\\Ringtones\\hangouts_incoming_call.ogg")
             >>> name = '..\\..\\Tests\\hangouts_incoming_call.ogg'
@@ -418,8 +418,8 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
                             content will be replaced.
 
         Examples:
-            >>> import win_mtp.mtp_access
-            >>> dev = win_mtp.mtp_access.get_portable_devices()
+            >>> import mtp.linux_access
+            >>> dev = mtp.linux_access.get_portable_devices()
             >>> cont = dev[0].get_content()
             >>> cont = cont.get_path("Interner Speicher\\Ringtones\\hangouts_incoming_call.ogg")
             >>> name = '..\\..\\Tests\\hangouts_incoming_call.ogg'
@@ -434,8 +434,8 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             0 on OK, else a windows errorcode
 
         Examples:
-            >>> import win_mtp.mtp_access
-            >>> dev = win_mtp.mtp_access.get_portable_devices()
+            >>> import mtp.linux_access
+            >>> dev = mtp.linux_access.get_portable_devices()
             >>> cont = dev[0].get_content()
             >>> mycont = cont.get_path("Interner Speicher\\Music\\Test.mp3")
             >>> if mycont: _ = mycont.remove()
@@ -471,8 +471,8 @@ def get_portable_devices() -> list[PortableDevice]:
         IOError: If something went wrong
 
     Examples:
-        >>> import win_mtp.mtp_access
-        >>> win_mtp.mtp_access.get_portable_devices()
+        >>> import mtp.linux_access
+        >>> mtp.linux_access.get_portable_devices()
         [<PortableDevice: ('HSG1316', 'HSG1316')>]
     """
     # On linux we can take a look into a directory
@@ -504,10 +504,10 @@ def get_content_from_device_path(dev: PortableDevice, fpath: str) -> PortableDev
         IOError: If something went wrong
 
     Examples:
-        >>> import win_mtp.mtp_access
-        >>> dev = win_mtp.mtp_access.get_portable_devices()
+        >>> import mtp.linux_access
+        >>> dev = mtp.linux_access.get_portable_devices()
         >>> n = "HSG1316\\Interner Speicher\\Ringtones"
-        >>> w =win_mtp.mtp_access.get_content_from_device_path(dev[0], n)
+        >>> w =mtp.linux_access.get_content_from_device_path(dev[0], n)
         >>> str(w)[:46]
         "<PortableDeviceContent o3: ('Ringtones', 1, -1"
     """
@@ -559,10 +559,10 @@ def walk(
         IOError: If something went wrong
 
     Examples:
-        >>> import win_mtp.mtp_access
-        >>> dev = win_mtp.mtp_access.get_portable_devices()
+        >>> import mtp.linux_access
+        >>> dev = mtp.linux_access.get_portable_devices()
         >>> n = "HSG1316\\Interner Speicher\\Ringtones"
-        >>> for r, d, f in win_mtp.mtp_access.walk(dev[0], n):
+        >>> for r, d, f in mtp.linux_access.walk(dev[0], n):
         ...     for f1 in f:
         ...             print(f1.name)
         ...
@@ -617,10 +617,10 @@ def makedirs(dev: PortableDevice, path: str) -> PortableDeviceContent:
         IOError: If something went wrong
 
     Examples:
-        >>> import win_mtp.mtp_access
-        >>> dev = win_mtp.mtp_access.get_portable_devices()
+        >>> import mtp.linux_access
+        >>> dev = mtp.linux_access.get_portable_devices()
         >>> n = "HSG1316\\Interner Speicher\\Music\\MyMusic\\Test1"
-        >>> str(win_mtp.mtp_access.makedirs(dev[0], n))[:22]
+        >>> str(mtp.linux_access.makedirs(dev[0], n))[:22]
         '<PortableDeviceContent'
     """
     dev_name, _ = dev.get_description()

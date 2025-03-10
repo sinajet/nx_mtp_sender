@@ -21,7 +21,7 @@ if __name__ == "__main__":
 
     def display_childs_with_walk(dev: mtp_access.PortableDevice, root: str) -> None:
         """Show content of device"""
-        for root, dirs, files in mtp_access.walk(dev, root):
+        for root, dirs, files in mtp_access.walk(dev, root):  # type: ignore
             for directory in dirs:
                 print(f"dir: {directory.full_filename}")
             for file in files:
@@ -29,7 +29,7 @@ if __name__ == "__main__":
 
     def display_child(dev: mtp_access.PortableDevice, root: str) -> None:
         """Show child content"""
-        if cont := mtp_access.get_content_from_device_path(dev, root):
+        if cont := mtp_access.get_content_from_device_path(dev, root):  # type: ignore
             for child in cont.get_children():
                 (
                     _,
@@ -66,8 +66,8 @@ if __name__ == "__main__":
         starttime = time.time()
         print("Devices:")
         devicelist = mtp_access.get_portable_devices()
-        for _ in range(1):
-            time.sleep(0.01)
+        for _ in range(1_000):
+            # time.sleep(0.01)
             for dev in devicelist:
                 device_name, device_desc = dev.get_description()
                 print(f"  {device_name}: {device_desc}")
