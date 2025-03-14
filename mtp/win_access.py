@@ -3,7 +3,7 @@ A module to access Mobile Devices from Windows via USB connection.
 
 Author:  Heribert Füchtenhans
 
-Version: 2025.3.10
+Version: 2025.3.14
 
 Implements access to basic functions of the Windows WPD API
 Yes I know, there are a lot of pylint disable and type ignors :-)
@@ -258,7 +258,7 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             >>> import mtp.win_access
             >>> dev = mtp.win_access.get_portable_devices()
             >>> cont = dev[0].get_content()
-            >>> cont.get_properties()
+            >>> cont[0].get_properties()
             ('HSG1316', 0, -1, datetime.datetime(1970, 1, 1, 0, 0), -1, -1, 'DQVSSCM799999999')
         """
         if self._plain_name:
@@ -355,7 +355,7 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             >>> import mtp.win_access
             >>> dev = mtp.win_access.get_portable_devices()
             >>> cont = dev[0].get_content()
-            >>> str(cont.get_children()[0])[:58]
+            >>> str(cont[0].get_children()[0])[:58]
             "<PortableDeviceContent s10001: ('Interner Speicher', 0, -1"
         """
         try:
@@ -403,7 +403,7 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             >>> import mtp.win_access
             >>> dev = mtp.win_access.get_portable_devices()
             >>> cont = dev[0].get_content()
-            >>> str(cont.get_child("Interner Speicher"))[:58]
+            >>> str(cont[0].get_child("Interner Speicher"))[:58]
             "<PortableDeviceContent s10001: ('Interner Speicher', 0, -1"
         """
         matches = [c for c in self.get_children() if c.name == name]
@@ -424,7 +424,7 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             >>> import mtp.win_access
             >>> dev = mtp.win_access.get_portable_devices()
             >>> cont = dev[0].get_content()
-            >>> str(cont.get_path("Interner Speicher\\Android\\data"))[:41]
+            >>> str(cont[0].get_path("Interner Speicher\\Android\\data"))[:41]
             "<PortableDeviceContent oE: ('data', 1, -1"
         """
         cur: Optional["PortableDeviceContent"] = self
@@ -448,9 +448,9 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             >>> import mtp.win_access
             >>> dev = mtp.win_access.get_portable_devices()
             >>> cont = dev[0].get_content()
-            >>> mycont = cont.get_path("Interner Speicher\\Music\\MyMusic")
+            >>> mycont = cont[0].get_path("Interner Speicher\\Music\\MyMusic")
             >>> if mycont: _ = mycont.remove()
-            >>> cont = cont.get_path("Interner Speicher\\Music")
+            >>> cont = cont[0].get_path("Interner Speicher\\Music")
             >>> cont.create_content("MyMusic")
         """
         try:
@@ -482,9 +482,9 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             >>> import mtp.win_access
             >>> dev = mtp.win_access.get_portable_devices()
             >>> cont = dev[0].get_content()
-            >>> mycont = cont.get_path("Interner Speicher\\Music\\Test.mp3")
+            >>> mycont = cont[0].get_path("Interner Speicher\\Music\\Test.mp3")
             >>> if mycont: _ = mycont.remove()
-            >>> cont = cont.get_path("Interner Speicher\\Music")
+            >>> cont = cont[0].get_path("Interner Speicher\\Music")
             >>> name = '..\\..\\Tests\\OnFire.mp3'
             >>> size = os.path.getsize(name)
             >>> inp = open(name, "rb")
@@ -553,9 +553,9 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             >>> import mtp.win_access
             >>> dev = mtp.win_access.get_portable_devices()
             >>> cont = dev[0].get_content()
-            >>> mycont = cont.get_path("Interner Speicher\\Music\\Test.mp3")
+            >>> mycont = cont[0].get_path("Interner Speicher\\Music\\Test.mp3")
             >>> if mycont: _ = mycont.remove()
-            >>> cont = cont.get_path("Interner Speicher\\Music")
+            >>> cont = cont[0].get_path("Interner Speicher\\Music")
             >>> name = '..\\..\\Tests\\OnFire.mp3'
             >>> cont.upload_file("Test.mp3", name)
         """
@@ -579,7 +579,7 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             >>> import mtp.win_access
             >>> dev = mtp.win_access.get_portable_devices()
             >>> cont = dev[0].get_content()
-            >>> cont = cont.get_path("Interner Speicher\\Ringtones\\hangouts_incoming_call.ogg")
+            >>> cont = cont[0].get_path("Interner Speicher\\Ringtones\\hangouts_incoming_call.ogg")
             >>> name = '..\\..\\Tests\\hangouts_incoming_call.ogg'
             >>> outp = open(name, "wb")
             >>> cont.download_stream(outp)
@@ -621,7 +621,7 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             >>> import mtp.win_access
             >>> dev = mtp.win_access.get_portable_devices()
             >>> cont = dev[0].get_content()
-            >>> cont = cont.get_path("Interner Speicher\\Ringtones\\hangouts_incoming_call.ogg")
+            >>> cont = cont[0].get_path("Interner Speicher\\Ringtones\\hangouts_incoming_call.ogg")
             >>> name = '..\\..\\Tests\\hangouts_incoming_call.ogg'
             >>> cont.download_file(name)
         """
@@ -642,13 +642,13 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             >>> import mtp.win_access
             >>> dev = mtp.win_access.get_portable_devices()
             >>> cont = dev[0].get_content()
-            >>> mycont = cont.get_path("Interner Speicher\\Music\\Test.mp3")
+            >>> mycont = cont[0].get_path("Interner Speicher\\Music\\Test.mp3")
             >>> if mycont: _ = mycont.remove()
-            >>> cont = cont.get_path("Interner Speicher\\Music")
+            >>> cont = cont[0].get_path("Interner Speicher\\Music")
             >>> name = '..\\..\\Tests\\OnFire.mp3'
             >>> cont.upload_file("Test.mp3", name)
             >>> cont = dev[0].get_content()
-            >>> mycont = cont.get_path("Interner Speicher\\Music\\Test.mp3")
+            >>> mycont = cont[0].get_path("Interner Speicher\\Music\\Test.mp3")
             >>> mycont.remove()
             0
         """
@@ -780,7 +780,7 @@ class PortableDevice:
         """Get the content of a device.
 
         Returns:
-            An instance of PortableDeviceContent
+            A list of instances of PortableDeviceContent
 
         Examples:
             >>> import mtp.win_access

@@ -13,7 +13,8 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 if platform.system() == "Windows":
     import mtp.win_access as mtp_access   # pylint: disable=unused-import,wrong-import-position
 else:
-    import mtp.linux_access as mtp_access   # pylint: disable=unused-import,wrong-import-position
+    # import mtp.linux_access as mtp_access   # pylint: disable=unused-import,wrong-import-position
+    import mtp.linux_libmtp_access as mtp_access   # pylint: disable=unused-import,wrong-import-position
 
 
 # ----------------------------------------------------------------------

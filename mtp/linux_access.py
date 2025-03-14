@@ -6,7 +6,7 @@ in the normal file system
 
 Author:  Heribert Füchtenhans
 
-Version: 2024.8.28
+Version: 2025.3.14
 
 For examples please look into the tests directory.
 
@@ -63,11 +63,10 @@ Examples:
 
 # pylint: disable=global-statement
 
-from collections.abc import Callable
 import datetime
 import os
 import shutil
-from typing import IO, Generator, List, Optional, Tuple
+from typing import IO, Generator, List, Optional, Tuple, Callable
 
 # Constants for the type entries returned bei PortableDeviceContent.get_properties
 WPD_CONTENT_TYPE_UNDEFINED = -1
@@ -232,7 +231,7 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             >>> import mtp.linux_access
             >>> dev = mtp.linux_access.get_portable_devices()
             >>> cont = dev[0].get_content()
-            >>> cont.get_properties()
+            >>> cont[0].get_properties()
             ('HSG1316', 0, -1, datetime.datetime(1970, 1, 1, 0, 0), -1, -1, 'DQVSSCM799999999')
         """
         return (
@@ -255,7 +254,7 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             >>> import mtp.linux_access
             >>> dev = mtp.linux_access.get_portable_devices()
             >>> cont = dev[0].get_content()
-            >>> str(cont.get_children()[0])[:58]
+            >>> str(cont[0].get_children()[0])[:58]
             "<PortableDeviceContent s10001: ('Interner Speicher', 0, -1"
         """
         if not os.path.isdir(self.full_filename):
@@ -283,7 +282,7 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             >>> import mtp.linux_access
             >>> dev = mtp.linux_access.get_portable_devices()
             >>> cont = dev[0].get_content()
-            >>> str(cont.get_child("Interner Speicher"))[:58]
+            >>> str(cont[0].get_child("Interner Speicher"))[:58]
             "<PortableDeviceContent s10001: ('Interner Speicher', 0, -1"
         """
         fullname = os.path.join(self.full_filename, name)
@@ -310,7 +309,7 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             >>> import mtp.linux_access
             >>> dev = mtp.linux_access.get_portable_devices()
             >>> cont = dev[0].get_content()
-            >>> str(cont.get_path("Interner Speicher\\Android\\data"))[:41]
+            >>> str(cont[0].get_path("Interner Speicher\\Android\\data"))[:41]
             "<PortableDeviceContent oE: ('data', 1, -1"
         """
         if not os.path.exists(name):
@@ -335,9 +334,9 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             >>> import mtp.linux_access
             >>> dev = mtp.linux_access.get_portable_devices()
             >>> cont = dev[0].get_content()
-            >>> mycont = cont.get_path("Interner Speicher\\Music\\MyMusic")
+            >>> mycont = cont[0].get_path("Interner Speicher\\Music\\MyMusic")
             >>> if mycont: _ = mycont.remove()
-            >>> cont = cont.get_path("Interner Speicher\\Music")
+            >>> cont = cont[0].get_path("Interner Speicher\\Music")
             >>> cont.create_content("MyMusic")
         """
         fullname = os.path.join(self.full_filename, dirname)
@@ -357,9 +356,9 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             >>> import mtp.linux_access
             >>> dev = mtp.linux_access.get_portable_devices()
             >>> cont = dev[0].get_content()
-            >>> mycont = cont.get_path("Interner Speicher\\Music\\Test.mp3")
+            >>> mycont = cont[0].get_path("Interner Speicher\\Music\\Test.mp3")
             >>> if mycont: _ = mycont.remove()
-            >>> cont = cont.get_path("Interner Speicher\\Music")
+            >>> cont = cont[0].get_path("Interner Speicher\\Music")
             >>> name = '..\\..\\Tests\\OnFire.mp3'
             >>> size = os.path.getsize(name)
             >>> inp = open(name, "rb")
@@ -380,9 +379,9 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             >>> import mtp.linux_access
             >>> dev = mtp.linux_access.get_portable_devices()
             >>> cont = dev[0].get_content()
-            >>> mycont = cont.get_path("Interner Speicher\\Music\\Test.mp3")
+            >>> mycont = cont[0].get_path("Interner Speicher\\Music\\Test.mp3")
             >>> if mycont: _ = mycont.remove()
-            >>> cont = cont.get_path("Interner Speicher\\Music")
+            >>> cont = cont[0].get_path("Interner Speicher\\Music")
             >>> name = '..\\..\\Tests\\OnFire.mp3'
             >>> cont.upload_file("Test.mp3", name)
         """
@@ -400,7 +399,7 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             >>> import mtp.linux_access
             >>> dev = mtp.linux_access.get_portable_devices()
             >>> cont = dev[0].get_content()
-            >>> cont = cont.get_path("Interner Speicher\\Ringtones\\hangouts_incoming_call.ogg")
+            >>> cont = cont[0].get_path("Interner Speicher\\Ringtones\\hangouts_incoming_call.ogg")
             >>> name = '..\\..\\Tests\\hangouts_incoming_call.ogg'
             >>> outp = open(name, "wb")
             >>> cont.download_stream(outp)
@@ -421,7 +420,7 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             >>> import mtp.linux_access
             >>> dev = mtp.linux_access.get_portable_devices()
             >>> cont = dev[0].get_content()
-            >>> cont = cont.get_path("Interner Speicher\\Ringtones\\hangouts_incoming_call.ogg")
+            >>> cont = cont[0].get_path("Interner Speicher\\Ringtones\\hangouts_incoming_call.ogg")
             >>> name = '..\\..\\Tests\\hangouts_incoming_call.ogg'
             >>> cont.download_file(name)
         """
@@ -437,13 +436,13 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             >>> import mtp.linux_access
             >>> dev = mtp.linux_access.get_portable_devices()
             >>> cont = dev[0].get_content()
-            >>> mycont = cont.get_path("Interner Speicher\\Music\\Test.mp3")
+            >>> mycont = cont[0].get_path("Interner Speicher\\Music\\Test.mp3")
             >>> if mycont: _ = mycont.remove()
-            >>> cont = cont.get_path("Interner Speicher\\Music")
+            >>> cont = cont[0].get_path("Interner Speicher\\Music")
             >>> name = '..\\..\\Tests\\OnFire.mp3'
             >>> cont.upload_file("Test.mp3", name)
             >>> cont = dev[0].get_content()
-            >>> mycont = cont.get_path("Interner Speicher\\Music\\Test.mp3")
+            >>> mycont = cont[0].get_path("Interner Speicher\\Music\\Test.mp3")
             >>> mycont.remove()
             0
         """
@@ -459,13 +458,10 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
 
 def get_portable_devices() -> list[PortableDevice]:
     """Get all attached portable devices.
-    Must be called to initialise the libmtp module
 
     Returns:
         A list of PortableDevice one for each found MTP device. The list is empty if no device
             was found.
-
-        On Linux, sorry, only the first found device will be returned
 
     Exceptions:
         IOError: If something went wrong
