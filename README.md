@@ -20,7 +20,8 @@ Tested with:
 This module implements the access to the Windows WPD functions to read and write MTP devices like smartphones, tablets. etc.
 
 ## linux_access.py
-This module implements the access to read and write MTP devices like smartphones, tablets. etc. from Linux
+This module implements the access to read and write MTP devices like smartphones, tablets. etc. from Linux.
+Only GNOME based systems are supported due to kio-fuse on KDE doesn't support the mtp protocol and the Python bindings for KIO don't exist yet.
 
 ## dialog.py
 dialog.py implements a directory searcher in tkinter that shows the attached MTP devices and the directories on them.
