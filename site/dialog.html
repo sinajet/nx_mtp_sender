@@ -528,11 +528,12 @@ mtp_access</p>
 
 
 <p><span class="doc-section-title">Examples:</span></p>
-    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">win_mtp</span><span class="w"> </span><span class="kn">import</span> <span class="n">mtp_dialog</span>
+    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">mtp</span><span class="w"> </span><span class="kn">import</span> <span class="n">dialog</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">root</span> <span class="o">=</span> <span class="n">tkinter</span><span class="o">.</span><span class="n">Tk</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">root</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;mtp_dialogs&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">adir</span> <span class="o">=</span> <span class="n">mtp_dialog</span><span class="o">.</span><span class="n">AskDirectory</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s2">&quot;Test ask_directory&quot;</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;Alls well&quot;</span><span class="p">,</span> <span class="s2">&quot;Don&#39;t do it&quot;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">adir</span> <span class="o">=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">AskDirectory</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s2">&quot;Test ask_directory&quot;</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;Alls well&quot;</span><span class="p">,</span> <span class="s2">&quot;Don&#39;t do it&quot;</span><span class="p">))</span>
 </code></pre></div>
+
 
 
 
@@ -587,7 +588,7 @@ wpd_device: The PortableDevice that was selected</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><span title="comtypes.COMError">COMError</span></code>
+                  <code><span title="IOError">IOError</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -597,6 +598,7 @@ wpd_device: The PortableDevice that was selected</p>
           </tr>
       </tbody>
     </table>
+
 
 
 
@@ -753,7 +755,7 @@ wpd_device: The PortableDevice that was selected</p>
 <span class="sd">        wpd_device: The PortableDevice that was selected</span>
 
 <span class="sd">    Exceptions:</span>
-<span class="sd">        comtypes.COMError: exceptions if something went wrong</span>
+<span class="sd">        IOError: exceptions if something went wrong</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
@@ -974,6 +976,7 @@ wpd_device: The PortableDevice that was selected</p>
       </tbody>
     </table>
 
+
             <details class="quote">
               <summary>Source code in <code>mtp/dialog.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 83</span>
@@ -1046,6 +1049,7 @@ wpd_device: The PortableDevice that was selected</p>
 
         <p>OK Button</p>
 
+
             <details class="quote">
               <summary>Source code in <code>mtp/dialog.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">191</span>
@@ -1102,6 +1106,7 @@ wpd_device: The PortableDevice that was selected</p>
 
         <p>Will be called on very selection</p>
 
+
             <details class="quote">
               <summary>Source code in <code>mtp/dialog.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">176</span>
@@ -1149,6 +1154,7 @@ wpd_device: The PortableDevice that was selected</p>
     <div class="doc doc-contents ">
 
         <p>Insert directory listing until depth is 0</p>
+
 
             <details class="quote">
               <summary>Source code in <code>mtp/dialog.py</code></summary>
@@ -1221,6 +1227,7 @@ wpd_device: The PortableDevice that was selected</p>
     <div class="doc doc-contents ">
 
         <p>Create body</p>
+
 
             <details class="quote">
               <summary>Source code in <code>mtp/dialog.py</code></summary>
@@ -1296,6 +1303,7 @@ wpd_device: The PortableDevice that was selected</p>
 
         <p>Create own buttons</p>
 
+
             <details class="quote">
               <summary>Source code in <code>mtp/dialog.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">110</span>
@@ -1350,6 +1358,7 @@ wpd_device: The PortableDevice that was selected</p>
 
 
         <p>Class for keepeing the entries in the tree</p>
+
 
 
 

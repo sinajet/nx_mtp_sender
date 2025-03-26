@@ -1,10 +1,11 @@
 {
     "configurations": [
       {
-        "name": "Python: dialog_test.py",
+        "name": "Python: access_test.py",
         "type": "debugpy",
         "request": "launch",
         "program": "${workspaceFolder}/tests/access_test.py",
+        // "program": "${workspaceFolder}/unused/KDE Tests/libmtp_access.py",
         "console": "integratedTerminal",
         "justMyCode": false
       },
