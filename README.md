@@ -2,8 +2,6 @@
 
 Accessing the filesystem of MTP devices (Smartphones, MP3-Player, etc.) on Windows or Linux with python.
 
-Attention: This a actual a beta-version for the KDE support!
-
 In the mtp directory there are three modules.
 - win_access.py
 - linux_access.py
@@ -30,6 +28,8 @@ dialog.py implements a directory searcher in tkinter that shows the attached MTP
 
 
 # Changelog
+* 2.0.1
+    * Deleted a bug when uploading files on a Linux KDE system
 * 2.0.0
     * Removed PortableDevice.get_description
       Use PortableDevice.name, PortableDevice.description
@@ -37,13 +37,13 @@ dialog.py implements a directory searcher in tkinter that shows the attached MTP
       Please use .upload and .download
     * get_properties now returns the modification time and not creation time
     * Corrected calculation of filetime in win_access
-    * Added support for KDE (see README)
+    * Added support for KDE
 * 1.3.0
     * Eleminated the need for a programm restart after first use of the comtypes library and modifying the generated wpd access files.
-      This requires that you use comtypes 1.4.10 or newer.
+      This requires that you use comtypes 1.4.10 or newer on Windows.
     * Updated documentation
 * 1.2.0
-    * Access MTP devices from Linux
+    * Access MTP devices from Linux with Gnome as desktop environment
 * 1.0.2
     * Fixed a bug when an MTP device doesn't have a userfriendly name
 * 1.0.1

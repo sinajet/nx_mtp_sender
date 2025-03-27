@@ -6,7 +6,10 @@
 # Released under the GPLv3 or later.
 #
 
-# Renamed and modified for my project by Heribert Füchtenhans
+# Renamed and modified for my MTP project by Heribert Füchtenhans
+# Attention: Only those function that I need for MTP are modfied
+#    to work with python version 3.x
+
 
 """
 PyMTP is a pythonic wrapper around libmtp, making it a bit more
@@ -530,7 +533,7 @@ class MTP:
         """
 
         if __DEBUG__:
-            self.mtp.LIBMTP_Dump_Errorstack()
+            self.mtp.LIBMTP_Dump_Errorstack(self.device)
             # self.mtp.LIBMTP_Clear_Errorstack()
 
     def detect_devices(self) -> list[ctypes._Pointer[LIBMTP_RawDevice]]:
@@ -1060,13 +1063,13 @@ class MTP:
             raise NotConnected
 
         if os.path.isfile(source) == False:
-            raise IOError
+            raise IOError(f'File {source} not found')
 
         if callback != None:
             callback = Progressfunc(callback)
 
         metadata = LIBMTP_File(
-            filename=target,
+            filename=target.encode("UTF-8"),
             filetype=self.find_filetype(source),
             filesize=os.stat(source).st_size,
             storage_id=storage_id,

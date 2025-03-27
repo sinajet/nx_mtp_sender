@@ -11,13 +11,15 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 if platform.system() == "Windows":
     import mtp.win_access as mtp_access  # pylint: disable=unused-import,wrong-import-position
+    on_windows = True
 # elif not os.path.exists(f"/run/user/{os.getuid()}/gvfs"):
 # import mtp.libmtp_access as mtp_access
 else:
     import mtp.linux_access as mtp_access  # pylint: disable=unused-import,wrong-import-position
+    on_windows = False
 
 
-TESTNUMBER = 6 # 1 - 5
+TESTNUMBER = 6 # 1 - 6
 TESTRUNS = 3
 
 def display_childs_with_walk(dev: mtp_access.PortableDevice, root: str) -> int:
@@ -104,7 +106,10 @@ def main() -> None:
     elif TESTNUMBER == 6:
         # Create / Delete files
         uploadfilename = '/home/heribert/Musik/Yanni/The Very Best of Yanni/01 Aria.mp3'
-        outfilename = '/home/heribert/tmp/test.mp3'
+        if not os.path.exists(uploadfilename):
+            uploadfilename =  r'C:\Windows\WindowsUpdate.log' if on_windows else '/usr/bin/python3'
+        outfilename = r'C:\temp\test.mp3' if on_windows else '/home/heribert/tmp/test.mp3'
+        os.makedirs(os.path.dirname(outfilename), exist_ok=True)
         for dev in mtp_access.get_portable_devices():
             print(f'Device: {dev.devicename}')
             for i in range(TESTRUNS):
