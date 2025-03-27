@@ -30,6 +30,7 @@ dialog.py implements a directory searcher in tkinter that shows the attached MTP
 # Changelog
 * 2.0.1
     * Deleted a bug when uploading files on a Linux KDE system
+    * Changed returned filenames in content to be consitent with the windows module
 * 2.0.0
     * Removed PortableDevice.get_description
       Use PortableDevice.name, PortableDevice.description

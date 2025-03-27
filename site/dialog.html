@@ -14,7 +14,7 @@
       
       
       <link rel="icon" href="assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.9">
     
     
       
@@ -22,7 +22,7 @@
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.8608ea7d.min.css">
+      <link rel="stylesheet" href="assets/stylesheets/main.4af4bdda.min.css">
       
       
 
@@ -298,33 +298,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#mtp.dialog.AskDirectory._on_ok" class="md-nav__link">
-    <span class="md-ellipsis">
-      _on_ok
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#mtp.dialog.AskDirectory._on_treeselect" class="md-nav__link">
-    <span class="md-ellipsis">
-      _on_treeselect
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#mtp.dialog.AskDirectory._process_directory" class="md-nav__link">
-    <span class="md-ellipsis">
-      _process_directory
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#mtp.dialog.AskDirectory.body" class="md-nav__link">
     <span class="md-ellipsis">
       body
@@ -426,33 +399,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#mtp.dialog.AskDirectory._on_ok" class="md-nav__link">
-    <span class="md-ellipsis">
-      _on_ok
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#mtp.dialog.AskDirectory._on_treeselect" class="md-nav__link">
-    <span class="md-ellipsis">
-      _on_treeselect
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#mtp.dialog.AskDirectory._process_directory" class="md-nav__link">
-    <span class="md-ellipsis">
-      _process_directory
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#mtp.dialog.AskDirectory.body" class="md-nav__link">
     <span class="md-ellipsis">
       body
@@ -514,7 +460,7 @@
 
         <p>A module with MTP relevant dialogs for tkinter</p>
 <p>Author:  Heribert Füchtenhans</p>
-<p>Version: 2025.3.6</p>
+<p>Version: 2025.3.27</p>
 
 
 <details class="python" open>
@@ -740,12 +686,7 @@ wpd_device: The PortableDevice that was selected</p>
 <span class="normal">200</span>
 <span class="normal">201</span>
 <span class="normal">202</span>
-<span class="normal">203</span>
-<span class="normal">204</span>
-<span class="normal">205</span>
-<span class="normal">206</span>
-<span class="normal">207</span>
-<span class="normal">208</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">AskDirectory</span><span class="p">(</span><span class="n">tkinter</span><span class="o">.</span><span class="n">simpledialog</span><span class="o">.</span><span class="n">Dialog</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-many-instance-attributes</span>
+<span class="normal">203</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">AskDirectory</span><span class="p">(</span><span class="n">tkinter</span><span class="o">.</span><span class="n">simpledialog</span><span class="o">.</span><span class="n">Dialog</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-many-instance-attributes</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Select a wpd device and directory.</span>
 
 <span class="sd">    Public methods:</span>
@@ -776,12 +717,11 @@ wpd_device: The PortableDevice that was selected</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">_dialog_title</span> <span class="o">=</span> <span class="n">title</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_tree</span><span class="p">:</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Treeview</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_smartphone_icon</span> <span class="o">=</span> <span class="n">tkinter</span><span class="o">.</span><span class="n">PhotoImage</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">SMARTPHONE_ICON</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_devicelist</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">access</span><span class="o">.</span><span class="n">PortableDevice</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_buttons</span> <span class="o">=</span> <span class="n">buttons</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_tree_entries</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">TreeEntry</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="c1"># external variables</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">answer</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">wpd_device</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">access</span><span class="o">.</span><span class="n">PortableDevice</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wpd_device</span><span class="p">:</span> <span class="n">access</span><span class="o">.</span><span class="n">PortableDevice</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">tkinter</span><span class="o">.</span><span class="n">simpledialog</span><span class="o">.</span><span class="n">Dialog</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update_idletasks</span><span class="p">()</span>
 
@@ -805,14 +745,11 @@ wpd_device: The PortableDevice that was selected</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">_tree</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s2">&quot;&lt;&lt;TreeviewOpen&gt;&gt;&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_on_treeselect</span><span class="p">)</span>
         <span class="c1"># adding data, get devices</span>
         <span class="k">for</span> <span class="n">dev</span> <span class="ow">in</span> <span class="n">access</span><span class="o">.</span><span class="n">get_portable_devices</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">device_desc</span> <span class="o">:=</span> <span class="n">dev</span><span class="o">.</span><span class="n">get_description</span><span class="p">():</span>
-                <span class="n">name</span> <span class="o">=</span> <span class="n">device_desc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="n">devpath</span> <span class="o">=</span> <span class="n">dev</span><span class="o">.</span><span class="n">get_device_path</span><span class="p">()</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_devicelist</span><span class="p">[</span><span class="n">devpath</span><span class="p">]</span> <span class="o">=</span> <span class="n">dev</span>
+            <span class="k">if</span> <span class="n">devicename</span> <span class="o">:=</span> <span class="n">dev</span><span class="o">.</span><span class="n">devicename</span><span class="p">:</span>
                 <span class="n">treeid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tree</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span>
                     <span class="s2">&quot;&quot;</span><span class="p">,</span>
                     <span class="n">tkinter</span><span class="o">.</span><span class="n">END</span><span class="p">,</span>
-                    <span class="n">text</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+                    <span class="n">text</span><span class="o">=</span><span class="n">devicename</span><span class="p">,</span>
                     <span class="nb">open</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                     <span class="n">image</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_smartphone_icon</span><span class="p">,</span>
                 <span class="p">)</span>
@@ -834,8 +771,7 @@ wpd_device: The PortableDevice that was selected</p>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cont</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># no children</span>
             <span class="k">return</span>
         <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">cont</span><span class="p">:</span>
-            <span class="n">contenttype</span> <span class="o">=</span> <span class="n">child</span><span class="o">.</span><span class="n">content_type</span>
-            <span class="k">if</span> <span class="n">contenttype</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span>
+            <span class="k">if</span> <span class="n">child</span><span class="o">.</span><span class="n">content_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span>
                 <span class="n">access</span><span class="o">.</span><span class="n">WPD_CONTENT_TYPE_STORAGE</span><span class="p">,</span>
                 <span class="n">access</span><span class="o">.</span><span class="n">WPD_CONTENT_TYPE_DIRECTORY</span><span class="p">,</span>
             <span class="p">):</span>
@@ -1003,8 +939,7 @@ wpd_device: The PortableDevice that was selected</p>
 <span class="normal">104</span>
 <span class="normal">105</span>
 <span class="normal">106</span>
-<span class="normal">107</span>
-<span class="normal">108</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+<span class="normal">107</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">parent</span><span class="p">:</span> <span class="n">tkinter</span><span class="o">.</span><span class="n">Tk</span><span class="p">,</span>
     <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -1022,193 +957,13 @@ wpd_device: The PortableDevice that was selected</p>
     <span class="bp">self</span><span class="o">.</span><span class="n">_dialog_title</span> <span class="o">=</span> <span class="n">title</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_tree</span><span class="p">:</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Treeview</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_smartphone_icon</span> <span class="o">=</span> <span class="n">tkinter</span><span class="o">.</span><span class="n">PhotoImage</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">SMARTPHONE_ICON</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_devicelist</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">access</span><span class="o">.</span><span class="n">PortableDevice</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_buttons</span> <span class="o">=</span> <span class="n">buttons</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_tree_entries</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">TreeEntry</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="c1"># external variables</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">answer</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">wpd_device</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">access</span><span class="o">.</span><span class="n">PortableDevice</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">wpd_device</span><span class="p">:</span> <span class="n">access</span><span class="o">.</span><span class="n">PortableDevice</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">tkinter</span><span class="o">.</span><span class="n">simpledialog</span><span class="o">.</span><span class="n">Dialog</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">update_idletasks</span><span class="p">()</span>
-</code></pre></div></td></tr></table></div>
-            </details>
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h3 id="mtp.dialog.AskDirectory._on_ok" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">_on_ok</span><span class="p">()</span></code>
-
-</h3>
-
-
-    <div class="doc doc-contents ">
-
-        <p>OK Button</p>
-
-
-            <details class="quote">
-              <summary>Source code in <code>mtp/dialog.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">191</span>
-<span class="normal">192</span>
-<span class="normal">193</span>
-<span class="normal">194</span>
-<span class="normal">195</span>
-<span class="normal">196</span>
-<span class="normal">197</span>
-<span class="normal">198</span>
-<span class="normal">199</span>
-<span class="normal">200</span>
-<span class="normal">201</span>
-<span class="normal">202</span>
-<span class="normal">203</span>
-<span class="normal">204</span>
-<span class="normal">205</span>
-<span class="normal">206</span>
-<span class="normal">207</span>
-<span class="normal">208</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">_on_ok</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;OK Button&quot;&quot;&quot;</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">withdraw</span><span class="p">()</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">update_idletasks</span><span class="p">()</span>
-    <span class="n">treeid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tree</span><span class="o">.</span><span class="n">focus</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">treeid</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">cont</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tree_entries</span><span class="p">[</span><span class="n">treeid</span><span class="p">]</span><span class="o">.</span><span class="n">content</span>
-        <span class="k">if</span> <span class="n">cont</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span>
-            <span class="k">return</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">answer</span> <span class="o">=</span> <span class="n">cont</span><span class="o">.</span><span class="n">full_filename</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">wpd_device</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tree_entries</span><span class="p">[</span><span class="n">treeid</span><span class="p">]</span><span class="o">.</span><span class="n">dev</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">apply</span><span class="p">()</span>
-        <span class="k">finally</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span>
-</code></pre></div></td></tr></table></div>
-            </details>
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h3 id="mtp.dialog.AskDirectory._on_treeselect" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">_on_treeselect</span><span class="p">(</span><span class="n">_</span><span class="p">)</span></code>
-
-</h3>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Will be called on very selection</p>
-
-
-            <details class="quote">
-              <summary>Source code in <code>mtp/dialog.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">176</span>
-<span class="normal">177</span>
-<span class="normal">178</span>
-<span class="normal">179</span>
-<span class="normal">180</span>
-<span class="normal">181</span>
-<span class="normal">182</span>
-<span class="normal">183</span>
-<span class="normal">184</span>
-<span class="normal">185</span>
-<span class="normal">186</span>
-<span class="normal">187</span>
-<span class="normal">188</span>
-<span class="normal">189</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">_on_treeselect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Will be called on very selection&quot;&quot;&quot;</span>
-    <span class="n">treeid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tree</span><span class="o">.</span><span class="n">focus</span><span class="p">()</span>
-    <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tree</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">treeid</span><span class="p">,</span> <span class="s2">&quot;open&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">status</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">cursor</span><span class="o">=</span><span class="s2">&quot;watch&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update_idletasks</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">c_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tree_entries</span><span class="p">[</span><span class="n">treeid</span><span class="p">]</span><span class="o">.</span><span class="n">child_treeids</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tree_entries</span><span class="p">[</span><span class="n">c_id</span><span class="p">]</span><span class="o">.</span><span class="n">content_loaded</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_process_directory</span><span class="p">(</span><span class="n">c_id</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">cursor</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_tree</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">treeid</span><span class="p">,</span> <span class="nb">open</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_tree</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">treeid</span><span class="p">,</span> <span class="nb">open</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-</code></pre></div></td></tr></table></div>
-            </details>
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h3 id="mtp.dialog.AskDirectory._process_directory" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">_process_directory</span><span class="p">(</span><span class="n">insert_after_id</span><span class="p">)</span></code>
-
-</h3>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Insert directory listing until depth is 0</p>
-
-
-            <details class="quote">
-              <summary>Source code in <code>mtp/dialog.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">149</span>
-<span class="normal">150</span>
-<span class="normal">151</span>
-<span class="normal">152</span>
-<span class="normal">153</span>
-<span class="normal">154</span>
-<span class="normal">155</span>
-<span class="normal">156</span>
-<span class="normal">157</span>
-<span class="normal">158</span>
-<span class="normal">159</span>
-<span class="normal">160</span>
-<span class="normal">161</span>
-<span class="normal">162</span>
-<span class="normal">163</span>
-<span class="normal">164</span>
-<span class="normal">165</span>
-<span class="normal">166</span>
-<span class="normal">167</span>
-<span class="normal">168</span>
-<span class="normal">169</span>
-<span class="normal">170</span>
-<span class="normal">171</span>
-<span class="normal">172</span>
-<span class="normal">173</span>
-<span class="normal">174</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">_process_directory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">insert_after_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Insert directory listing until depth is 0&quot;&quot;&quot;</span>
-    <span class="n">treeentry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tree_entries</span><span class="p">[</span><span class="n">insert_after_id</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">treeentry</span><span class="o">.</span><span class="n">content</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">cont</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">treeentry</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">get_children</span><span class="p">())</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">cont</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">treeentry</span><span class="o">.</span><span class="n">dev</span><span class="o">.</span><span class="n">get_content</span><span class="p">())</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cont</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># no children</span>
-        <span class="k">return</span>
-    <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">cont</span><span class="p">:</span>
-        <span class="n">contenttype</span> <span class="o">=</span> <span class="n">child</span><span class="o">.</span><span class="n">content_type</span>
-        <span class="k">if</span> <span class="n">contenttype</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span>
-            <span class="n">access</span><span class="o">.</span><span class="n">WPD_CONTENT_TYPE_STORAGE</span><span class="p">,</span>
-            <span class="n">access</span><span class="o">.</span><span class="n">WPD_CONTENT_TYPE_DIRECTORY</span><span class="p">,</span>
-        <span class="p">):</span>
-            <span class="k">continue</span>
-        <span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">suppress</span><span class="p">(</span><span class="n">tkinter</span><span class="o">.</span><span class="n">TclError</span><span class="p">):</span>
-            <span class="n">treeid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tree</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span>
-                <span class="n">insert_after_id</span><span class="p">,</span>
-                <span class="n">tkinter</span><span class="o">.</span><span class="n">END</span><span class="p">,</span>
-                <span class="n">text</span><span class="o">=</span><span class="n">child</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-                <span class="nb">open</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_tree_entries</span><span class="p">[</span><span class="n">treeid</span><span class="p">]</span> <span class="o">=</span> <span class="n">TreeEntry</span><span class="p">(</span><span class="n">treeentry</span><span class="o">.</span><span class="n">dev</span><span class="p">,</span> <span class="n">child</span><span class="p">,</span> <span class="p">[],</span> <span class="kc">False</span><span class="p">)</span>
-            <span class="n">treeentry</span><span class="o">.</span><span class="n">child_treeids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">treeid</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_tree_entries</span><span class="p">[</span><span class="n">insert_after_id</span><span class="p">]</span><span class="o">.</span><span class="n">content_loaded</span> <span class="o">=</span> <span class="kc">True</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -1231,7 +986,8 @@ wpd_device: The PortableDevice that was selected</p>
 
             <details class="quote">
               <summary>Source code in <code>mtp/dialog.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">121</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">120</span>
+<span class="normal">121</span>
 <span class="normal">122</span>
 <span class="normal">123</span>
 <span class="normal">124</span>
@@ -1253,11 +1009,7 @@ wpd_device: The PortableDevice that was selected</p>
 <span class="normal">140</span>
 <span class="normal">141</span>
 <span class="normal">142</span>
-<span class="normal">143</span>
-<span class="normal">144</span>
-<span class="normal">145</span>
-<span class="normal">146</span>
-<span class="normal">147</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">body</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">master</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">143</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">body</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">master</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create body&quot;&quot;&quot;</span>
     <span class="n">box</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
     <span class="n">box</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">side</span><span class="o">=</span><span class="n">tkinter</span><span class="o">.</span><span class="n">TOP</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="n">tkinter</span><span class="o">.</span><span class="n">BOTH</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">padx</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">pady</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
@@ -1266,14 +1018,11 @@ wpd_device: The PortableDevice that was selected</p>
     <span class="bp">self</span><span class="o">.</span><span class="n">_tree</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s2">&quot;&lt;&lt;TreeviewOpen&gt;&gt;&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_on_treeselect</span><span class="p">)</span>
     <span class="c1"># adding data, get devices</span>
     <span class="k">for</span> <span class="n">dev</span> <span class="ow">in</span> <span class="n">access</span><span class="o">.</span><span class="n">get_portable_devices</span><span class="p">():</span>
-        <span class="k">if</span> <span class="n">device_desc</span> <span class="o">:=</span> <span class="n">dev</span><span class="o">.</span><span class="n">get_description</span><span class="p">():</span>
-            <span class="n">name</span> <span class="o">=</span> <span class="n">device_desc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">devpath</span> <span class="o">=</span> <span class="n">dev</span><span class="o">.</span><span class="n">get_device_path</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_devicelist</span><span class="p">[</span><span class="n">devpath</span><span class="p">]</span> <span class="o">=</span> <span class="n">dev</span>
+        <span class="k">if</span> <span class="n">devicename</span> <span class="o">:=</span> <span class="n">dev</span><span class="o">.</span><span class="n">devicename</span><span class="p">:</span>
             <span class="n">treeid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tree</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span>
                 <span class="s2">&quot;&quot;</span><span class="p">,</span>
                 <span class="n">tkinter</span><span class="o">.</span><span class="n">END</span><span class="p">,</span>
-                <span class="n">text</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+                <span class="n">text</span><span class="o">=</span><span class="n">devicename</span><span class="p">,</span>
                 <span class="nb">open</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">image</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_smartphone_icon</span><span class="p">,</span>
             <span class="p">)</span>
@@ -1306,7 +1055,8 @@ wpd_device: The PortableDevice that was selected</p>
 
             <details class="quote">
               <summary>Source code in <code>mtp/dialog.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">110</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">109</span>
+<span class="normal">110</span>
 <span class="normal">111</span>
 <span class="normal">112</span>
 <span class="normal">113</span>
@@ -1314,8 +1064,7 @@ wpd_device: The PortableDevice that was selected</p>
 <span class="normal">115</span>
 <span class="normal">116</span>
 <span class="normal">117</span>
-<span class="normal">118</span>
-<span class="normal">119</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">buttonbox</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">118</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">buttonbox</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create own buttons&quot;&quot;&quot;</span>
     <span class="n">box</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
     <span class="n">box</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">side</span><span class="o">=</span><span class="n">tkinter</span><span class="o">.</span><span class="n">TOP</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="n">tkinter</span><span class="o">.</span><span class="n">BOTH</span><span class="p">)</span>

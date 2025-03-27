@@ -3,7 +3,7 @@ A module with MTP relevant dialogs for tkinter
 
 Author:  Heribert Füchtenhans
 
-Version: 2025.3.6
+Version: 2025.3.27
 
 Python: 
     tkinter
@@ -98,12 +98,11 @@ class AskDirectory(tkinter.simpledialog.Dialog):  # pylint: disable=too-many-ins
         self._dialog_title = title
         self._tree: ttk.Treeview
         self._smartphone_icon = tkinter.PhotoImage(data=SMARTPHONE_ICON)
-        self._devicelist: dict[str, access.PortableDevice] = {}
         self._buttons = buttons
         self._tree_entries: Dict[str, TreeEntry] = {}
         # external variables
         self.answer = ""
-        self.wpd_device: Optional[access.PortableDevice] = None
+        self.wpd_device: access.PortableDevice | None = None
         tkinter.simpledialog.Dialog.__init__(self, parent, title=title)
         self.update_idletasks()
 
@@ -127,14 +126,11 @@ class AskDirectory(tkinter.simpledialog.Dialog):  # pylint: disable=too-many-ins
         self._tree.bind("<<TreeviewOpen>>", self._on_treeselect)
         # adding data, get devices
         for dev in access.get_portable_devices():
-            if device_desc := dev.get_description():
-                name = device_desc[0]
-                devpath = dev.get_device_path()
-                self._devicelist[devpath] = dev
+            if devicename := dev.devicename:
                 treeid = self._tree.insert(
                     "",
                     tkinter.END,
-                    text=name,
+                    text=devicename,
                     open=False,
                     image=self._smartphone_icon,
                 )
@@ -156,8 +152,7 @@ class AskDirectory(tkinter.simpledialog.Dialog):  # pylint: disable=too-many-ins
         if len(cont) == 0:  # no children
             return
         for child in cont:
-            contenttype = child.content_type
-            if contenttype not in (
+            if child.content_type not in (
                 access.WPD_CONTENT_TYPE_STORAGE,
                 access.WPD_CONTENT_TYPE_DIRECTORY,
             ):

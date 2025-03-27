@@ -7,7 +7,7 @@
 #
 
 # Renamed and modified for my MTP project by Heribert Füchtenhans
-# Attention: Only those function that I need for MTP are modfied
+# Attention: Only those function I needed for MTP are modfied
 #    to work with python version 3.x
 
 
