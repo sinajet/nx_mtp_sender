@@ -22,8 +22,12 @@ TESTRUNS = 3
 
 def display_childs_with_walk(dev: mtp_access.PortableDevice, root: str) -> int:
     """Show content of device"""
+    def error_function(error: str) -> bool:
+        """Error function"""
+        print(f"Error: {error}")
+        return True
     count = 0
-    for root, dirs, files in mtp_access.walk(dev, root):  # type: ignore
+    for root, dirs, files in mtp_access.walk(dev, root, None, error_function):  # type: ignore
         for directory in dirs:
             count += 1
             # print(f"dir: {directory.full_filename}")
@@ -87,7 +91,7 @@ def test_get_con_from_path() -> None:
     """Test get cont from a path"""
     for dev in mtp_access.get_portable_devices():
         for i in range(TESTRUNS):
-            cont = mtp_access.get_content_from_device_path(dev, f"{dev.devicename}/SD-Karte/Musik/zz_Sonstiges/Diverses/ZARAH LEANDER/ZARAH LEANDER UND DIE MOONLIGHTS - WUNDERLAND BEI NACHT     1960.mp3")  # type: ignore
+            cont = mtp_access.get_content_from_device_path(dev, f"{dev.devicename}/SD-Karte/Music/back draft/Pull The Trigger/01 Little Mona.mp3")  # type: ignore
             print(f'Content found: {cont}')
         dev.close()
 

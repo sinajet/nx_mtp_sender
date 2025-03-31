@@ -28,6 +28,9 @@ dialog.py implements a directory searcher in tkinter that shows the attached MTP
 
 
 # Changelog
+* 2.0.2
+    * Fixed wrong handling of error callback in walk
+    * Modified 'upload' to work with older Gnome versions who don't support direct writing to the virtual filesystem
 * 2.0.1
     * Deleted a bug when uploading files on a Linux KDE system
     * Changed returned filenames in content to be consitent with the windows module
