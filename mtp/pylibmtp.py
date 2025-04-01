@@ -9,6 +9,7 @@
 # Renamed and modified for my MTP project by Heribert Füchtenhans
 # Attention: Only those function I needed for MTP are modfied
 #    to work with python version 3.x
+# Version: 2025.3.30
 
 
 """
@@ -774,7 +775,7 @@ class MTP:
 
     def get_storage(self) -> list[tuple[str, int]]:
         """
-                This function updates all the storage id's of a device and their properties, then creates a linked list
+        This function updates all the storage id's of a device and their properties, then creates a linked list
         and puts the list head into the device struct. It also optionally sorts this list. If you want to display
         storage information in your application you should call this function, then dereference the device struct
         (device->storage) to get out information on the storage.
@@ -790,6 +791,7 @@ class MTP:
             raise NotConnected
         err = self.mtp.LIBMTP_Get_Storage(self.device, 0)
         if err == -1:
+            # self.mtp.LIBMTP_Dump_Errorstack(self.device)
             raise CommandFailed
         ret: list[tuple[str, int]] = []
         next = self.device.contents.storage

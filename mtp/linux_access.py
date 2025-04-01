@@ -215,16 +215,19 @@ class PortableDevice:
             '<PortableDeviceContent c_wchar_p('
         """
         ret_objs: list["PortableDeviceContent"] = []
-        try:
-            if _gvfs_found:
+        if _gvfs_found:
+            try:
                 for entry in os.listdir(os.path.join(_gvfs_search_path, self._device)):
                     full_name = os.path.join(self.devicename, entry)
                     ret_objs.append(
                         PortableDeviceContent(self, full_name, 0, 0, WPD_CONTENT_TYPE_STORAGE)
                     )
-            else:
-                if self._libmntp_device is None:
-                    raise IOError("Device not initialised. Call get_portable_devices first.")
+            except OSError as err:
+                raise IOError(f"Can't access {self.devicename}.") from err
+        else:
+            if self._libmntp_device is None:
+                raise IOError("Device not initialised. Call get_portable_devices first.")
+            try:
                 for entry in self._libmntp_device.get_storage():
                     full_name = os.path.join(self.devicename, entry[0])
                     pdc = PortableDeviceContent(
@@ -235,8 +238,8 @@ class PortableDevice:
                         WPD_CONTENT_TYPE_STORAGE,
                     )
                     ret_objs.append(pdc)
-        except OSError as err:
-            raise IOError(f"Can't access {self.devicename}.") from err
+            except pylibmtp.CommandFailed as err:
+                raise IOError(f"Can't access {self.devicename}.") from err
         ret_objs.sort(key=lambda entry: entry.name)
         return ret_objs
 
@@ -576,7 +579,7 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
                 except subprocess.CalledProcessError as err:
                     raise IOError(
                         f"Error copying file '{inputfilename}' to '{gio_full_filename}'"
-                        f": {urllib.parse.unquote(err.output.decode("utf-8"))}"
+                        f": {urllib.parse.unquote(err.output.decode('utf-8'))}"
                     ) from err
             # shutil.copy(inputfilename, full_filename)
         else:

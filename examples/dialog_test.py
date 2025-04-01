@@ -2,8 +2,8 @@
 Test mtp_dialog for tkinter
 
 Author:  Heribert Füchtenhans
-Version: 2023.04.13
-OS:      Windows
+Version: 2025.04.1
+OS:      Windows/Linux
 """
 
 import os
