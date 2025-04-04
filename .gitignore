@@ -5,9 +5,8 @@ create_docs.sh
 create_docs.cmd
 requirements_other.txt
 mkdocs.yml
-unused/
+
 tests/
-tests
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
