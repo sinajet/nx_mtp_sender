@@ -6,6 +6,7 @@ create_docs.cmd
 requirements_other.txt
 mkdocs.yml
 
+.vscode/
 tests/
 
 # Byte-compiled / optimized / DLL files
