@@ -1,39 +1,52 @@
 """
 A module to access Mobile Devices from Windows via USB connection.
+Implements access to basic functions of the Windows WPD API
 
 Author:  Heribert Füchtenhans
 
-Version: 2025.3.26
+Version: 2025.4.4
 
-Implements access to basic functions of the Windows WPD API
-Yes I know, there are a lot of pylint disable and type ignors :-)
-For examples please look into the tests directory.
+For examples please look into the examples directory.
+
+All functions through IOError when a communication fails.
 
 Requirements:
-OS:
-    Windows 10
-    Windows 11
-Python:
-    comtypes
+    - OS
+        - Windows 10
+        - Windows 11
+    - Python modules
+        - comtypes
 
 The module contains the following functions:
 
-- 'get_portable_devices' Get all attached portable devices.
-- 'get_content_from_device_path' - Get the content of a path.
+- 'get_portable_devices' Get a list (instances of PortableDevice) of all connected portable devices.
+- 'get_content_from_device_path' - Get the content (files, dirs) of a path as instances of
+    PortableDeviceContent
 - 'walk' - Iterates ower all files in a tree.
 - 'makedirs' - Creates the directories on the MTP device if they don't exist.
 
 The module contains the following classes:
 
-- 'PortableDeviceContent' - Class for one file, directory or storage
 - 'PortableDevice' - Class for one portable device found connected
+- 'PortableDeviceContent' - Class for one file, directory or storage
 
-All functions through IOError when a communication fails.
+Information to the filenames used in MTP:
+- The filename consists of the following part:
+    devicename/storagename/foldername/....
+- The devicename can be found in PortableDevice.devicename
+- The storagename is in content returned by PortableDevice.get_content
+    It's the the name attribute
+- Every PortableDeviceContent has an attribute 'full_filename' that contains the whole
+    path of that content
 
 Examples:
     >>> import mtp.win_access
-    >>> mtp.win_access.get_portable_devices()
-    [<PortableDevice: ('HSG1316', 'HSG1316')>]
+    >>> devs = mtp.win_access.get_portable_devices()
+    >>> len(devs) >= 1
+    True
+    >>> str(devs[0])[:33]
+    'PortableDevice: PLEGAR1791402808 '
+    >>> devs[0].close()
 """
 
 import ctypes
@@ -41,7 +54,6 @@ import datetime
 import io
 import os
 import os.path
-import sys
 from typing import Any, IO, Callable, Generator, List, Optional, Tuple
 import contextlib
 import comtypes  # type: ignore # pylint: disable=import-error
@@ -50,19 +62,15 @@ import comtypes.automation  # type: ignore # pylint: disable=import-error
 
 gen_dir = os.path.join(os.path.dirname(__file__), "comtype_gen_win_wpd")
 comtypes.client.gen_dir = gen_dir
-# The following lines are only neccessary if a new typelib file must be created
-# if not os.path.exists(gen_dir) and not hasattr(sys, "frozen"):
-#     os.makedirs(gen_dir)
-#     comtypes.client.GetModule("portabledeviceapi.dll")
-#     comtypes.client.GetModule("portabledevicetypes.dll")
-#     from . import modify_comtypes
-#     modify_comtypes.modify_generated_files(comtypes.client.gen_dir)  # type: ignore
 
-from .comtype_gen_win_wpd import PortableDeviceApiLib as port  # pylint: disable=all # type: ignore
-from .comtype_gen_win_wpd import (
-    PortableDeviceTypesLib as types,
-)  # pylint: disable=all # type: ignore
-
+try:
+    from .comtype_gen_win_wpd import PortableDeviceApiLib as port
+    from .comtype_gen_win_wpd import PortableDeviceTypesLib as types
+except ImportError:
+    # When doing doctest relative imports don't work and create ImportError
+    # So do it with absolute imports
+    from comtype_gen_win_wpd import PortableDeviceApiLib as port
+    from comtype_gen_win_wpd import PortableDeviceTypesLib as types
 
 # ComType Verweise anlegen
 WPD_RESOURCE_DEFAULT = comtypes.pointer(
@@ -72,9 +80,7 @@ WPD_RESOURCE_DEFAULT.contents.fmtid = comtypes.GUID("{E81E79BE-34F0-41BF-B53F-F1
 WPD_RESOURCE_DEFAULT.contents.pid = 0
 
 # ---------
-WPD_OBJECT_NAME = comtypes.pointer(
-    port._tagpropertykey()
-)  # pylint: disable=no-member, protected-access # type: ignore
+WPD_OBJECT_NAME = comtypes.pointer(port._tagpropertykey())  # pylint: disable=no-member, protected-access # type: ignore
 WPD_OBJECT_NAME.contents.fmtid = comtypes.GUID("{EF6B490D-5CD8-437A-AFFC-DA8B60EE4A3C}")
 WPD_OBJECT_NAME.contents.pid = 4
 
@@ -89,9 +95,7 @@ WPD_STORAGE_CAPACITY.contents.pid = 4
 WPD_STORAGE_FREE_SPACE_IN_BYTES = comtypes.pointer(
     port._tagpropertykey()  # pylint: disable=no-member, protected-access # type: ignore
 )
-WPD_STORAGE_FREE_SPACE_IN_BYTES.contents.fmtid = comtypes.GUID(
-    "{01A3057A-74D6-4E80-BEA7-DC4C212CE50A}"
-)
+WPD_STORAGE_FREE_SPACE_IN_BYTES.contents.fmtid = comtypes.GUID("{01A3057A-74D6-4E80-BEA7-DC4C212CE50A}")
 WPD_STORAGE_FREE_SPACE_IN_BYTES.contents.pid = 5
 
 # ---------
@@ -118,9 +122,7 @@ WPD_OBJECT_CONTENT_TYPE.contents.pid = 7
 
 
 # ---------
-WPD_OBJECT_SIZE = comtypes.pointer(
-    port._tagpropertykey()
-)  # pylint: disable=no-member, protected-access # type: ignore
+WPD_OBJECT_SIZE = comtypes.pointer(port._tagpropertykey())  # pylint: disable=no-member, protected-access # type: ignore
 WPD_OBJECT_SIZE.contents.fmtid = comtypes.GUID("{EF6B490D-5CD8-437A-AFFC-DA8B60EE4A3C}")
 WPD_OBJECT_SIZE.contents.pid = 11
 
@@ -128,9 +130,7 @@ WPD_OBJECT_SIZE.contents.pid = 11
 WPD_OBJECT_ORIGINAL_FILE_NAME = comtypes.pointer(
     port._tagpropertykey()  # pylint: disable=no-member, protected-access # type: ignore
 )
-WPD_OBJECT_ORIGINAL_FILE_NAME.contents.fmtid = comtypes.GUID(
-    "{EF6B490D-5CD8-437A-AFFC-DA8B60EE4A3C}"
-)
+WPD_OBJECT_ORIGINAL_FILE_NAME.contents.fmtid = comtypes.GUID("{EF6B490D-5CD8-437A-AFFC-DA8B60EE4A3C}")
 WPD_OBJECT_ORIGINAL_FILE_NAME.contents.pid = 12
 
 # ---------
@@ -169,39 +169,36 @@ DEVICE_MANAGER: Optional[Any] = None
 # -------------------------------------------------------------------------------------------------
 class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
     """Class for one file, directory or storage with it's properties.
-    This class is only internaly created, use it only to read the properties
+    This instances of this class are created intern, please only use the methods and attributes
 
-    Args:
-        object_id: MTP object id.
-        content: interface to IPortableDeviceContent.
-        properties: The interface that is required to get or set properties on an object on
-                    the device.
+    Methods:
+        get_children: Get the children of this content (files and directories)
+        get_child: Returns a PortableDeviceContent for one child whos name is known.
+        get_path: Returns a PortableDeviceContent for a child who's path in the tree is known.
+        create_content: Creates an empty directory content in this content.
+        upload_file: Upload of a file to MTP device.
+        download_file: Download a file from MTP device.
+        remove: Deletes the current directory or file.
 
-    Public methods:
-        get_properties
-        get_children
-        get_child
-        get_path
-        create_content
-        upload_file
-        download_file
-        remove
-
-    Public attributes:
-        name: Name of the MTP device
+    Attributes:
+        name: Directory-/Filename of this content
         fullname: The full path name
-        date_modified: The file date
+        date_modified: The file modification date
         size: The size of the file in bytes
-        content_type: Type of the entry. One of the WPD_CONTENT_TYPE_ constants
+        content_type: Type of the entry. One of the WPD_CONTENT_TYPE_ constants:
+        
+            - WPD_CONTENT_TYPE_UNDEFINED = -1
+            - WPD_CONTENT_TYPE_STORAGE = 0
+            - WPD_CONTENT_TYPE_DIRECTORY = 1
+            - WPD_CONTENT_TYPE_FILE = 2
+            - WPD_CONTENT_TYPE_DEVICE = 3
 
     Exceptions:
         IOError: If something went wrong
     """
 
     # class variable
-    _properties_to_read: types.PortableDeviceKeyCollection | None = (
-        None  # pylint: disable=no-member # type: ignore
-    )
+    _properties_to_read: types.PortableDeviceKeyCollection | None = None  # pylint: disable=no-member # type: ignore
 
     _CoTaskMemFree = ctypes.windll.ole32.CoTaskMemFree  # type: ignore
     _CoTaskMemFree.restype = None
@@ -211,11 +208,11 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
         self,
         object_id: Any,
         content: "PortableDeviceContent",
+        device: "PortableDevice",
         properties: Any | None = None,
         parent_path: str = "",
-        device_name: str | None = None,
     ) -> None:
-        """ """
+        """Instance constructor"""
 
         self._object_id = object_id
         self._content: "PortableDeviceContent" = content
@@ -227,6 +224,7 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
         self.size: int = -1
         self.date_modified: datetime.datetime = datetime.datetime.now()
         self._serialnumber: str = ""
+        self._port_device = device
         self._properties = properties or content.properties()  # type: ignore
         if PortableDeviceContent._properties_to_read is None:
             # We haven't set the properties wie will read, so do it now
@@ -241,51 +239,12 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             PortableDeviceContent._properties_to_read.Add(WPD_OBJECT_SIZE)  # type: ignore
             PortableDeviceContent._properties_to_read.Add(WPD_OBJECT_DATE_MODIFIED)  # type: ignore
             PortableDeviceContent._properties_to_read.Add(WPD_DEVICE_SERIAL_NUMBER)  # type: ignore
-        self.get_properties()
-        # Correct some entries for devices
-        if device_name is not None:
-            self.name = device_name
-            self.full_filename = device_name
-            self.content_type = WPD_CONTENT_TYPE_DEVICE
+        self._get_properties()
 
-    def get_properties(
+    def _get_properties(
         self,
-    ) -> Tuple[str, int, int, datetime.datetime, str]:
-        """Get the properties of this content.
-
-        Returns:
-            name: The name for this content, normaly the file or directory name
-            content_type: One of the content type values that descripe the type of the content
-                        WPD_CONTENT_TYPE_UNDEFINED, WPD_CONTENT_TYPE_STORAGE,
-                        WPD_CONTENT_TYPE_DIRECTORY, WPD_CONTENT_TYPE_FILE, WPD_CONTENT_TYPE_DEVICE
-            size: The size of the file or 0 if content ist not a file
-            date_modified: The reation date of the file or directory
-            serialnumber: The serial number of the device, only valid if content_type is
-                        WPD_CONTENT_TYPE_DEVICE
-
-        Examples:
-            >>> import mtp.win_access
-            >>> dev = mtp.win_access.get_portable_devices()
-            >>> cont = dev[0].get_content()
-            >>> cont[0].get_properties()
-            ('HSG1316', 0, -1, datetime.datetime(1970, 1, 1, 0, 0), -1, -1, 'DQVSSCM799999999')
-        """
-        if self._plain_name:
-            return (
-                self.name,
-                self.content_type,
-                self.size,
-                self.date_modified,
-                self._serialnumber,
-            )
-        if self._object_id is None:
-            return (
-                "",
-                WPD_CONTENT_TYPE_UNDEFINED,
-                -1,
-                self.date_modified,
-                self._serialnumber,
-            )
+    ) -> None:
+        """Sets the properties of this content."""
         propvalues = self._properties.GetValues(  # type: ignore
             self._object_id, PortableDeviceContent._properties_to_read
         )
@@ -310,15 +269,13 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             self.content_type = WPD_CONTENT_TYPE_STORAGE
         else:
             if content_id == "{27E2E392-A111-48E0-AB0C-E17705A05F85}":
-                self.content_type = WPD_CONTENT_TYPE_DIRECTORY 
+                self.content_type = WPD_CONTENT_TYPE_DIRECTORY
             else:
                 self.content_type = WPD_CONTENT_TYPE_FILE
             self.size = int(propvalues.GetUnsignedLargeIntegerValue(WPD_OBJECT_SIZE))  # type: ignore
             filetime = float(propvalues.GetValue(WPD_OBJECT_DATE_MODIFIED).data.date)  # type: ignore
             filedate = abs(int(filetime))
-            days_since_1970 = (
-                filedate - (datetime.datetime(1970, 1, 1) - datetime.datetime(1899, 12, 30)).days
-            )
+            days_since_1970 = filedate - (datetime.datetime(1970, 1, 1) - datetime.datetime(1899, 12, 30)).days
             hours = (filetime - int(filetime)) * 24
             minutes = (hours - int(hours)) * 60
             seconds = (minutes - int(minutes)) * 60
@@ -332,34 +289,29 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             )
         propvalues.Clear()  # type: ignore
         self.full_filename = os.path.join(self._parent_path, self._plain_name)
-        return (
-            self.name,
-            self.content_type,
-            self.size,
-            self.date_modified,
-            self._serialnumber,
-        )
 
     def get_children(self) -> Generator["PortableDeviceContent", None, None]:
-        """Get the child items of a folder.
+        """Get the child items (dirs and files) of a folder.
 
         Returns:
             A Generator of PortableDeviceContent instances each representing a child entry.
 
+        Exceptions:
+            IOError: If something went wrong
+
         Examples:
             >>> import mtp.win_access
             >>> dev = mtp.win_access.get_portable_devices()
-            >>> cont = dev[0].get_content()
-            >>> str(cont[0].get_children()[0])[:58]
-            "<PortableDeviceContent s10001: ('Interner Speicher', 0, -1"
+            >>> stor = dev[0].get_content()[0]
+            >>> str(list(stor.get_children())[0])
+            'PortableDeviceContent Pictures (1)'
+            >>> dev[0].close()
         """
         try:
             enumobject_ids = self._content.EnumObjects(  # type: ignore
                 ctypes.c_ulong(0),
                 self._object_id,
-                ctypes.POINTER(
-                    port.IPortableDeviceValues
-                )(),  # pylint: disable=no-member # type: ignore
+                ctypes.POINTER(port.IPortableDeviceValues)(),  # pylint: disable=no-member # type: ignore
             )
             while True:
                 num_objects = ctypes.c_ulong(16)  # block size, so to speak
@@ -376,84 +328,101 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
                     break
                 for index in range(num_fetched.contents.value):
                     curobject_id = object_id_array[index]
-                    value = PortableDeviceContent(curobject_id, self._content, self._properties, self.full_filename)  # type: ignore
+                    value = PortableDeviceContent(curobject_id, self._content, self._port_device, self._properties, self.full_filename)  # type: ignore
                     # Free memory
-                    address = (
-                        ctypes.addressof(object_id_array) + ctypes.sizeof(ctypes.c_wchar_p) * index
-                    )
+                    address = ctypes.addressof(object_id_array) + ctypes.sizeof(ctypes.c_wchar_p) * index
                     ptr = ctypes.pointer(ctypes.c_wchar_p.from_address(address))
                     ctypes.windll.ole32.CoTaskMemFree(ptr.contents)  # type: ignore
                     yield value
         except comtypes.COMError as err:
             raise IOError(f"Error getting child item from '{self.full_filename}': {err.args[1]}")
 
-    def get_child(self, name: str) -> Optional["PortableDeviceContent"]:
+    def get_child(self, name: str) -> "PortableDeviceContent | None":
         """Returns a PortableDeviceContent for one child whos name is known.
         The search is case sensitive.
 
-        Args:
+        Parameters:
             name: The name of the file or directory to search
 
         Returns:
-            The PortableDeviceContent instance of the child or None if the child could not be
-            found.
+            The PortableDeviceContent instance of the child or None if the child could not be found.
+
+        Exceptions:
+            IOError: If something went wrong
 
         Examples:
             >>> import mtp.win_access
             >>> dev = mtp.win_access.get_portable_devices()
-            >>> cont = dev[0].get_content()
-            >>> str(cont[0].get_child("Interner Speicher"))[:58]
-            "<PortableDeviceContent s10001: ('Interner Speicher', 0, -1"
+            >>> stor = dev[0].get_content()[0]
+            >>> str(list(stor.get_children())[0])
+            'PortableDeviceContent Pictures (1)'
+            >>> dev[0].close()
         """
         matches = [c for c in self.get_children() if c.name == name]
         return matches[0] if matches else None
 
     def get_path(self, path: str) -> Optional["PortableDeviceContent"]:
-        """Returns a PortableDeviceContent for a child whos path in the tree is known
+        """Returns a PortableDeviceContent for a child who's path in the tree is known.
+        The path can be fully qualified or starting from the current content.
 
-        Args:
-            path: The pathname to the child. Each path entry must be separated by the
-                    os.path.sep character.
+        Parameters:
+            path: The pathname to the child.
 
         Returns:
-            The PortableDeviceContent instance of the child or None if the child could not be
-            found.
+            The PortableDeviceContent instance of the child or None if the child could not be found.
+
+        Exceptions:
+            IOError: If something went wrong
 
         Examples:
             >>> import mtp.win_access
             >>> dev = mtp.win_access.get_portable_devices()
-            >>> cont = dev[0].get_content()
-            >>> str(cont[0].get_path("Interner Speicher\\Android\\data"))[:41]
-            "<PortableDeviceContent oE: ('data', 1, -1"
+            >>> stor = dev[0].get_content()[0]
+            >>> str(stor.get_path(f"{stor.full_filename}/DCIM"))
+            'PortableDeviceContent DCIM (1)'
+            >>> str(stor.get_path(f"DCIM"))
+            'PortableDeviceContent DCIM (1)'
+            >>> dev[0].close()
         """
+        name = path.replace("/", os.path.sep)
+        start = name.split(os.sep, 1)[0]
+        if start == self._port_device.devicename:
+            return get_content_from_device_path(self._port_device, name)
+        if start == self.name:
+            name = name.split(os.sep, 1)[1]
         cur: Optional["PortableDeviceContent"] = self
-        for part in path.split(os.path.sep):
+        for part in name.split(os.path.sep):
             if not cur:
                 return None
             cur = cur.get_child(part)
         return cur
 
     def __repr__(self) -> str:
-        """ """
-        return f"<PortableDeviceContent {self._object_id}: {self.get_properties()}>"
+        """String representation"""
+        return f"PortableDeviceContent {self.name} ({self.content_type})"
 
-    def create_content(self, dirname: str) -> 'PortableDeviceContent':
+    def create_content(self, dirname: str) -> "PortableDeviceContent":
         """Creates an empty directory content in this content.
 
-        Args:
+        Parameters:
             dirname: Name of the directory that shall be created
 
-        Return:
+        Returns:
             PortableDeviceContent for the new directory
-            
+
+        Exceptions:
+            IOError: If something went wrong
+
         Examples:
             >>> import mtp.win_access
             >>> dev = mtp.win_access.get_portable_devices()
-            >>> cont = dev[0].get_content()
-            >>> mycont = cont[0].get_path("Interner Speicher\\Music\\MyMusic")
+            >>> stor = dev[0].get_content()[0]
+            >>> mycont = stor.get_path(f"{stor.full_filename}/MyMusic")
             >>> if mycont: _ = mycont.remove()
-            >>> cont = cont[0].get_path("Interner Speicher\\Music")
-            >>> cont.create_content("MyMusic")
+            >>> cont = stor.create_content("MyMusic")
+            >>> cont.full_filename
+            'Nokia 6_Nokia 6_PLEGAR1791402808\\\\Interner gemeinsamer Speicher\\\\MyMusic'
+            >>> dev[0].close()
         """
         pdc = None
         try:
@@ -478,25 +447,11 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
 
     def _upload_stream(self, filename: str, inputstream: io.FileIO, stream_len: int) -> None:
         """Upload a steam to a file on the MTP device.
-        For an easier usage use upload_file
 
-        Args:
+        Parameters:
             filename: Name of the new file on the MTP device
             inputstream: open python file
             stream_len: length of the file to upload
-
-        Examples:
-            >>> import mtp.win_access
-            >>> dev = mtp.win_access.get_portable_devices()
-            >>> cont = dev[0].get_content()
-            >>> mycont = cont[0].get_path("Interner Speicher\\Music\\Test.mp3")
-            >>> if mycont: _ = mycont.remove()
-            >>> cont = cont[0].get_path("Interner Speicher\\Music")
-            >>> name = '..\\..\\Tests\\OnFire.mp3'
-            >>> size = os.path.getsize(name)
-            >>> inp = open(name, "rb")
-            >>> cont.upload_stream("Test.mp3", inp, size)
-            >>> inp.close()
         """
         try:
             object_properties = comtypes.client.CreateObject(
@@ -509,9 +464,7 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             object_properties.SetStringValue(WPD_OBJECT_ORIGINAL_FILE_NAME, filename)  # type: ignore
             object_properties.SetStringValue(WPD_OBJECT_NAME, filename)  # type: ignore
             optimal_transfer_size_bytes = ctypes.pointer(ctypes.c_ulong(0))
-            p_filestream = ctypes.POINTER(
-                port.IStream
-            )()  # pylint: disable=no-member # type: ignore
+            p_filestream = ctypes.POINTER(port.IStream)()  # pylint: disable=no-member # type: ignore
             # be sure to change the IPortableDeviceContent
             # 'CreateObjectWithPropertiesAndData' function in the generated code to
             # have IStream ppData as 'in','out'
@@ -521,22 +474,7 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
                 optimal_transfer_size_bytes,
                 ctypes.POINTER(ctypes.c_wchar_p)(),
             )
-            # filestream = filestream.value
             blocksize = optimal_transfer_size_bytes.contents.value
-            # cur_written = 0
-            # while True:
-            #     to_read = stream_len - cur_written
-            #     block = inputstream.read(to_read if to_read < blocksize else blocksize)
-            #     if len(block) <= 0:
-            #         break
-            #     string_buf = ctypes.create_string_buffer(block)
-            #     written = filestream.RemoteWrite(
-            #         ctypes.cast(string_buf, ctypes.POINTER(ctypes.c_ubyte)),
-            #         len(block),
-            #     )
-            #     cur_written += written
-            #     if cur_written >= stream_len:
-            #         break
             while True:
                 block = inputstream.read(blocksize)
                 if len(block) <= 0:
@@ -554,19 +492,27 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
     def upload_file(self, filename: str, inputfilename: str) -> None:
         """Upload of a file to MTP device.
 
-        Args:
+        Parameters:
             filename: Name of the new file on the MTP device
             inputfilename: Name of the file that shall be uploaded
+
+        Exceptions:
+            IOError: If something went wrong
 
         Examples:
             >>> import mtp.win_access
             >>> dev = mtp.win_access.get_portable_devices()
-            >>> cont = dev[0].get_content()
-            >>> mycont = cont[0].get_path("Interner Speicher\\Music\\Test.mp3")
+            >>> stor = dev[0].get_content()[0]
+            >>> mycont = stor.get_path("DCIM/Camera/test.jpg")
             >>> if mycont: _ = mycont.remove()
-            >>> cont = cont[0].get_path("Interner Speicher\\Music")
-            >>> name = '..\\..\\Tests\\OnFire.mp3'
-            >>> cont.upload_file("Test.mp3", name)
+            >>> cont = stor.get_path("DCIM/Camera")
+            >>> name = './tests/pic.jpg'
+            >>> cont.upload_file("test.jpg", name)
+            >>> stor = dev[0].get_content()[0]
+            >>> mycont = stor.get_path("DCIM/Camera/test.jpg")
+            >>> str(mycont)
+            'PortableDeviceContent test.jpg (2)'
+            >>> dev[0].close()
         """
         try:
             length = os.path.getsize(inputfilename)
@@ -579,28 +525,15 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
     def _download_stream(self, outputstream: IO[bytes]) -> None:
         """Download a file from MTP device.
         The used ProtableDeviceContent instance must be a file!
-        For easier usage use download_file
 
-        Args:
+        Parameters:
             outputstream: Open python file for writing
-
-        Examples:
-            >>> import mtp.win_access
-            >>> dev = mtp.win_access.get_portable_devices()
-            >>> cont = dev[0].get_content()
-            >>> cont = cont[0].get_path("Interner Speicher\\Ringtones\\hangouts_incoming_call.ogg")
-            >>> name = '..\\..\\Tests\\hangouts_incoming_call.ogg'
-            >>> outp = open(name, "wb")
-            >>> cont.download_stream(outp)
-            >>> outp.close()
         """
         try:
             resources = self._content.Transfer()  # type: ignore
             stgm_read = ctypes.c_uint(0)
             optimal_transfer_size_bytes = ctypes.pointer(ctypes.c_ulong(0))
-            p_filestream = ctypes.POINTER(
-                port.IStream
-            )()  # pylint: disable=no-member # type: ignore
+            p_filestream = ctypes.POINTER(port.IStream)()  # pylint: disable=no-member # type: ignore
             optimal_transfer_size_bytes, q_filestream = resources.GetStream(  # type: ignore
                 self._object_id,
                 WPD_RESOURCE_DEFAULT,
@@ -624,17 +557,22 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
         """Download of a file from MTP device
         The used ProtableDeviceContent instance must be a file!
 
-        Args:
+        Parameters:
             outputfilename: Name of the file the MTP file shall be written to. Any existing
                             content will be replaced.
+
+        Exceptions:
+            IOError: If something went wrong
 
         Examples:
             >>> import mtp.win_access
             >>> dev = mtp.win_access.get_portable_devices()
-            >>> cont = dev[0].get_content()
-            >>> cont = cont[0].get_path("Interner Speicher\\Ringtones\\hangouts_incoming_call.ogg")
-            >>> name = '..\\..\\Tests\\hangouts_incoming_call.ogg'
+            >>> stor = dev[0].get_content()
+            >>> cont = stor[0].get_path(f"{stor[0].full_filename}/DCIM/Camera/IMG_20241210_160830.jpg")
+            >>> name = 'picture.jpg'
             >>> cont.download_file(name)
+            >>> os.remove(name)
+            >>> dev[0].close()
         """
         try:
             # with open(outputfilename, "wb") as output_stream:
@@ -646,22 +584,23 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
     def remove(self) -> None:
         """Deletes the current directory or file.
 
-        Return:
-            0 on OK, else a windows errorcode
+        Exceptions:
+            IOError: If something went wrong
 
         Examples:
             >>> import mtp.win_access
             >>> dev = mtp.win_access.get_portable_devices()
-            >>> cont = dev[0].get_content()
-            >>> mycont = cont[0].get_path("Interner Speicher\\Music\\Test.mp3")
+            >>> stor = dev[0].get_content()[0]
+            >>> mycont = stor.get_path("DCIM/Camera/test.jpg")
             >>> if mycont: _ = mycont.remove()
-            >>> cont = cont[0].get_path("Interner Speicher\\Music")
-            >>> name = '..\\..\\Tests\\OnFire.mp3'
-            >>> cont.upload_file("Test.mp3", name)
-            >>> cont = dev[0].get_content()
-            >>> mycont = cont[0].get_path("Interner Speicher\\Music\\Test.mp3")
+            >>> cont = stor.get_path("DCIM/Camera")
+            >>> name = './tests/pic.jpg'
+            >>> cont.upload_file("test.jpg", name)
+            >>> mycont = stor.get_path("DCIM/Camera/test.jpg")
             >>> mycont.remove()
-            0
+            >>> str(mycont)
+            'PortableDeviceContent test.jpg (2)'
+            >>> dev[0].close()
         """
         try:
             objects_to_delete = comtypes.client.CreateObject(
@@ -678,17 +617,11 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
                 clsctx=comtypes.CLSCTX_INPROC_SERVER,  # pylint: disable=no-member, protected-access
                 interface=port.IPortableDevicePropVariantCollection,  # pylint: disable=no-member, protected-access # type: ignore
             )
-            self._content.Delete(WPD_DELETE_WITH_RECURSION, objects_to_delete, errors)  # type: ignore
-            count = ctypes.c_ulong()
-            errors.GetCount(ctypes.pointer(count))  # type: ignore
-            for i in range(count.value):
-                index = ctypes.c_ulong(i)
-                pvar = port.tag_inner_PROPVARIANT()  # pylint: disable=no-member # type: ignore
-                errors.GetAt(index, ctypes.pointer(pvar))  # type: ignore
-                # if pvar.data.uintVal != 0:
-                #     return pvar.data.uintVal
+            result = self._content.Delete(WPD_DELETE_WITH_RECURSION, objects_to_delete, ctypes.pointer(errors))  # type: ignore
+            if result != 0:
+                raise IOError(f"Error deleting directory/file '{self.full_filename}': {result}")
         except comtypes.COMError as err:
-            raise IOError(f"Error deleting file '{self.full_filename}': {err.args[1]}")
+            raise IOError(f"Error deleting directory/file '{self.full_filename}': {err.args[1]}")
 
 
 # -------------------------------------------------------------------------------------------------
@@ -696,14 +629,13 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
 
 class PortableDevice:
     """Class with the infos for a connected portable device.
-    The instanzes of this class will be created internaly. User should not instanciate them manually
-    until you know what you do.
+    This instances of this class are created intern, please only use the methods and attributes
 
-    Public methods:
+    Methods:
         close: Must be called when the device is no more needed. This frees the resources
         get_content: Get the content (Storages) of the device
 
-    Public attributes:
+    Attributes:
         name: Name of the MTP device
         description: Description for the device
         serialnumber: Serialnumber of the device
@@ -719,19 +651,22 @@ class PortableDevice:
     def __init__(self, p_id: str) -> None:
         """Init the class.
 
-        Args:
+        Parameters:
             p_id: ID of the found device
         """
         self._p_id = p_id
         self._set_device()
         self.name, self.description = self._get_description()
         # Get the serialnumber
-        pdc = PortableDeviceContent(ctypes.c_wchar_p("DEVICE"), self._device.Content(), None)  # type: ignore
-        self.serialnumber = pdc.get_properties()[4]
+        self._pdc = PortableDeviceContent(ctypes.c_wchar_p("DEVICE"), self._device.Content(), self, None)  # type: ignore
+        self.serialnumber = self._pdc._serialnumber
         self.devicename = f"{self.name}_{self.description}_{self.serialnumber}"
+        # Correct filename because during the initialisation it's only filled
+        # with the name, not name and serialnumber
+        self._pdc.full_filename = self.devicename
 
     def close(self) -> None:
-        """To be compatible with libmtp. One Windows not supported"""
+        """Close the connection to the device. This must be called when the device is no more needed."""
         pass
 
     def _get_description(self) -> Tuple[str, str]:
@@ -744,8 +679,8 @@ class PortableDevice:
         Examples:
             >>> import mtp.win_access
             >>> dev = mtp.win_access.get_portable_devices()
-            >>> dev[0].get_description()
-            ('HSG1316', 'HSG1316')
+            >>> dev[0]._get_description()
+            ('Nokia 6', 'Nokia 6')
         """
         if DEVICE_MANAGER is None:
             return "", ""
@@ -759,9 +694,7 @@ class PortableDevice:
         )
         self._desc = name.value
         try:
-            DEVICE_MANAGER.GetDeviceFriendlyName(
-                self._p_id, ctypes.POINTER(ctypes.c_ushort)(), name_len
-            )
+            DEVICE_MANAGER.GetDeviceFriendlyName(self._p_id, ctypes.POINTER(ctypes.c_ushort)(), name_len)
             name = ctypes.create_unicode_buffer(name_len.contents.value)
             DEVICE_MANAGER.GetDeviceFriendlyName(
                 self._p_id,
@@ -789,22 +722,28 @@ class PortableDevice:
             self._device.Open(self._p_id, client_information)  # type: ignore
 
     def get_content(self) -> List[PortableDeviceContent]:
-        """Get the content (storages / root directories) of a device.
+        """Get the content of a device, the storages
 
         Returns:
-            A list of instances of PortableDeviceContent
+            A list of instances of PortableDeviceContent, one for each storage
+
+        Exceptions:
+            IOError: If something went wrong
 
         Examples:
             >>> import mtp.win_access
             >>> dev = mtp.win_access.get_portable_devices()
-            >>> str(dev[0].get_content())[:33]
-            '<PortableDeviceContent c_wchar_p('
+            >>> stor = dev[0].get_content()
+            >>> len(stor)
+            2
+            >>> str(stor[0])
+            'PortableDeviceContent Interner gemeinsamer Speicher (0)'
+            >>> dev[0].close()
         """
-        dev_content = PortableDeviceContent(ctypes.c_wchar_p("DEVICE"), self._device.Content(), None, "", self.devicename) # type: ignore
-        return list(dev_content.get_children())
+        return list(self._pdc.get_children())
 
     def __repr__(self) -> str:
-        return f"<PortableDevice: {self.description}>"
+        return f"PortableDevice: {self.serialnumber} ({self.name})"
 
 
 # -------------------------------------------------------------------------------------------------
@@ -823,8 +762,9 @@ def get_portable_devices() -> list[PortableDevice]:
 
     Examples:
         >>> import mtp.win_access
-        >>> mtp.win_access.get_portable_devices()
-        [<PortableDevice: ('HSG1316', 'HSG1316')>]
+        >>> devs = mtp.win_access.get_portable_devices()
+        >>> len(devs) == 1
+        True
     """
     global DEVICE_MANAGER  # pylint: disable=global-statement
 
@@ -836,6 +776,8 @@ def get_portable_devices() -> list[PortableDevice]:
                 clsctx=comtypes.CLSCTX_INPROC_SERVER,
                 interface=port.IPortableDeviceManager,  # pylint: disable=no-member  # type: ignore
             )
+        if DEVICE_MANAGER is None:
+            raise IOError("Error initialising Windows PortableDeviceManager")
         pnp_device_id_count = ctypes.pointer(ctypes.c_ulong(0))
         DEVICE_MANAGER.GetDevices(ctypes.POINTER(ctypes.c_wchar_p)(), pnp_device_id_count)
         if pnp_device_id_count.contents.value == 0:
@@ -853,7 +795,7 @@ def get_portable_devices() -> list[PortableDevice]:
 def get_content_from_device_path(dev: PortableDevice, path: str) -> PortableDeviceContent | None:
     """Get the content of a path.
 
-    Args:
+    Parameters:
         dev: The instance of PortableDevice where the path is searched
         path: The pathname of the file or directory
 
@@ -867,10 +809,11 @@ def get_content_from_device_path(dev: PortableDevice, path: str) -> PortableDevi
     Examples:
         >>> import mtp.win_access
         >>> dev = mtp.win_access.get_portable_devices()
-        >>> n = "HSG1316\\Interner Speicher\\Ringtones"
-        >>> w = mtp.win_access.get_content_from_device_path(dev[0], n)
-        >>> str(w)[:46]
-        "<PortableDeviceContent o3: ('Ringtones', 1, -1"
+        >>> n = "Nokia 6_Nokia 6_PLEGAR1791402808/Interner gemeinsamer Speicher/DCIM/Camera"
+        >>> cont = mtp.win_access.get_content_from_device_path(dev[0], n)
+        >>> str(cont)
+        'PortableDeviceContent Camera (1)'
+        >>> dev[0].close()
     """
     path = path.replace("\\", os.path.sep).replace("/", os.path.sep)
     path_parts = path.split(os.path.sep)
@@ -893,21 +836,19 @@ def get_content_from_device_path(dev: PortableDevice, path: str) -> PortableDevi
         except comtypes.COMError as err:
             raise IOError(f"Error reading directory '{path}': {err.args[1]}")
     return None
-    
+
 
 def walk(
     dev: PortableDevice,
     path: str,
     callback: Optional[Callable[[str], bool]] = None,
     error_callback: Optional[Callable[[str], bool]] = None,
-) -> Generator[
+) ->  Generator[
     tuple[str, list[PortableDeviceContent], list[PortableDeviceContent]],
-    None,
-    None,
-]:
+    ]:
     """Iterates ower all files in a tree just like os.walk
 
-    Args:
+    Parameters:
         dev: Portable device to iterate in
         path: path from witch to iterate
         callback: when given, a function that takes one argument (the selected file) and returns
@@ -931,13 +872,16 @@ def walk(
     Examples:
         >>> import mtp.win_access
         >>> dev = mtp.win_access.get_portable_devices()
-        >>> n = "HSG1316\\Interner Speicher\\Ringtones"
+        >>> n = "Nokia 6_Nokia 6_PLEGAR1791402808/Interner gemeinsamer Speicher/DCIM/Camera"
         >>> for r, d, f in mtp.win_access.walk(dev[0], n):
         ...     for f1 in f:
         ...             print(f1.name)
         ...
-        hangouts_message.ogg
-        hangouts_incoming_call.ogg
+        IMG_20241210_160830.jpg
+        IMG_20241210_160833.jpg
+        IMG_20241210_161150.jpg
+        test.jpg
+        >>> dev[0].close()
     """
     if not (cont := get_content_from_device_path(dev, path)):
         return
@@ -950,23 +894,22 @@ def walk(
         files: list[PortableDeviceContent] = []
         try:
             for child in cont.get_children():
-                (_, contenttype, _, _, _) = child.get_properties()
-                if contenttype in [
+                if child.content_type in [
                     WPD_CONTENT_TYPE_STORAGE,
                     WPD_CONTENT_TYPE_DIRECTORY,
                 ]:
                     # child.full_filename = os.path.join(cont.full_filename, name)
                     directories.append(child)
-                elif contenttype == WPD_CONTENT_TYPE_FILE:
+                elif child.content_type == WPD_CONTENT_TYPE_FILE:
                     # child.full_filename = os.path.join(cont.full_filename, name)
                     files.append(child)
                 if callback and not callback(child.full_filename):
                     directories = []
                     files = []
                     return
-            yield cont.full_filename, sorted(
-                directories, key=lambda ent: ent.full_filename
-            ), sorted(files, key=lambda ent: ent.full_filename)
+            yield cont.full_filename, sorted(directories, key=lambda ent: ent.full_filename), sorted(
+                files, key=lambda ent: ent.full_filename
+            )
         except Exception as err:
             if error_callback is not None:
                 if not error_callback(str(err)):
@@ -979,19 +922,26 @@ def walk(
 def makedirs(dev: PortableDevice, path: str) -> PortableDeviceContent:
     """Creates the directories in path on the MTP device if they don't exist.
 
-    Args:
+    Parameters:
         dev: Portable device to create the dirs on
-        path: pathname of the dir to create. Any directoriues in path that don't exist
-            will e created automatically.
+        path: pathname of the dir to create. Any directories in path that don't exist
+            will be created automatically.
+
+    Returns:
+        A PortableDeviceContent instance for the last directory in path.
+            
     Exceptions:
         IOError: If something went wrong
 
     Examples:
         >>> import mtp.win_access
         >>> dev = mtp.win_access.get_portable_devices()
-        >>> n = "HSG1316\\Interner Speicher\\Music\\MyMusic\\Test1"
-        >>> str(mtp.win_access.makedirs(dev[0], n))[:22]
-        '<PortableDeviceContent'
+        >>> n = "Nokia 6_Nokia 6_PLEGAR1791402808/Interner gemeinsamer Speicher/DCIM/Camera/Test"
+        >>> cont = mtp.win_access.makedirs(dev[0], n)
+        >>> str(cont)
+        'PortableDeviceContent Test (1)'
+        >>> cont.remove()
+        >>> dev[0].close()
     """
     try:
         content = dev.get_content()[0]

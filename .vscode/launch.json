@@ -4,8 +4,8 @@
         "name": "Python: access_test.py",
         "type": "debugpy",
         "request": "launch",
-        "program": "${workspaceFolder}/tests/access_test.py",
-        // "program": "${workspaceFolder}/tests/dialog_test.py",
+        "program": "${workspaceFolder}/examples/access_test.py",
+        // "program": "${workspaceFolder}/examples/dialog_test.py",
         "console": "integratedTerminal",
         "justMyCode": false
       },

@@ -6,7 +6,7 @@
     },
     "black-formatter.args": [
         "--line-length",
-        "100"
+        "120"
     ],
     "python.analysis.typeCheckingMode": "basic"
 }

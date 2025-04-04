@@ -5,9 +5,9 @@ Author:  Heribert Füchtenhans
 
 Version: 2025.3.27
 
-Python: 
-    tkinter
-    mtp_access
+Requirements:
+    - Python modules
+        - tkinter
 
 The module contains the following classes:
 
@@ -58,7 +58,7 @@ OCEcIDN0FImiRm7CP2vMkPHyBQ2ctAP71HHTBs4e2AIDAgA7
 
 
 @dataclass
-class TreeEntry:
+class _TreeEntry:
     """Class for keepeing the entries in the tree"""
 
     dev: access.PortableDevice
@@ -70,9 +70,7 @@ class TreeEntry:
 class AskDirectory(tkinter.simpledialog.Dialog):  # pylint: disable=too-many-instance-attributes
     """Select a wpd device and directory.
 
-    Public methods:
-
-    Public attributes:
+    Attributes:
         answer: The MTP path to the selected directory
         wpd_device: The PortableDevice that was selected
 
@@ -99,7 +97,7 @@ class AskDirectory(tkinter.simpledialog.Dialog):  # pylint: disable=too-many-ins
         self._tree: ttk.Treeview
         self._smartphone_icon = tkinter.PhotoImage(data=SMARTPHONE_ICON)
         self._buttons = buttons
-        self._tree_entries: Dict[str, TreeEntry] = {}
+        self._tree_entries: Dict[str, _TreeEntry] = {}
         # external variables
         self.answer = ""
         self.wpd_device: access.PortableDevice | None = None
@@ -134,7 +132,7 @@ class AskDirectory(tkinter.simpledialog.Dialog):  # pylint: disable=too-many-ins
                     open=False,
                     image=self._smartphone_icon,
                 )
-                self._tree_entries[treeid] = TreeEntry(dev, None, [], False)
+                self._tree_entries[treeid] = _TreeEntry(dev, None, [], False)
                 self.config(cursor="watch")
                 self.update_idletasks()
                 self._process_directory(treeid)
@@ -164,7 +162,7 @@ class AskDirectory(tkinter.simpledialog.Dialog):  # pylint: disable=too-many-ins
                     text=child.name,
                     open=False,
                 )
-                self._tree_entries[treeid] = TreeEntry(treeentry.dev, child, [], False)
+                self._tree_entries[treeid] = _TreeEntry(treeentry.dev, child, [], False)
                 treeentry.child_treeids.append(treeid)
         self._tree_entries[insert_after_id].content_loaded = True
 

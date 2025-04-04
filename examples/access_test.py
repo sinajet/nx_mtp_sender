@@ -20,31 +20,39 @@ else:
     on_windows = False
 
 
-TESTNUMBER = 7  # 1 - 7
-TESTRUNS = 1
+TESTNUMBER = 0  # 1 - 9, 0 for all tests
+TESTRUNS = 1    # how many times a test should be executed
 
 
-def test_connect_disconnct() -> None:
+def test_1_connect_disconnct() -> None:
     """Test connection and disconnection to device"""
+    print("Test 1 ------------------------------------------------------------------------")
     for i in range(TESTRUNS):
         print(f"Find devices on test run {i+1}:")
-        for dev in mtp_access.get_portable_devices():
+        devices = mtp_access.get_portable_devices()
+        if len(devices) == 0:
+            print("No devices found!")
+            return
+        for dev in devices:
             print(
                 f"Found device: Name: {dev.name}: Desc.: {dev.description}: Serialnr.: {dev.serialnumber}"
+                f" Fullname: {dev.devicename}"
             )
             dev.close()
 
 
-def test_list_storages() -> None:
+def test_2_list_storages() -> None:
     """Test list storages of device"""
+    print("Test 2 ------------------------------------------------------------------------")
     for dev in mtp_access.get_portable_devices():
         for i in range(TESTRUNS):
+            print(f"Find storages on test run {i+1}:")
             for storage in dev.get_content():
                 print(f"Found Storage: {storage.full_filename}")
         dev.close()
 
 
-def test_list_childs_with_walk() -> None:
+def test_3_list_childs_with_walk() -> None:
     """Test get all childs with walk"""
 
     def error_function(error: str) -> bool:
@@ -52,8 +60,10 @@ def test_list_childs_with_walk() -> None:
         print(f"Error: {error}")
         return True
 
+    print("Test 3 ------------------------------------------------------------------------")
     for dev in mtp_access.get_portable_devices():
         for i in range(TESTRUNS):
+            print(f"Find all childs with walk on test run {i+1}:")
             for storage in dev.get_content():
                 print(f"Walk Storage: {storage.full_filename}")
                 count = 0
@@ -68,36 +78,45 @@ def test_list_childs_with_walk() -> None:
         dev.close()
 
 
-def test_get_cont_from_path() -> None:
+def test_4_get_cont_from_path() -> None:
     """Test get cont from a path"""
+    print("Test 4 ------------------------------------------------------------------------")
     for dev in mtp_access.get_portable_devices():
         for i in range(TESTRUNS):
+            print(f"Find content of a full qualified path on test run {i+1}:")
             cont = mtp_access.get_content_from_device_path(dev, f"{dev.devicename}/Interner gemeinsamer Speicher/Android/data/com.google.android.apps.maps/cache/diskcache")  # type: ignore
             print(f"Content found: {cont}")
         dev.close()
 
 
-def test_create_delete_folder() -> None:
+def test_5_create_delete_folder() -> None:
     """Create / Delete Folder"""
+    print("Test 5 ------------------------------------------------------------------------")
     for dev in mtp_access.get_portable_devices():
         for i in range(TESTRUNS):
+            print(f"Create and delete folder on test run {i+1}:")
             new_path = os.path.join(dev.get_content()[0].full_filename, "example/temp")
             cont = mtp_access.makedirs(dev, new_path)  # type: ignore
             print(f"Content created: {cont}")
             if cont is not None:
                 cont.remove()
+                cont = mtp_access.get_content_from_device_path(dev, os.path.join(dev.get_content()[0].full_filename, "example/temp"))  # type: ignore
+                if cont is not None:
+                    raise IOError("Can't delete folder in test_create_delete_folder")
                 print(f"   Content (temp) removed")
         dev.close()
 
 
-def test_create_delete_file() -> None:
+def test_6_create_delete_file() -> None:
     """Create / Delete files"""
+    print("Test 6 ------------------------------------------------------------------------")
     mtp_filename = "music.mp3"
     uploadfilename = os.path.join(os.path.dirname(__file__), "music.mp3")
     downloadfilename = os.path.join(os.path.dirname(__file__), "test.mp3")
     for dev in mtp_access.get_portable_devices():
         print(f"Device: {dev.devicename}")
         for i in range(TESTRUNS):
+            print(f"Create and delete file on test run {i+1}:")
             # Create the directory for the new file
             new_path = os.path.join(dev.get_content()[0].full_filename, "example/temp")
             cont = mtp_access.makedirs(dev, new_path)  # type: ignore
@@ -128,7 +147,7 @@ def test_create_delete_file() -> None:
         dev.close()
 
 
-def test_display_childs() -> None:
+def test_7_display_childs() -> None:
     """test to show all cont, but doesn't use walk.
     For walking through the content of a directory tree use walk, it's much faster"""
 
@@ -136,17 +155,16 @@ def test_display_childs() -> None:
         """Show all cont, but don't use walk"""
         if cont := mtp_access.get_content_from_device_path(dev, root):  # type: ignore
             for child in cont.get_children():
-                (_, contenttype, size, date_created, _) = child.get_properties()
                 fullpath = child.full_filename
-                typ = "?"
-                if contenttype == mtp_access.WPD_CONTENT_TYPE_STORAGE:
-                    typ = "S"
-                elif contenttype == mtp_access.WPD_CONTENT_TYPE_DIRECTORY:
-                    typ = "D"
-                elif contenttype == mtp_access.WPD_CONTENT_TYPE_FILE:
-                    typ = "F"
-                print(f"{typ}  {fullpath} Size: {size} Created: {date_created} ")
-                if contenttype in (
+                if child.content_type == mtp_access.WPD_CONTENT_TYPE_STORAGE:
+                    print(f"S  {fullpath}")
+                elif child.content_type == mtp_access.WPD_CONTENT_TYPE_DIRECTORY:
+                    print(f"D  {fullpath}")
+                elif child.content_type == mtp_access.WPD_CONTENT_TYPE_FILE:
+                    print(f"F  {fullpath} Size: {child.size} Created: {child.date_modified}")
+                else:
+                    print(f"?  {fullpath}")
+                if child.content_type in (
                     mtp_access.WPD_CONTENT_TYPE_STORAGE,
                     mtp_access.WPD_CONTENT_TYPE_DIRECTORY,
                 ):
@@ -154,39 +172,94 @@ def test_display_childs() -> None:
         else:
             print(f"{root} not found")
 
+    print("Test 7 ------------------------------------------------------------------------")
     for dev in mtp_access.get_portable_devices():
-        for storage in dev.get_content():
-            print(f"Storage: {storage.full_filename}")
-            show_childs(dev, storage.full_filename)
-            break
+        for i in range(TESTRUNS):
+            print(f"Display childs on test run {i+1}:")
+            for storage in dev.get_content():
+                print(f"Storage: {storage.full_filename}")
+                show_childs(dev, storage.full_filename)
+                break
         print("Closing device")
+        dev.close()
+
+
+def test_8_get_path() -> None:
+    """Test get content from partial and fully qualified path"""
+    print("Test 8 ------------------------------------------------------------------------")
+    for dev in mtp_access.get_portable_devices():
+        for i in range(TESTRUNS):
+            print(f"Get content from fully and partialy qualified filename on test run {i+1}:")
+            stor = dev.get_content()[0]
+            cont = stor.get_path(f"{stor.full_filename}/DCIM/Camera")
+            print(cont.full_filename if cont is not None else "DCIM/Camera with full name not found")
+            cont = stor.get_path(f"DCIM/Camera")
+            print(cont.full_filename if cont is not None else "DCIM/Camera with name not found")
+        dev.close()
+
+
+def test_9_create_content() -> None:
+    """Test to create a folder with create_content"""
+    print("Test 9 ------------------------------------------------------------------------")
+    for dev in mtp_access.get_portable_devices():
+        for i in range(TESTRUNS):
+            print(f"Create a folder with create_content on test run {i+1}:")
+            stor = dev.get_content()[0]
+            mycont = stor.get_path(f"{stor.full_filename}/MyMusic")
+            if mycont:
+                mycont.remove()
+            cont = stor.create_content("MyMusic")
+            if str(cont).split(os.sep, 1)[1][:38] != "Interner gemeinsamer Speicher/MyMusic:":
+                raise IOError("Content differs in test_create_content")
+        dev.close()
+
+
+def test_10_get_child() -> None:
+    """Test get_child for directories"""
+    print("Test 10------------------------------------------------------------------------")
+    for dev in mtp_access.get_portable_devices():
+        for i in range(TESTRUNS):
+            print(f"Test get_child on test run {i+1}:")
+            stor = dev.get_content()[0]
+            mycont = stor.get_child("DCIM")
+            if mycont is None or mycont.content_type != mtp_access.WPD_CONTENT_TYPE_DIRECTORY:
+                dev.close()
+                raise IOError("Test 10 Content is not a directory")
         dev.close()
 
 
 def main() -> None:
     """Hauptprogramm"""
+    print("")
     if TESTNUMBER == 0:  # all test
-        test_connect_disconnct()
-        test_list_storages()
-        test_list_childs_with_walk()
-        test_get_cont_from_path()
-        test_create_delete_folder()
-        test_create_delete_file()
-        test_display_childs()
+        test_1_connect_disconnct()
+        test_2_list_storages()
+        test_3_list_childs_with_walk()
+        test_4_get_cont_from_path()
+        test_5_create_delete_folder()
+        test_6_create_delete_file()
+        test_7_display_childs()
+        test_8_get_path()
     elif TESTNUMBER == 1:
-        test_connect_disconnct()
+        test_1_connect_disconnct()
     elif TESTNUMBER == 2:
-        test_list_storages()
+        test_2_list_storages()
     elif TESTNUMBER == 3:
-        test_list_childs_with_walk()
+        test_3_list_childs_with_walk()
     elif TESTNUMBER == 4:
-        test_get_cont_from_path()
+        test_4_get_cont_from_path()
     elif TESTNUMBER == 5:
-        test_create_delete_folder()
+        test_5_create_delete_folder()
     elif TESTNUMBER == 6:
-        test_create_delete_file()
+        test_6_create_delete_file()
     elif TESTNUMBER == 7:
-        test_display_childs()
+        test_7_display_childs()
+    elif TESTNUMBER == 8:
+        test_8_get_path()
+    elif TESTNUMBER == 9:
+        test_9_create_content()
+    elif TESTNUMBER == 10:
+        test_10_get_child()
 
 
 # ----------------------------------------------------------------------

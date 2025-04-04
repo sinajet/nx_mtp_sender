@@ -791,7 +791,8 @@ class MTP:
             raise NotConnected
         err = self.mtp.LIBMTP_Get_Storage(self.device, 0)
         if err == -1:
-            # self.mtp.LIBMTP_Dump_Errorstack(self.device)
+            self.mtp.LIBMTP_Dump_Errorstack(self.device)
+            self.mtp.LIBMTP_Clear_Errorstack(self.device)
             raise CommandFailed
         ret: list[tuple[str, int]] = []
         next = self.device.contents.storage
