@@ -1,3 +1,0 @@
-## dialog Documentation
-
-::: mtp.dialog
