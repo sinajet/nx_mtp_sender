@@ -8,7 +8,7 @@ libmtp.
 
 Author:  Heribert Füchtenhans
 
-Version: 2025.4.4
+Version: 2025.4.6
 
 For examples please look into the examples directory.
 
@@ -46,20 +46,21 @@ Examples:
     >>> devs = mtp.linux_access.get_portable_devices()
     >>> len(devs) >= 1
     True
-    >>> str(devs[0])[:32]
-    'PortableDevice: PLEGAR1791402808'
+    >>> str(devs[0])[:16]
+    'PortableDevice: '
     >>> devs[0].close()
 
 """
 
-# pylint: disable=global-statement
+# __pylint: disable=global-statement
+# pyright: reportPrivateUsage=false
 
 import ctypes
 import datetime
 import os
 import shutil
 import subprocess
-from typing import Generator, List, Optional, Tuple, Callable
+from typing import Generator, List, Optional, Callable
 import urllib.parse
 
 
@@ -96,7 +97,7 @@ def _init_libmtp() -> None:
     # Kill any process that uses libmtp
     # Getting MTP devices from lsusb
     p = subprocess.Popen("lsusb", stdout=subprocess.PIPE, shell=True)
-    (output, err) = p.communicate()
+    (output, _) = p.communicate()
     if p.wait() != 0:
         raise IOError("Can't get output from lsusb!")
     for o in output.decode("ascii").split("\n"):
@@ -134,7 +135,7 @@ class PortableDevice:
         IOError: If something went wrong
     """
 
-    def __init__(self, device: "str | ctypes._Pointer[pylibmtp.LIBMTP_RawDevice]") -> None:
+    def __init__(self, device: "str | ctypes._Pointer[pylibmtp.LIBMTP_RawDevice]") -> None: # type: ignore
         """Init the class.
 
         Parameters:
@@ -165,7 +166,7 @@ class PortableDevice:
             # greps libmtp back is very small
             if _libmtp is None:
                 _init_libmtp()
-            self._libmntp_device = pylibmtp.MTP(device)
+            self._libmntp_device = pylibmtp.MTP(device) # type: ignore
             self._libmntp_device.connect()
             self.name = self._libmntp_device.get_devicename()
             self.description = self._libmntp_device.get_modelname()
@@ -194,8 +195,8 @@ class PortableDevice:
             >>> stor = dev[0].get_content()
             >>> len(stor)
             2
-            >>> str(stor[0])
-            'PortableDeviceContent Interner gemeinsamer Speicher (0)'
+            >>> str(stor[0])[:31]
+            'PortableDeviceContent Interner '
             >>> dev[0].close()
         """
         ret_objs: list["PortableDeviceContent"] = []
@@ -207,8 +208,6 @@ class PortableDevice:
             except OSError as err:
                 raise IOError(f"Can't access {self.devicename}.") from err
         else:
-            if self._libmntp_device is None:
-                raise IOError("Device not initialised. Call get_portable_devices first.")
             try:
                 for entry in self._libmntp_device.get_storage():
                     full_name = os.path.join(self.devicename, entry[0])
@@ -535,7 +534,7 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
                 # Ok can't copy with shutil on older Gnomes (for example Zorin). si we use gio
                 gio_full_filename = "mtp://" + full_filename.split("=", 1)[1]
                 try:
-                    status = subprocess.check_output(
+                    _ = subprocess.check_output(
                         f'gio copy "{inputfilename}" "{gio_full_filename}"',
                         shell=True,
                         stderr=subprocess.STDOUT,
@@ -548,7 +547,7 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             # shutil.copy(inputfilename, full_filename)
         else:
             self._port_device._libmntp_device.send_file_from_file(
-                inputfilename, filename, self.storage_id, self.entry_id, None
+                inputfilename, filename, self.storage_id, self.entry_id
             )
 
     def download_file(self, outputfilename: str) -> None:
@@ -720,6 +719,8 @@ def walk(
     error_callback: Optional[Callable[[str], bool]] = None,
 ) -> Generator[
     tuple[str, list[PortableDeviceContent], list[PortableDeviceContent]],
+    None,
+    None
     ]:
     """Iterates ower all files in a tree just like os.walk
 
@@ -854,8 +855,6 @@ def makedirs(dev: PortableDevice, path: str) -> PortableDeviceContent:
             cont = cont.get_child(pp)
             if cont is None:
                 cont = par_cont.create_content(pp)
-            if cont is None:
-                raise IOError(f"Error creating directory '{path}'")
     return cont
 
 

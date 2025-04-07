@@ -30,8 +30,8 @@ dialog.py implements a directory searcher in tkinter that shows the attached MTP
 # Changelog
 * 2.0.4
     * Fixed remove. It will now raise IOError if remove could not be done
-    * Added create_new_comtype_modules_from_wpd_dlls to automtically create new comtype files
-        This is only neede if for some reason the Windows WPD library changes.
+    * Added create_new_comtype_modules_from_wpd_dlls to automtically create new comtype files.
+        This is only needed if for some reason the Windows WPD library changes.
     * Removed ProtableDevice.get_properties because all properties are now directly accessible
     * Updates documentation and doctest
 * 2.0.3
