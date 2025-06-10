@@ -30,7 +30,7 @@ dialog.py implements a directory searcher in tkinter that shows the attached MTP
 # Changelog
 * 2.0.5
     * Updated comtypes files for comtypes version 1.4.11
-    * Added comtype.CoUninitialise to close function to free Windows memory
+    * Added comtypes.CoUninitialize to close function to free Windows memory
 * 2.0.4
     * Fixed remove. It will now raise IOError if remove could not be done
     * Added create_new_comtype_modules_from_wpd_dlls to automtically create new comtype files.
