@@ -1,14 +1,15 @@
 # -*- coding: mbcs -*-
 
 from ctypes import *
+from . import _00020430_0000_0000_C000_000000000046_0_2_0
 from comtypes import (
     _check_version, BSTR, CoClass, COMMETHOD, dispid, GUID,
     helpstring, IUnknown
 )
+from ctypes import HRESULT
 from comtypes.automation import (
     DECIMAL, IDispatch, SCODE, tagINVOKEKIND, VARIANT
 )
-from . import _00020430_0000_0000_C000_000000000046_0_2_0
 from comtypes.typeinfo import (
     IRecordInfo, ITypeComp, ITypeInfo, ITypeLib, tagARRAYDESC,
     tagCALLCONV, tagDESCKIND, tagELEMDESC, tagFUNCDESC, tagFUNCKIND,
@@ -16,11 +17,10 @@ from comtypes.typeinfo import (
     tagSYSKIND, tagTLIBATTR, tagTYPEATTR, tagTYPEDESC, tagTYPEKIND,
     tagVARDESC, tagVARKIND, ULONG_PTR
 )
-from ctypes import HRESULT
-from comtypes.stream import ISequentialStream
 from ctypes.wintypes import (
     _FILETIME, _LARGE_INTEGER, _ULARGE_INTEGER, DWORD, VARIANT_BOOL
 )
+from comtypes.stream import ISequentialStream
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -34,250 +34,14 @@ STRING = c_char_p
 
 
 
-class _wireSAFEARRAY(Structure):
-    pass
-
-
-class _wireSAFEARRAY_UNION(Structure):
-    pass
-
-
-class __MIDL_IOleAutomationTypes_0001(Union):
-    pass
-
-
-class _wireSAFEARR_BSTR(Structure):
-    pass
-
-
-class _FLAGGED_WORD_BLOB(Structure):
-    pass
-
-
-_wireSAFEARR_BSTR._fields_ = [
-    ('Size', c_ulong),
-    ('aBstr', POINTER(POINTER(_FLAGGED_WORD_BLOB))),
-]
-
-assert sizeof(_wireSAFEARR_BSTR) == 16, sizeof(_wireSAFEARR_BSTR)
-assert alignment(_wireSAFEARR_BSTR) == 8, alignment(_wireSAFEARR_BSTR)
-
-
-class _wireSAFEARR_UNKNOWN(Structure):
-    pass
-
-
-_wireSAFEARR_UNKNOWN._fields_ = [
-    ('Size', c_ulong),
-    ('apUnknown', POINTER(POINTER(IUnknown))),
-]
-
-assert sizeof(_wireSAFEARR_UNKNOWN) == 16, sizeof(_wireSAFEARR_UNKNOWN)
-assert alignment(_wireSAFEARR_UNKNOWN) == 8, alignment(_wireSAFEARR_UNKNOWN)
-
-
-class _wireSAFEARR_DISPATCH(Structure):
-    pass
-
-
-_wireSAFEARR_DISPATCH._fields_ = [
-    ('Size', c_ulong),
-    ('apDispatch', POINTER(POINTER(IDispatch))),
-]
-
-assert sizeof(_wireSAFEARR_DISPATCH) == 16, sizeof(_wireSAFEARR_DISPATCH)
-assert alignment(_wireSAFEARR_DISPATCH) == 8, alignment(_wireSAFEARR_DISPATCH)
-
-
-class _wireSAFEARR_VARIANT(Structure):
-    pass
-
-
-class _wireVARIANT(Structure):
-    pass
-
-
-_wireSAFEARR_VARIANT._fields_ = [
-    ('Size', c_ulong),
-    ('aVariant', POINTER(POINTER(_wireVARIANT))),
-]
-
-assert sizeof(_wireSAFEARR_VARIANT) == 16, sizeof(_wireSAFEARR_VARIANT)
-assert alignment(_wireSAFEARR_VARIANT) == 8, alignment(_wireSAFEARR_VARIANT)
-
-
-class _wireSAFEARR_BRECORD(Structure):
-    pass
-
-
-class _wireBRECORD(Structure):
-    pass
-
-
-_wireSAFEARR_BRECORD._fields_ = [
-    ('Size', c_ulong),
-    ('aRecord', POINTER(POINTER(_wireBRECORD))),
-]
-
-assert sizeof(_wireSAFEARR_BRECORD) == 16, sizeof(_wireSAFEARR_BRECORD)
-assert alignment(_wireSAFEARR_BRECORD) == 8, alignment(_wireSAFEARR_BRECORD)
-
-
-class _wireSAFEARR_HAVEIID(Structure):
-    pass
-
-
-_wireSAFEARR_HAVEIID._fields_ = [
-    ('Size', c_ulong),
-    ('apUnknown', POINTER(POINTER(IUnknown))),
-    ('iid', _00020430_0000_0000_C000_000000000046_0_2_0.GUID),
-]
-
-assert sizeof(_wireSAFEARR_HAVEIID) == 32, sizeof(_wireSAFEARR_HAVEIID)
-assert alignment(_wireSAFEARR_HAVEIID) == 8, alignment(_wireSAFEARR_HAVEIID)
-
-
-class _BYTE_SIZEDARR(Structure):
-    pass
-
-
-_BYTE_SIZEDARR._fields_ = [
-    ('clSize', c_ulong),
-    ('pData', POINTER(c_ubyte)),
-]
-
-assert sizeof(_BYTE_SIZEDARR) == 16, sizeof(_BYTE_SIZEDARR)
-assert alignment(_BYTE_SIZEDARR) == 8, alignment(_BYTE_SIZEDARR)
-
-
-class _SHORT_SIZEDARR(Structure):
-    pass
-
-
-_SHORT_SIZEDARR._fields_ = [
-    ('clSize', c_ulong),
-    ('pData', POINTER(c_ushort)),
-]
-
-assert sizeof(_SHORT_SIZEDARR) == 16, sizeof(_SHORT_SIZEDARR)
-assert alignment(_SHORT_SIZEDARR) == 8, alignment(_SHORT_SIZEDARR)
-
-
-class _LONG_SIZEDARR(Structure):
-    pass
-
-
-_LONG_SIZEDARR._fields_ = [
-    ('clSize', c_ulong),
-    ('pData', POINTER(c_ulong)),
-]
-
-assert sizeof(_LONG_SIZEDARR) == 16, sizeof(_LONG_SIZEDARR)
-assert alignment(_LONG_SIZEDARR) == 8, alignment(_LONG_SIZEDARR)
-
-
-class _HYPER_SIZEDARR(Structure):
-    pass
-
-
-_HYPER_SIZEDARR._fields_ = [
-    ('clSize', c_ulong),
-    ('pData', POINTER(c_longlong)),
-]
-
-assert sizeof(_HYPER_SIZEDARR) == 16, sizeof(_HYPER_SIZEDARR)
-assert alignment(_HYPER_SIZEDARR) == 8, alignment(_HYPER_SIZEDARR)
-
-__MIDL_IOleAutomationTypes_0001._fields_ = [
-    ('BstrStr', _wireSAFEARR_BSTR),
-    ('UnknownStr', _wireSAFEARR_UNKNOWN),
-    ('DispatchStr', _wireSAFEARR_DISPATCH),
-    ('VariantStr', _wireSAFEARR_VARIANT),
-    ('RecordStr', _wireSAFEARR_BRECORD),
-    ('HaveIidStr', _wireSAFEARR_HAVEIID),
-    ('ByteStr', _BYTE_SIZEDARR),
-    ('WordStr', _SHORT_SIZEDARR),
-    ('LongStr', _LONG_SIZEDARR),
-    ('HyperStr', _HYPER_SIZEDARR),
-]
-
-assert sizeof(__MIDL_IOleAutomationTypes_0001) == 32, sizeof(__MIDL_IOleAutomationTypes_0001)
-assert alignment(__MIDL_IOleAutomationTypes_0001) == 8, alignment(__MIDL_IOleAutomationTypes_0001)
-
-_wireSAFEARRAY_UNION._fields_ = [
-    ('sfType', c_ulong),
-    ('u', __MIDL_IOleAutomationTypes_0001),
-]
-
-assert sizeof(_wireSAFEARRAY_UNION) == 40, sizeof(_wireSAFEARRAY_UNION)
-assert alignment(_wireSAFEARRAY_UNION) == 8, alignment(_wireSAFEARRAY_UNION)
-
-_wireSAFEARRAY._fields_ = [
-    ('cDims', c_ushort),
-    ('fFeatures', c_ushort),
-    ('cbElements', c_ulong),
-    ('cLocks', c_ulong),
-    ('uArrayStructs', _wireSAFEARRAY_UNION),
-    ('rgsabound', POINTER(tagSAFEARRAYBOUND)),
-]
-
-assert sizeof(_wireSAFEARRAY) == 64, sizeof(_wireSAFEARRAY)
-assert alignment(_wireSAFEARRAY) == 8, alignment(_wireSAFEARRAY)
-
-
-class tagCLIPDATA(Structure):
-    pass
-
-
-tagCLIPDATA._fields_ = [
-    ('cbSize', c_ulong),
-    ('ulClipFmt', c_int),
-    ('pClipData', POINTER(c_ubyte)),
-]
-
-assert sizeof(tagCLIPDATA) == 16, sizeof(tagCLIPDATA)
-assert alignment(tagCLIPDATA) == 8, alignment(tagCLIPDATA)
-
-
-class IPortableDeviceServiceCapabilities(_00020430_0000_0000_C000_000000000046_0_2_0.IUnknown):
-    """IPortableDeviceServiceCapabilities Interface"""
+class IPortableDeviceServiceMethodCallback(_00020430_0000_0000_C000_000000000046_0_2_0.IUnknown):
+    """IPortableDeviceServiceMethodCallback Interface"""
     _case_insensitive_ = True
-    _iid_ = GUID('{24DBD89D-413E-43E0-BD5B-197F3C56C886}')
+    _iid_ = GUID('{C424233C-AFCE-4828-A756-7ED7A2350083}')
     _idlflags_ = []
 
     if TYPE_CHECKING:  # commembers
-        def GetSupportedMethods(self) -> 'IPortableDevicePropVariantCollection': ...
-        def GetSupportedMethodsByFormat(self, Format: hints.Incomplete) -> 'IPortableDevicePropVariantCollection': ...
-        def GetMethodAttributes(self, Method: hints.Incomplete) -> 'IPortableDeviceValues': ...
-        def GetMethodParameterAttributes(self, Method: hints.Incomplete, Parameter: hints.Incomplete) -> 'IPortableDeviceValues': ...
-        def GetSupportedFormats(self) -> 'IPortableDevicePropVariantCollection': ...
-        def GetFormatAttributes(self, Format: hints.Incomplete) -> 'IPortableDeviceValues': ...
-        def GetSupportedFormatProperties(self, Format: hints.Incomplete) -> 'IPortableDeviceKeyCollection': ...
-        def GetFormatPropertyAttributes(self, Format: hints.Incomplete, Property: hints.Incomplete) -> 'IPortableDeviceValues': ...
-        def GetSupportedEvents(self) -> 'IPortableDevicePropVariantCollection': ...
-        def GetEventAttributes(self, Event: hints.Incomplete) -> 'IPortableDeviceValues': ...
-        def GetEventParameterAttributes(self, Event: hints.Incomplete, Parameter: hints.Incomplete) -> 'IPortableDeviceValues': ...
-        def GetInheritedServices(self, dwInheritanceType: hints.Incomplete) -> 'IPortableDevicePropVariantCollection': ...
-        def GetFormatRenderingProfiles(self, Format: hints.Incomplete) -> 'IPortableDeviceValuesCollection': ...
-        def GetSupportedCommands(self) -> 'IPortableDeviceKeyCollection': ...
-        def GetCommandOptions(self, Command: hints.Incomplete) -> 'IPortableDeviceValues': ...
-        def Cancel(self) -> hints.Hresult: ...
-
-
-class IPortableDevicePropVariantCollection(_00020430_0000_0000_C000_000000000046_0_2_0.IUnknown):
-    """IPortableDevicePropVariantCollection Interface"""
-    _case_insensitive_ = True
-    _iid_ = GUID('{89B2E422-4F1B-4316-BCEF-A44AFEA83EB3}')
-    _idlflags_ = []
-
-    if TYPE_CHECKING:  # commembers
-        def GetCount(self, pcElems: hints.Incomplete) -> hints.Hresult: ...
-        def GetAt(self, dwIndex: hints.Incomplete, pValue: hints.Incomplete) -> hints.Hresult: ...
-        def Add(self, pValue: hints.Incomplete) -> hints.Hresult: ...
-        def GetType(self) -> hints.Incomplete: ...
-        def ChangeType(self, vt: hints.Incomplete) -> hints.Hresult: ...
-        def Clear(self) -> hints.Hresult: ...
-        def RemoveAt(self, dwIndex: hints.Incomplete) -> hints.Hresult: ...
+        def OnComplete(self, hrStatus: hints.Incomplete, pResults: hints.Incomplete) -> hints.Hresult: ...
 
 
 class IPortableDeviceValues(_00020430_0000_0000_C000_000000000046_0_2_0.IUnknown):
@@ -329,851 +93,6 @@ class IPortableDeviceValues(_00020430_0000_0000_C000_000000000046_0_2_0.IUnknown
         def Clear(self) -> hints.Hresult: ...
 
 
-class _tagpropertykey(Structure):
-    pass
-
-
-class IPortableDeviceKeyCollection(_00020430_0000_0000_C000_000000000046_0_2_0.IUnknown):
-    """IPortableDeviceKeyCollection Interface"""
-    _case_insensitive_ = True
-    _iid_ = GUID('{DADA2357-E0AD-492E-98DB-DD61C53BA353}')
-    _idlflags_ = []
-
-    if TYPE_CHECKING:  # commembers
-        def GetCount(self, pcElems: hints.Incomplete) -> hints.Hresult: ...
-        def GetAt(self, dwIndex: hints.Incomplete, pKey: hints.Incomplete) -> hints.Hresult: ...
-        def Add(self, key: hints.Incomplete) -> hints.Hresult: ...
-        def Clear(self) -> hints.Hresult: ...
-        def RemoveAt(self, dwIndex: hints.Incomplete) -> hints.Hresult: ...
-
-
-class IPortableDeviceValuesCollection(_00020430_0000_0000_C000_000000000046_0_2_0.IUnknown):
-    """IPortableDeviceValuesCollection Interface"""
-    _case_insensitive_ = True
-    _iid_ = GUID('{6E3F2D79-4E07-48C4-8208-D8C2E5AF4A99}')
-    _idlflags_ = []
-
-    if TYPE_CHECKING:  # commembers
-        def GetCount(self, pcElems: hints.Incomplete) -> hints.Hresult: ...
-        def GetAt(self, dwIndex: hints.Incomplete) -> 'IPortableDeviceValues': ...
-        def Add(self, pValues: hints.Incomplete) -> hints.Hresult: ...
-        def Clear(self) -> hints.Hresult: ...
-        def RemoveAt(self, dwIndex: hints.Incomplete) -> hints.Hresult: ...
-
-
-IPortableDeviceServiceCapabilities._methods_ = [
-    COMMETHOD(
-        [],
-        HRESULT,
-        'GetSupportedMethods',
-        (
-            ['out'],
-            POINTER(POINTER(IPortableDevicePropVariantCollection)),
-            'ppMethods',
-        )
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'GetSupportedMethodsByFormat',
-        (
-            ['in'],
-            POINTER(_00020430_0000_0000_C000_000000000046_0_2_0.GUID),
-            'Format',
-        ),
-        (
-            ['out'],
-            POINTER(POINTER(IPortableDevicePropVariantCollection)),
-            'ppMethods',
-        )
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'GetMethodAttributes',
-        (
-            ['in'],
-            POINTER(_00020430_0000_0000_C000_000000000046_0_2_0.GUID),
-            'Method',
-        ),
-        (['out'], POINTER(POINTER(IPortableDeviceValues)), 'ppAttributes')
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'GetMethodParameterAttributes',
-        (
-            ['in'],
-            POINTER(_00020430_0000_0000_C000_000000000046_0_2_0.GUID),
-            'Method',
-        ),
-        (['in'], POINTER(_tagpropertykey), 'Parameter'),
-        (['out'], POINTER(POINTER(IPortableDeviceValues)), 'ppAttributes')
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'GetSupportedFormats',
-        (
-            ['out'],
-            POINTER(POINTER(IPortableDevicePropVariantCollection)),
-            'ppFormats',
-        )
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'GetFormatAttributes',
-        (
-            ['in'],
-            POINTER(_00020430_0000_0000_C000_000000000046_0_2_0.GUID),
-            'Format',
-        ),
-        (['out'], POINTER(POINTER(IPortableDeviceValues)), 'ppAttributes')
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'GetSupportedFormatProperties',
-        (
-            ['in'],
-            POINTER(_00020430_0000_0000_C000_000000000046_0_2_0.GUID),
-            'Format',
-        ),
-        (['out'], POINTER(POINTER(IPortableDeviceKeyCollection)), 'ppKeys')
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'GetFormatPropertyAttributes',
-        (
-            ['in'],
-            POINTER(_00020430_0000_0000_C000_000000000046_0_2_0.GUID),
-            'Format',
-        ),
-        (['in'], POINTER(_tagpropertykey), 'Property'),
-        (['out'], POINTER(POINTER(IPortableDeviceValues)), 'ppAttributes')
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'GetSupportedEvents',
-        (
-            ['out'],
-            POINTER(POINTER(IPortableDevicePropVariantCollection)),
-            'ppEvents',
-        )
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'GetEventAttributes',
-        (
-            ['in'],
-            POINTER(_00020430_0000_0000_C000_000000000046_0_2_0.GUID),
-            'Event',
-        ),
-        (['out'], POINTER(POINTER(IPortableDeviceValues)), 'ppAttributes')
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'GetEventParameterAttributes',
-        (
-            ['in'],
-            POINTER(_00020430_0000_0000_C000_000000000046_0_2_0.GUID),
-            'Event',
-        ),
-        (['in'], POINTER(_tagpropertykey), 'Parameter'),
-        (['out'], POINTER(POINTER(IPortableDeviceValues)), 'ppAttributes')
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'GetInheritedServices',
-        (['in'], c_ulong, 'dwInheritanceType'),
-        (
-            ['out'],
-            POINTER(POINTER(IPortableDevicePropVariantCollection)),
-            'ppServices',
-        )
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'GetFormatRenderingProfiles',
-        (
-            ['in'],
-            POINTER(_00020430_0000_0000_C000_000000000046_0_2_0.GUID),
-            'Format',
-        ),
-        (
-            ['out'],
-            POINTER(POINTER(IPortableDeviceValuesCollection)),
-            'ppRenderingProfiles',
-        )
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'GetSupportedCommands',
-        (['out'], POINTER(POINTER(IPortableDeviceKeyCollection)), 'ppCommands')
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'GetCommandOptions',
-        (['in'], POINTER(_tagpropertykey), 'Command'),
-        (['out'], POINTER(POINTER(IPortableDeviceValues)), 'ppOptions')
-    ),
-    COMMETHOD([], HRESULT, 'Cancel'),
-]
-
-################################################################
-# code template for IPortableDeviceServiceCapabilities implementation
-# class IPortableDeviceServiceCapabilities_Impl(object):
-#     def GetSupportedMethods(self):
-#         '-no docstring-'
-#         #return ppMethods
-#
-#     def GetSupportedMethodsByFormat(self, Format):
-#         '-no docstring-'
-#         #return ppMethods
-#
-#     def GetMethodAttributes(self, Method):
-#         '-no docstring-'
-#         #return ppAttributes
-#
-#     def GetMethodParameterAttributes(self, Method, Parameter):
-#         '-no docstring-'
-#         #return ppAttributes
-#
-#     def GetSupportedFormats(self):
-#         '-no docstring-'
-#         #return ppFormats
-#
-#     def GetFormatAttributes(self, Format):
-#         '-no docstring-'
-#         #return ppAttributes
-#
-#     def GetSupportedFormatProperties(self, Format):
-#         '-no docstring-'
-#         #return ppKeys
-#
-#     def GetFormatPropertyAttributes(self, Format, Property):
-#         '-no docstring-'
-#         #return ppAttributes
-#
-#     def GetSupportedEvents(self):
-#         '-no docstring-'
-#         #return ppEvents
-#
-#     def GetEventAttributes(self, Event):
-#         '-no docstring-'
-#         #return ppAttributes
-#
-#     def GetEventParameterAttributes(self, Event, Parameter):
-#         '-no docstring-'
-#         #return ppAttributes
-#
-#     def GetInheritedServices(self, dwInheritanceType):
-#         '-no docstring-'
-#         #return ppServices
-#
-#     def GetFormatRenderingProfiles(self, Format):
-#         '-no docstring-'
-#         #return ppRenderingProfiles
-#
-#     def GetSupportedCommands(self):
-#         '-no docstring-'
-#         #return ppCommands
-#
-#     def GetCommandOptions(self, Command):
-#         '-no docstring-'
-#         #return ppOptions
-#
-#     def Cancel(self):
-#         '-no docstring-'
-#         #return 
-#
-
-
-class IStorage(_00020430_0000_0000_C000_000000000046_0_2_0.IUnknown):
-    _case_insensitive_ = True
-    _iid_ = GUID('{0000000B-0000-0000-C000-000000000046}')
-    _idlflags_ = []
-
-    if TYPE_CHECKING:  # commembers
-        def CreateStream(self, pwcsName: hints.Incomplete, grfMode: hints.Incomplete, reserved1: hints.Incomplete, reserved2: hints.Incomplete) -> 'IStream': ...
-        def RemoteOpenStream(self, pwcsName: hints.Incomplete, cbReserved1: hints.Incomplete, reserved1: hints.Incomplete, grfMode: hints.Incomplete, reserved2: hints.Incomplete) -> 'IStream': ...
-        def CreateStorage(self, pwcsName: hints.Incomplete, grfMode: hints.Incomplete, reserved1: hints.Incomplete, reserved2: hints.Incomplete) -> 'IStorage': ...
-        def OpenStorage(self, pwcsName: hints.Incomplete, pstgPriority: hints.Incomplete, grfMode: hints.Incomplete, snbExclude: hints.Incomplete, reserved: hints.Incomplete) -> 'IStorage': ...
-        def RemoteCopyTo(self, ciidExclude: hints.Incomplete, rgiidExclude: hints.Incomplete, snbExclude: hints.Incomplete, pstgDest: hints.Incomplete) -> hints.Hresult: ...
-        def MoveElementTo(self, pwcsName: hints.Incomplete, pstgDest: hints.Incomplete, pwcsNewName: hints.Incomplete, grfFlags: hints.Incomplete) -> hints.Hresult: ...
-        def Commit(self, grfCommitFlags: hints.Incomplete) -> hints.Hresult: ...
-        def Revert(self) -> hints.Hresult: ...
-        def RemoteEnumElements(self, reserved1: hints.Incomplete, cbReserved2: hints.Incomplete, reserved2: hints.Incomplete, reserved3: hints.Incomplete) -> 'IEnumSTATSTG': ...
-        def DestroyElement(self, pwcsName: hints.Incomplete) -> hints.Hresult: ...
-        def RenameElement(self, pwcsOldName: hints.Incomplete, pwcsNewName: hints.Incomplete) -> hints.Hresult: ...
-        def SetElementTimes(self, pwcsName: hints.Incomplete, pctime: hints.Incomplete, patime: hints.Incomplete, pmtime: hints.Incomplete) -> hints.Hresult: ...
-        def SetClass(self, clsid: hints.Incomplete) -> hints.Hresult: ...
-        def SetStateBits(self, grfStateBits: hints.Incomplete, grfMask: hints.Incomplete) -> hints.Hresult: ...
-        def Stat(self, grfStatFlag: hints.Incomplete) -> hints.Incomplete: ...
-
-
-class IStream(ISequentialStream):
-    _case_insensitive_ = True
-    _iid_ = GUID('{0000000C-0000-0000-C000-000000000046}')
-    _idlflags_ = []
-
-    if TYPE_CHECKING:  # commembers
-        def RemoteSeek(self, dlibMove: hints.Incomplete, dwOrigin: hints.Incomplete) -> hints.Incomplete: ...
-        def SetSize(self, libNewSize: hints.Incomplete) -> hints.Hresult: ...
-        def RemoteCopyTo(self, pstm: hints.Incomplete, cb: hints.Incomplete) -> hints.Tuple[hints.Incomplete, hints.Incomplete]: ...
-        def Commit(self, grfCommitFlags: hints.Incomplete) -> hints.Hresult: ...
-        def Revert(self) -> hints.Hresult: ...
-        def LockRegion(self, libOffset: hints.Incomplete, cb: hints.Incomplete, dwLockType: hints.Incomplete) -> hints.Hresult: ...
-        def UnlockRegion(self, libOffset: hints.Incomplete, cb: hints.Incomplete, dwLockType: hints.Incomplete) -> hints.Hresult: ...
-        def Stat(self, grfStatFlag: hints.Incomplete) -> hints.Incomplete: ...
-        def Clone(self) -> 'IStream': ...
-
-
-class tagRemSNB(Structure):
-    pass
-
-
-wireSNB = POINTER(tagRemSNB)
-
-
-class IEnumSTATSTG(_00020430_0000_0000_C000_000000000046_0_2_0.IUnknown):
-    _case_insensitive_ = True
-    _iid_ = GUID('{0000000D-0000-0000-C000-000000000046}')
-    _idlflags_ = []
-
-    if TYPE_CHECKING:  # commembers
-        def RemoteNext(self, celt: hints.Incomplete) -> hints.Tuple[hints.Incomplete, hints.Incomplete]: ...
-        def Skip(self, celt: hints.Incomplete) -> hints.Hresult: ...
-        def Reset(self) -> hints.Hresult: ...
-        def Clone(self) -> 'IEnumSTATSTG': ...
-
-
-class tagSTATSTG(Structure):
-    pass
-
-
-IStorage._methods_ = [
-    COMMETHOD(
-        [],
-        HRESULT,
-        'CreateStream',
-        (['in'], WSTRING, 'pwcsName'),
-        (['in'], c_ulong, 'grfMode'),
-        (['in'], c_ulong, 'reserved1'),
-        (['in'], c_ulong, 'reserved2'),
-        (['out'], POINTER(POINTER(IStream)), 'ppstm')
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'RemoteOpenStream',
-        (['in'], WSTRING, 'pwcsName'),
-        (['in'], c_ulong, 'cbReserved1'),
-        (['in'], POINTER(c_ubyte), 'reserved1'),
-        (['in'], c_ulong, 'grfMode'),
-        (['in'], c_ulong, 'reserved2'),
-        (['out'], POINTER(POINTER(IStream)), 'ppstm')
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'CreateStorage',
-        (['in'], WSTRING, 'pwcsName'),
-        (['in'], c_ulong, 'grfMode'),
-        (['in'], c_ulong, 'reserved1'),
-        (['in'], c_ulong, 'reserved2'),
-        (['out'], POINTER(POINTER(IStorage)), 'ppstg')
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'OpenStorage',
-        (['in'], WSTRING, 'pwcsName'),
-        (['in'], POINTER(IStorage), 'pstgPriority'),
-        (['in'], c_ulong, 'grfMode'),
-        (['in'], wireSNB, 'snbExclude'),
-        (['in'], c_ulong, 'reserved'),
-        (['out'], POINTER(POINTER(IStorage)), 'ppstg')
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'RemoteCopyTo',
-        (['in'], c_ulong, 'ciidExclude'),
-        (
-            ['in'],
-            POINTER(_00020430_0000_0000_C000_000000000046_0_2_0.GUID),
-            'rgiidExclude',
-        ),
-        (['in'], wireSNB, 'snbExclude'),
-        (['in'], POINTER(IStorage), 'pstgDest')
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'MoveElementTo',
-        (['in'], WSTRING, 'pwcsName'),
-        (['in'], POINTER(IStorage), 'pstgDest'),
-        (['in'], WSTRING, 'pwcsNewName'),
-        (['in'], c_ulong, 'grfFlags')
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'Commit',
-        (['in'], c_ulong, 'grfCommitFlags')
-    ),
-    COMMETHOD([], HRESULT, 'Revert'),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'RemoteEnumElements',
-        (['in'], c_ulong, 'reserved1'),
-        (['in'], c_ulong, 'cbReserved2'),
-        (['in'], POINTER(c_ubyte), 'reserved2'),
-        (['in'], c_ulong, 'reserved3'),
-        (['out'], POINTER(POINTER(IEnumSTATSTG)), 'ppenum')
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'DestroyElement',
-        (['in'], WSTRING, 'pwcsName')
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'RenameElement',
-        (['in'], WSTRING, 'pwcsOldName'),
-        (['in'], WSTRING, 'pwcsNewName')
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'SetElementTimes',
-        (['in'], WSTRING, 'pwcsName'),
-        (['in'], POINTER(_FILETIME), 'pctime'),
-        (['in'], POINTER(_FILETIME), 'patime'),
-        (['in'], POINTER(_FILETIME), 'pmtime')
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'SetClass',
-        (
-            ['in'],
-            POINTER(_00020430_0000_0000_C000_000000000046_0_2_0.GUID),
-            'clsid',
-        )
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'SetStateBits',
-        (['in'], c_ulong, 'grfStateBits'),
-        (['in'], c_ulong, 'grfMask')
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'Stat',
-        (['out'], POINTER(tagSTATSTG), 'pstatstg'),
-        (['in'], c_ulong, 'grfStatFlag')
-    ),
-]
-
-################################################################
-# code template for IStorage implementation
-# class IStorage_Impl(object):
-#     def CreateStream(self, pwcsName, grfMode, reserved1, reserved2):
-#         '-no docstring-'
-#         #return ppstm
-#
-#     def RemoteOpenStream(self, pwcsName, cbReserved1, reserved1, grfMode, reserved2):
-#         '-no docstring-'
-#         #return ppstm
-#
-#     def CreateStorage(self, pwcsName, grfMode, reserved1, reserved2):
-#         '-no docstring-'
-#         #return ppstg
-#
-#     def OpenStorage(self, pwcsName, pstgPriority, grfMode, snbExclude, reserved):
-#         '-no docstring-'
-#         #return ppstg
-#
-#     def RemoteCopyTo(self, ciidExclude, rgiidExclude, snbExclude, pstgDest):
-#         '-no docstring-'
-#         #return 
-#
-#     def MoveElementTo(self, pwcsName, pstgDest, pwcsNewName, grfFlags):
-#         '-no docstring-'
-#         #return 
-#
-#     def Commit(self, grfCommitFlags):
-#         '-no docstring-'
-#         #return 
-#
-#     def Revert(self):
-#         '-no docstring-'
-#         #return 
-#
-#     def RemoteEnumElements(self, reserved1, cbReserved2, reserved2, reserved3):
-#         '-no docstring-'
-#         #return ppenum
-#
-#     def DestroyElement(self, pwcsName):
-#         '-no docstring-'
-#         #return 
-#
-#     def RenameElement(self, pwcsOldName, pwcsNewName):
-#         '-no docstring-'
-#         #return 
-#
-#     def SetElementTimes(self, pwcsName, pctime, patime, pmtime):
-#         '-no docstring-'
-#         #return 
-#
-#     def SetClass(self, clsid):
-#         '-no docstring-'
-#         #return 
-#
-#     def SetStateBits(self, grfStateBits, grfMask):
-#         '-no docstring-'
-#         #return 
-#
-#     def Stat(self, grfStatFlag):
-#         '-no docstring-'
-#         #return pstatstg
-#
-
-
-class IPortableDeviceContent(_00020430_0000_0000_C000_000000000046_0_2_0.IUnknown):
-    """IPortableDeviceContent Interface"""
-    _case_insensitive_ = True
-    _iid_ = GUID('{6A96ED84-7C73-4480-9938-BF5AF477D426}')
-    _idlflags_ = []
-
-    if TYPE_CHECKING:  # commembers
-        def EnumObjects(self, dwFlags: hints.Incomplete, pszParentObjectID: hints.Incomplete, pFilter: hints.Incomplete) -> 'IEnumPortableDeviceObjectIDs': ...
-        def Properties(self) -> 'IPortableDeviceProperties': ...
-        def Transfer(self) -> 'IPortableDeviceResources': ...
-        def CreateObjectWithPropertiesOnly(self, pValues: hints.Incomplete, ppszObjectID: hints.Incomplete) -> hints.Incomplete: ...
-        def CreateObjectWithPropertiesAndData(self, pValues: hints.Incomplete, pdwOptimalWriteBufferSize: hints.Incomplete, ppszCookie: hints.Incomplete) -> hints.Tuple['IStream', hints.Incomplete, hints.Incomplete]: ...
-        def Delete(self, dwOptions: hints.Incomplete, pObjectIDs: hints.Incomplete, ppResults: hints.Incomplete) -> 'IPortableDevicePropVariantCollection': ...
-        def GetObjectIDsFromPersistentUniqueIDs(self, pPersistentUniqueIDs: hints.Incomplete) -> 'IPortableDevicePropVariantCollection': ...
-        def Cancel(self) -> hints.Hresult: ...
-        def Move(self, pObjectIDs: hints.Incomplete, pszDestinationFolderObjectID: hints.Incomplete, ppResults: hints.Incomplete) -> 'IPortableDevicePropVariantCollection': ...
-        def Copy(self, pObjectIDs: hints.Incomplete, pszDestinationFolderObjectID: hints.Incomplete, ppResults: hints.Incomplete) -> 'IPortableDevicePropVariantCollection': ...
-
-
-class IPortableDeviceContent2(IPortableDeviceContent):
-    """IPortableDeviceContent2 Interface"""
-    _case_insensitive_ = True
-    _iid_ = GUID('{9B4ADD96-F6BF-4034-8708-ECA72BF10554}')
-    _idlflags_ = []
-
-    if TYPE_CHECKING:  # commembers
-        def UpdateObjectWithPropertiesAndData(self, pszObjectID: hints.Incomplete, pProperties: hints.Incomplete, pdwOptimalWriteBufferSize: hints.Incomplete) -> hints.Tuple['IStream', hints.Incomplete]: ...
-
-
-class IEnumPortableDeviceObjectIDs(_00020430_0000_0000_C000_000000000046_0_2_0.IUnknown):
-    """IEnumPortableDeviceObjectIDs Interface"""
-    _case_insensitive_ = True
-    _iid_ = GUID('{10ECE955-CF41-4728-BFA0-41EEDF1BBF19}')
-    _idlflags_ = []
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        item, fetched = self.Next(1)
-        if fetched:
-            return item
-        raise StopIteration
-
-    def __getitem__(self, index):
-        self.Reset()
-        self.Skip(index)
-        item, fetched = self.Next(1)
-        if fetched:
-            return item
-        raise IndexError(index)
-
-    if TYPE_CHECKING:  # commembers
-        def Next(self, cObjects: hints.Incomplete, pcFetched: hints.Incomplete) -> hints.Tuple[hints.Incomplete, hints.Incomplete]: ...
-        def Skip(self, cObjects: hints.Incomplete) -> hints.Hresult: ...
-        def Reset(self) -> hints.Hresult: ...
-        def Clone(self) -> 'IEnumPortableDeviceObjectIDs': ...
-        def Cancel(self) -> hints.Hresult: ...
-
-
-class IPortableDeviceProperties(_00020430_0000_0000_C000_000000000046_0_2_0.IUnknown):
-    """IPortableDeviceProperties Interface"""
-    _case_insensitive_ = True
-    _iid_ = GUID('{7F6D695C-03DF-4439-A809-59266BEEE3A6}')
-    _idlflags_ = []
-
-    if TYPE_CHECKING:  # commembers
-        def GetSupportedProperties(self, pszObjectID: hints.Incomplete) -> 'IPortableDeviceKeyCollection': ...
-        def GetPropertyAttributes(self, pszObjectID: hints.Incomplete, key: hints.Incomplete) -> 'IPortableDeviceValues': ...
-        def GetValues(self, pszObjectID: hints.Incomplete, pKeys: hints.Incomplete) -> 'IPortableDeviceValues': ...
-        def SetValues(self, pszObjectID: hints.Incomplete, pValues: hints.Incomplete) -> 'IPortableDeviceValues': ...
-        def Delete(self, pszObjectID: hints.Incomplete, pKeys: hints.Incomplete) -> hints.Hresult: ...
-        def Cancel(self) -> hints.Hresult: ...
-
-
-class IPortableDeviceResources(_00020430_0000_0000_C000_000000000046_0_2_0.IUnknown):
-    """IPortableDeviceResources Interface"""
-    _case_insensitive_ = True
-    _iid_ = GUID('{FD8878AC-D841-4D17-891C-E6829CDB6934}')
-    _idlflags_ = []
-
-    if TYPE_CHECKING:  # commembers
-        def GetSupportedResources(self, pszObjectID: hints.Incomplete) -> 'IPortableDeviceKeyCollection': ...
-        def GetResourceAttributes(self, pszObjectID: hints.Incomplete, key: hints.Incomplete) -> 'IPortableDeviceValues': ...
-        def GetStream(self, pszObjectID: hints.Incomplete, key: hints.Incomplete, dwMode: hints.Incomplete, pdwOptimalBufferSize: hints.Incomplete) -> hints.Tuple[hints.Incomplete, 'IStream']: ...
-        def Delete(self, pszObjectID: hints.Incomplete, pKeys: hints.Incomplete) -> hints.Hresult: ...
-        def Cancel(self) -> hints.Hresult: ...
-        def CreateResource(self, pResourceAttributes: hints.Incomplete, pdwOptimalWriteBufferSize: hints.Incomplete, ppszCookie: hints.Incomplete) -> hints.Tuple['IStream', hints.Incomplete, hints.Incomplete]: ...
-
-
-IPortableDeviceContent._methods_ = [
-    COMMETHOD(
-        [],
-        HRESULT,
-        'EnumObjects',
-        (['in'], c_ulong, 'dwFlags'),
-        (['in'], WSTRING, 'pszParentObjectID'),
-        (['in'], POINTER(IPortableDeviceValues), 'pFilter'),
-        (['out'], POINTER(POINTER(IEnumPortableDeviceObjectIDs)), 'ppenum')
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'Properties',
-        (['out'], POINTER(POINTER(IPortableDeviceProperties)), 'ppProperties')
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'Transfer',
-        (['out'], POINTER(POINTER(IPortableDeviceResources)), 'ppResources')
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'CreateObjectWithPropertiesOnly',
-        (['in'], POINTER(IPortableDeviceValues), 'pValues'),
-        (['in', 'out'], POINTER(WSTRING), 'ppszObjectID')
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'CreateObjectWithPropertiesAndData',
-        (['in'], POINTER(IPortableDeviceValues), 'pValues'),
-        (['in', 'out'], POINTER(POINTER(IStream)), 'ppData'),
-        (['in', 'out'], POINTER(c_ulong), 'pdwOptimalWriteBufferSize'),
-        (['in', 'out'], POINTER(WSTRING), 'ppszCookie')
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'Delete',
-        (['in'], c_ulong, 'dwOptions'),
-        (['in'], POINTER(IPortableDevicePropVariantCollection), 'pObjectIDs'),
-        (
-            ['in'],
-            POINTER(POINTER(IPortableDevicePropVariantCollection)),
-            'ppResults',
-        )
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'GetObjectIDsFromPersistentUniqueIDs',
-        (
-            ['in'],
-            POINTER(IPortableDevicePropVariantCollection),
-            'pPersistentUniqueIDs',
-        ),
-        (
-            ['out'],
-            POINTER(POINTER(IPortableDevicePropVariantCollection)),
-            'ppObjectIDs',
-        )
-    ),
-    COMMETHOD([], HRESULT, 'Cancel'),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'Move',
-        (['in'], POINTER(IPortableDevicePropVariantCollection), 'pObjectIDs'),
-        (['in'], WSTRING, 'pszDestinationFolderObjectID'),
-        (
-            ['in', 'out'],
-            POINTER(POINTER(IPortableDevicePropVariantCollection)),
-            'ppResults',
-        )
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'Copy',
-        (['in'], POINTER(IPortableDevicePropVariantCollection), 'pObjectIDs'),
-        (['in'], WSTRING, 'pszDestinationFolderObjectID'),
-        (
-            ['in', 'out'],
-            POINTER(POINTER(IPortableDevicePropVariantCollection)),
-            'ppResults',
-        )
-    ),
-]
-
-################################################################
-# code template for IPortableDeviceContent implementation
-# class IPortableDeviceContent_Impl(object):
-#     def EnumObjects(self, dwFlags, pszParentObjectID, pFilter):
-#         '-no docstring-'
-#         #return ppenum
-#
-#     def Properties(self):
-#         '-no docstring-'
-#         #return ppProperties
-#
-#     def Transfer(self):
-#         '-no docstring-'
-#         #return ppResources
-#
-#     def CreateObjectWithPropertiesOnly(self, pValues):
-#         '-no docstring-'
-#         #return ppszObjectID
-#
-#     def CreateObjectWithPropertiesAndData(self, pValues):
-#         '-no docstring-'
-#         #return ppData, pdwOptimalWriteBufferSize, ppszCookie
-#
-#     def Delete(self, dwOptions, pObjectIDs):
-#         '-no docstring-'
-#         #return ppResults
-#
-#     def GetObjectIDsFromPersistentUniqueIDs(self, pPersistentUniqueIDs):
-#         '-no docstring-'
-#         #return ppObjectIDs
-#
-#     def Cancel(self):
-#         '-no docstring-'
-#         #return 
-#
-#     def Move(self, pObjectIDs, pszDestinationFolderObjectID):
-#         '-no docstring-'
-#         #return ppResults
-#
-#     def Copy(self, pObjectIDs, pszDestinationFolderObjectID):
-#         '-no docstring-'
-#         #return ppResults
-#
-
-IPortableDeviceContent2._methods_ = [
-    COMMETHOD(
-        [],
-        HRESULT,
-        'UpdateObjectWithPropertiesAndData',
-        (['in'], WSTRING, 'pszObjectID'),
-        (['in'], POINTER(IPortableDeviceValues), 'pProperties'),
-        (['out'], POINTER(POINTER(IStream)), 'ppData'),
-        (['in', 'out'], POINTER(c_ulong), 'pdwOptimalWriteBufferSize')
-    ),
-]
-
-################################################################
-# code template for IPortableDeviceContent2 implementation
-# class IPortableDeviceContent2_Impl(object):
-#     def UpdateObjectWithPropertiesAndData(self, pszObjectID, pProperties):
-#         '-no docstring-'
-#         #return ppData, pdwOptimalWriteBufferSize
-#
-
-
-class IPortableDeviceServiceMethods(_00020430_0000_0000_C000_000000000046_0_2_0.IUnknown):
-    """IPortableDeviceServiceMethods Interface"""
-    _case_insensitive_ = True
-    _iid_ = GUID('{E20333C9-FD34-412D-A381-CC6F2D820DF7}')
-    _idlflags_ = []
-
-    if TYPE_CHECKING:  # commembers
-        def Invoke(self, Method: hints.Incomplete, pParameters: hints.Incomplete, ppResults: hints.Incomplete) -> 'IPortableDeviceValues': ...
-        def InvokeAsync(self, Method: hints.Incomplete, pParameters: hints.Incomplete, pCallback: hints.Incomplete) -> hints.Hresult: ...
-        def Cancel(self, pCallback: hints.Incomplete) -> hints.Hresult: ...
-
-
-class IPortableDeviceServiceMethodCallback(_00020430_0000_0000_C000_000000000046_0_2_0.IUnknown):
-    """IPortableDeviceServiceMethodCallback Interface"""
-    _case_insensitive_ = True
-    _iid_ = GUID('{C424233C-AFCE-4828-A756-7ED7A2350083}')
-    _idlflags_ = []
-
-    if TYPE_CHECKING:  # commembers
-        def OnComplete(self, hrStatus: hints.Incomplete, pResults: hints.Incomplete) -> hints.Hresult: ...
-
-
-IPortableDeviceServiceMethods._methods_ = [
-    COMMETHOD(
-        [],
-        HRESULT,
-        'Invoke',
-        (
-            ['in'],
-            POINTER(_00020430_0000_0000_C000_000000000046_0_2_0.GUID),
-            'Method',
-        ),
-        (['in'], POINTER(IPortableDeviceValues), 'pParameters'),
-        (['in', 'out'], POINTER(POINTER(IPortableDeviceValues)), 'ppResults')
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'InvokeAsync',
-        (
-            ['in'],
-            POINTER(_00020430_0000_0000_C000_000000000046_0_2_0.GUID),
-            'Method',
-        ),
-        (['in'], POINTER(IPortableDeviceValues), 'pParameters'),
-        (['in'], POINTER(IPortableDeviceServiceMethodCallback), 'pCallback')
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'Cancel',
-        (['in'], POINTER(IPortableDeviceServiceMethodCallback), 'pCallback')
-    ),
-]
-
-################################################################
-# code template for IPortableDeviceServiceMethods implementation
-# class IPortableDeviceServiceMethods_Impl(object):
-#     def Invoke(self, Method, pParameters):
-#         '-no docstring-'
-#         #return ppResults
-#
-#     def InvokeAsync(self, Method, pParameters, pCallback):
-#         '-no docstring-'
-#         #return 
-#
-#     def Cancel(self, pCallback):
-#         '-no docstring-'
-#         #return 
-#
-
 IPortableDeviceServiceMethodCallback._methods_ = [
     COMMETHOD(
         [],
@@ -1191,8 +110,6 @@ IPortableDeviceServiceMethodCallback._methods_ = [
 #         '-no docstring-'
 #         #return 
 #
-
-wirePSAFEARRAY = POINTER(POINTER(_wireSAFEARRAY))
 
 
 class IPortableDeviceDispatchFactory(_00020430_0000_0000_C000_000000000046_0_2_0.IUnknown):
@@ -1223,8 +140,83 @@ IPortableDeviceDispatchFactory._methods_ = [
 #
 
 
+class _HYPER_SIZEDARR(Structure):
+    pass
+
+
+_HYPER_SIZEDARR._fields_ = [
+    ('clSize', c_ulong),
+    ('pData', POINTER(c_longlong)),
+]
+
+assert sizeof(_HYPER_SIZEDARR) == 16, sizeof(_HYPER_SIZEDARR)
+assert alignment(_HYPER_SIZEDARR) == 8, alignment(_HYPER_SIZEDARR)
+
+
+class __MIDL_IOleAutomationTypes_0005(Union):
+    pass
+
+
+__MIDL_IOleAutomationTypes_0005._fields_ = [
+    ('lptdesc', POINTER(tagTYPEDESC)),
+    ('lpadesc', POINTER(tagARRAYDESC)),
+    ('hreftype', c_ulong),
+]
+
+assert sizeof(__MIDL_IOleAutomationTypes_0005) == 8, sizeof(__MIDL_IOleAutomationTypes_0005)
+assert alignment(__MIDL_IOleAutomationTypes_0005) == 8, alignment(__MIDL_IOleAutomationTypes_0005)
+
+
+class _tagpropertykey(Structure):
+    pass
+
+
 class tag_inner_PROPVARIANT(Structure):
     pass
+
+
+class IPortableDevicePropVariantCollection(_00020430_0000_0000_C000_000000000046_0_2_0.IUnknown):
+    """IPortableDevicePropVariantCollection Interface"""
+    _case_insensitive_ = True
+    _iid_ = GUID('{89B2E422-4F1B-4316-BCEF-A44AFEA83EB3}')
+    _idlflags_ = []
+
+    if TYPE_CHECKING:  # commembers
+        def GetCount(self, pcElems: hints.Incomplete) -> hints.Hresult: ...
+        def GetAt(self, dwIndex: hints.Incomplete, pValue: hints.Incomplete) -> hints.Hresult: ...
+        def Add(self, pValue: hints.Incomplete) -> hints.Hresult: ...
+        def GetType(self) -> hints.Incomplete: ...
+        def ChangeType(self, vt: hints.Incomplete) -> hints.Hresult: ...
+        def Clear(self) -> hints.Hresult: ...
+        def RemoveAt(self, dwIndex: hints.Incomplete) -> hints.Hresult: ...
+
+
+class IPortableDeviceKeyCollection(_00020430_0000_0000_C000_000000000046_0_2_0.IUnknown):
+    """IPortableDeviceKeyCollection Interface"""
+    _case_insensitive_ = True
+    _iid_ = GUID('{DADA2357-E0AD-492E-98DB-DD61C53BA353}')
+    _idlflags_ = []
+
+    if TYPE_CHECKING:  # commembers
+        def GetCount(self, pcElems: hints.Incomplete) -> hints.Hresult: ...
+        def GetAt(self, dwIndex: hints.Incomplete, pKey: hints.Incomplete) -> hints.Hresult: ...
+        def Add(self, key: hints.Incomplete) -> hints.Hresult: ...
+        def Clear(self) -> hints.Hresult: ...
+        def RemoveAt(self, dwIndex: hints.Incomplete) -> hints.Hresult: ...
+
+
+class IPortableDeviceValuesCollection(_00020430_0000_0000_C000_000000000046_0_2_0.IUnknown):
+    """IPortableDeviceValuesCollection Interface"""
+    _case_insensitive_ = True
+    _iid_ = GUID('{6E3F2D79-4E07-48C4-8208-D8C2E5AF4A99}')
+    _idlflags_ = []
+
+    if TYPE_CHECKING:  # commembers
+        def GetCount(self, pcElems: hints.Incomplete) -> hints.Hresult: ...
+        def GetAt(self, dwIndex: hints.Incomplete) -> 'IPortableDeviceValues': ...
+        def Add(self, pValues: hints.Incomplete) -> hints.Hresult: ...
+        def Clear(self) -> hints.Hresult: ...
+        def RemoveAt(self, dwIndex: hints.Incomplete) -> hints.Hresult: ...
 
 
 class IPropertyStore(_00020430_0000_0000_C000_000000000046_0_2_0.IUnknown):
@@ -1693,87 +685,6 @@ IPortableDeviceValues._methods_ = [
 #         #return 
 #
 
-IPortableDeviceValuesCollection._methods_ = [
-    COMMETHOD(
-        [],
-        HRESULT,
-        'GetCount',
-        (['in'], POINTER(c_ulong), 'pcElems')
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'GetAt',
-        (['in'], c_ulong, 'dwIndex'),
-        (['out'], POINTER(POINTER(IPortableDeviceValues)), 'ppValues')
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'Add',
-        (['in'], POINTER(IPortableDeviceValues), 'pValues')
-    ),
-    COMMETHOD([], HRESULT, 'Clear'),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'RemoveAt',
-        (['in'], c_ulong, 'dwIndex')
-    ),
-]
-
-################################################################
-# code template for IPortableDeviceValuesCollection implementation
-# class IPortableDeviceValuesCollection_Impl(object):
-#     def GetCount(self, pcElems):
-#         '-no docstring-'
-#         #return 
-#
-#     def GetAt(self, dwIndex):
-#         '-no docstring-'
-#         #return ppValues
-#
-#     def Add(self, pValues):
-#         '-no docstring-'
-#         #return 
-#
-#     def Clear(self):
-#         '-no docstring-'
-#         #return 
-#
-#     def RemoveAt(self, dwIndex):
-#         '-no docstring-'
-#         #return 
-#
-
-
-class IPortableDeviceEventCallback(_00020430_0000_0000_C000_000000000046_0_2_0.IUnknown):
-    """IPortableDeviceEventCallback Interface"""
-    _case_insensitive_ = True
-    _iid_ = GUID('{A8792A31-F385-493C-A893-40F64EB45F6E}')
-    _idlflags_ = []
-
-    if TYPE_CHECKING:  # commembers
-        def OnEvent(self, pEventParameters: hints.Incomplete) -> hints.Hresult: ...
-
-
-IPortableDeviceEventCallback._methods_ = [
-    COMMETHOD(
-        [],
-        HRESULT,
-        'OnEvent',
-        (['in'], POINTER(IPortableDeviceValues), 'pEventParameters')
-    ),
-]
-
-################################################################
-# code template for IPortableDeviceEventCallback implementation
-# class IPortableDeviceEventCallback_Impl(object):
-#     def OnEvent(self, pEventParameters):
-#         '-no docstring-'
-#         #return 
-#
-
 
 class IPortableDeviceWebControl(_00020430_0000_0000_C000_000000000046_0_2_0.IDispatch):
     _case_insensitive_ = True
@@ -1814,32 +725,6 @@ IPortableDeviceWebControl._methods_ = [
 #         'method GetDeviceFromIdAsync'
 #         #return 
 #
-
-
-class tagCAC(Structure):
-    pass
-
-
-tagCAC._fields_ = [
-    ('cElems', c_ulong),
-    ('pElems', STRING),
-]
-
-assert sizeof(tagCAC) == 16, sizeof(tagCAC)
-assert alignment(tagCAC) == 8, alignment(tagCAC)
-
-
-class tagCAUB(Structure):
-    pass
-
-
-tagCAUB._fields_ = [
-    ('cElems', c_ulong),
-    ('pElems', POINTER(c_ubyte)),
-]
-
-assert sizeof(tagCAUB) == 16, sizeof(tagCAUB)
-assert alignment(tagCAUB) == 8, alignment(tagCAUB)
 
 IPropertyStore._methods_ = [
     COMMETHOD(
@@ -1897,45 +782,24 @@ IPropertyStore._methods_ = [
 #
 
 
-class __MIDL_IOleAutomationTypes_0005(Union):
+class tagCAC(Structure):
     pass
 
 
-__MIDL_IOleAutomationTypes_0005._fields_ = [
-    ('lptdesc', POINTER(tagTYPEDESC)),
-    ('lpadesc', POINTER(tagARRAYDESC)),
-    ('hreftype', c_ulong),
-]
-
-assert sizeof(__MIDL_IOleAutomationTypes_0005) == 8, sizeof(__MIDL_IOleAutomationTypes_0005)
-assert alignment(__MIDL_IOleAutomationTypes_0005) == 8, alignment(__MIDL_IOleAutomationTypes_0005)
-
-
-class tagCAI(Structure):
-    pass
-
-
-tagCAI._fields_ = [
+tagCAC._fields_ = [
     ('cElems', c_ulong),
-    ('pElems', POINTER(c_short)),
+    ('pElems', STRING),
 ]
 
-assert sizeof(tagCAI) == 16, sizeof(tagCAI)
-assert alignment(tagCAI) == 8, alignment(tagCAI)
-
-_FLAGGED_WORD_BLOB._pack_ = 4
-
-_FLAGGED_WORD_BLOB._fields_ = [
-    ('fFlags', c_ulong),
-    ('clSize', c_ulong),
-    ('asData', POINTER(c_ushort)),
-]
-
-assert sizeof(_FLAGGED_WORD_BLOB) == 16, sizeof(_FLAGGED_WORD_BLOB)
-assert alignment(_FLAGGED_WORD_BLOB) == 4, alignment(_FLAGGED_WORD_BLOB)
+assert sizeof(tagCAC) == 16, sizeof(tagCAC)
+assert alignment(tagCAC) == 8, alignment(tagCAC)
 
 
 class __MIDL___MIDL_itf_PortableDeviceApi_0001_0000_0001(Union):
+    pass
+
+
+class tagCLIPDATA(Structure):
     pass
 
 
@@ -1965,8 +829,81 @@ assert sizeof(tagBLOB) == 16, sizeof(tagBLOB)
 assert alignment(tagBLOB) == 8, alignment(tagBLOB)
 
 
+class IStream(ISequentialStream):
+    _case_insensitive_ = True
+    _iid_ = GUID('{0000000C-0000-0000-C000-000000000046}')
+    _idlflags_ = []
+
+    if TYPE_CHECKING:  # commembers
+        def RemoteSeek(self, dlibMove: hints.Incomplete, dwOrigin: hints.Incomplete) -> hints.Incomplete: ...
+        def SetSize(self, libNewSize: hints.Incomplete) -> hints.Hresult: ...
+        def RemoteCopyTo(self, pstm: hints.Incomplete, cb: hints.Incomplete) -> hints.Tuple[hints.Incomplete, hints.Incomplete]: ...
+        def Commit(self, grfCommitFlags: hints.Incomplete) -> hints.Hresult: ...
+        def Revert(self) -> hints.Hresult: ...
+        def LockRegion(self, libOffset: hints.Incomplete, cb: hints.Incomplete, dwLockType: hints.Incomplete) -> hints.Hresult: ...
+        def UnlockRegion(self, libOffset: hints.Incomplete, cb: hints.Incomplete, dwLockType: hints.Incomplete) -> hints.Hresult: ...
+        def Stat(self, grfStatFlag: hints.Incomplete) -> hints.Incomplete: ...
+        def Clone(self) -> 'IStream': ...
+
+
+class IStorage(_00020430_0000_0000_C000_000000000046_0_2_0.IUnknown):
+    _case_insensitive_ = True
+    _iid_ = GUID('{0000000B-0000-0000-C000-000000000046}')
+    _idlflags_ = []
+
+    if TYPE_CHECKING:  # commembers
+        def CreateStream(self, pwcsName: hints.Incomplete, grfMode: hints.Incomplete, reserved1: hints.Incomplete, reserved2: hints.Incomplete) -> 'IStream': ...
+        def RemoteOpenStream(self, pwcsName: hints.Incomplete, cbReserved1: hints.Incomplete, reserved1: hints.Incomplete, grfMode: hints.Incomplete, reserved2: hints.Incomplete) -> 'IStream': ...
+        def CreateStorage(self, pwcsName: hints.Incomplete, grfMode: hints.Incomplete, reserved1: hints.Incomplete, reserved2: hints.Incomplete) -> 'IStorage': ...
+        def OpenStorage(self, pwcsName: hints.Incomplete, pstgPriority: hints.Incomplete, grfMode: hints.Incomplete, snbExclude: hints.Incomplete, reserved: hints.Incomplete) -> 'IStorage': ...
+        def RemoteCopyTo(self, ciidExclude: hints.Incomplete, rgiidExclude: hints.Incomplete, snbExclude: hints.Incomplete, pstgDest: hints.Incomplete) -> hints.Hresult: ...
+        def MoveElementTo(self, pwcsName: hints.Incomplete, pstgDest: hints.Incomplete, pwcsNewName: hints.Incomplete, grfFlags: hints.Incomplete) -> hints.Hresult: ...
+        def Commit(self, grfCommitFlags: hints.Incomplete) -> hints.Hresult: ...
+        def Revert(self) -> hints.Hresult: ...
+        def RemoteEnumElements(self, reserved1: hints.Incomplete, cbReserved2: hints.Incomplete, reserved2: hints.Incomplete, reserved3: hints.Incomplete) -> 'IEnumSTATSTG': ...
+        def DestroyElement(self, pwcsName: hints.Incomplete) -> hints.Hresult: ...
+        def RenameElement(self, pwcsOldName: hints.Incomplete, pwcsNewName: hints.Incomplete) -> hints.Hresult: ...
+        def SetElementTimes(self, pwcsName: hints.Incomplete, pctime: hints.Incomplete, patime: hints.Incomplete, pmtime: hints.Incomplete) -> hints.Hresult: ...
+        def SetClass(self, clsid: hints.Incomplete) -> hints.Hresult: ...
+        def SetStateBits(self, grfStateBits: hints.Incomplete, grfMask: hints.Incomplete) -> hints.Hresult: ...
+        def Stat(self, grfStatFlag: hints.Incomplete) -> hints.Incomplete: ...
+
+
 class tagVersionedStream(Structure):
     pass
+
+
+class _wireSAFEARRAY(Structure):
+    pass
+
+
+wirePSAFEARRAY = POINTER(POINTER(_wireSAFEARRAY))
+
+
+class tagCAUB(Structure):
+    pass
+
+
+tagCAUB._fields_ = [
+    ('cElems', c_ulong),
+    ('pElems', POINTER(c_ubyte)),
+]
+
+assert sizeof(tagCAUB) == 16, sizeof(tagCAUB)
+assert alignment(tagCAUB) == 8, alignment(tagCAUB)
+
+
+class tagCAI(Structure):
+    pass
+
+
+tagCAI._fields_ = [
+    ('cElems', c_ulong),
+    ('pElems', POINTER(c_short)),
+]
+
+assert sizeof(tagCAI) == 16, sizeof(tagCAI)
+assert alignment(tagCAI) == 8, alignment(tagCAI)
 
 
 class tagCAUI(Structure):
@@ -2305,15 +1242,22 @@ tag_inner_PROPVARIANT._fields_ = [
 assert sizeof(tag_inner_PROPVARIANT) == 24, sizeof(tag_inner_PROPVARIANT)
 assert alignment(tag_inner_PROPVARIANT) == 8, alignment(tag_inner_PROPVARIANT)
 
-_wireBRECORD._fields_ = [
-    ('fFlags', c_ulong),
-    ('clSize', c_ulong),
-    ('pRecInfo', POINTER(IRecordInfo)),
-    ('pRecord', POINTER(c_ubyte)),
+
+class _wireSAFEARR_VARIANT(Structure):
+    pass
+
+
+class _wireVARIANT(Structure):
+    pass
+
+
+_wireSAFEARR_VARIANT._fields_ = [
+    ('Size', c_ulong),
+    ('aVariant', POINTER(POINTER(_wireVARIANT))),
 ]
 
-assert sizeof(_wireBRECORD) == 24, sizeof(_wireBRECORD)
-assert alignment(_wireBRECORD) == 8, alignment(_wireBRECORD)
+assert sizeof(_wireSAFEARR_VARIANT) == 16, sizeof(_wireSAFEARR_VARIANT)
+assert alignment(_wireSAFEARR_VARIANT) == 8, alignment(_wireSAFEARR_VARIANT)
 
 
 class __MIDL_IOleAutomationTypes_0006(Union):
@@ -2328,13 +1272,94 @@ __MIDL_IOleAutomationTypes_0006._fields_ = [
 assert sizeof(__MIDL_IOleAutomationTypes_0006) == 8, sizeof(__MIDL_IOleAutomationTypes_0006)
 assert alignment(__MIDL_IOleAutomationTypes_0006) == 8, alignment(__MIDL_IOleAutomationTypes_0006)
 
-_tagpropertykey._fields_ = [
-    ('fmtid', _00020430_0000_0000_C000_000000000046_0_2_0.GUID),
-    ('pid', c_ulong),
+
+class __MIDL_IOleAutomationTypes_0004(Union):
+    pass
+
+
+class _FLAGGED_WORD_BLOB(Structure):
+    pass
+
+
+class _wireBRECORD(Structure):
+    pass
+
+
+__MIDL_IOleAutomationTypes_0004._fields_ = [
+    ('llVal', c_longlong),
+    ('lVal', c_int),
+    ('bVal', c_ubyte),
+    ('iVal', c_short),
+    ('fltVal', c_float),
+    ('dblVal', c_double),
+    ('boolVal', VARIANT_BOOL),
+    ('scode', SCODE),
+    ('cyVal', c_longlong),
+    ('date', c_double),
+    ('bstrVal', POINTER(_FLAGGED_WORD_BLOB)),
+    ('punkVal', POINTER(IUnknown)),
+    ('pdispVal', POINTER(IDispatch)),
+    ('parray', POINTER(POINTER(_wireSAFEARRAY))),
+    ('brecVal', POINTER(_wireBRECORD)),
+    ('pbVal', POINTER(c_ubyte)),
+    ('piVal', POINTER(c_short)),
+    ('plVal', POINTER(c_int)),
+    ('pllVal', POINTER(c_longlong)),
+    ('pfltVal', POINTER(c_float)),
+    ('pdblVal', POINTER(c_double)),
+    ('pboolVal', POINTER(VARIANT_BOOL)),
+    ('pscode', POINTER(SCODE)),
+    ('pcyVal', POINTER(c_longlong)),
+    ('pdate', POINTER(c_double)),
+    ('pbstrVal', POINTER(POINTER(_FLAGGED_WORD_BLOB))),
+    ('ppunkVal', POINTER(POINTER(IUnknown))),
+    ('ppdispVal', POINTER(POINTER(IDispatch))),
+    ('pparray', POINTER(POINTER(POINTER(_wireSAFEARRAY)))),
+    ('pvarVal', POINTER(POINTER(_wireVARIANT))),
+    ('cVal', c_char),
+    ('uiVal', c_ushort),
+    ('ulVal', c_ulong),
+    ('ullVal', c_ulonglong),
+    ('intVal', c_int),
+    ('uintVal', c_uint),
+    ('decVal', DECIMAL),
+    ('pdecVal', POINTER(DECIMAL)),
+    ('pcVal', STRING),
+    ('puiVal', POINTER(c_ushort)),
+    ('pulVal', POINTER(c_ulong)),
+    ('pullVal', POINTER(c_ulonglong)),
+    ('pintVal', POINTER(c_int)),
+    ('puintVal', POINTER(c_uint)),
 ]
 
-assert sizeof(_tagpropertykey) == 20, sizeof(_tagpropertykey)
-assert alignment(_tagpropertykey) == 4, alignment(_tagpropertykey)
+assert sizeof(__MIDL_IOleAutomationTypes_0004) == 16, sizeof(__MIDL_IOleAutomationTypes_0004)
+assert alignment(__MIDL_IOleAutomationTypes_0004) == 8, alignment(__MIDL_IOleAutomationTypes_0004)
+
+_wireVARIANT._fields_ = [
+    ('clSize', c_ulong),
+    ('rpcReserved', c_ulong),
+    ('vt', c_ushort),
+    ('wReserved1', c_ushort),
+    ('wReserved2', c_ushort),
+    ('wReserved3', c_ushort),
+    ('DUMMYUNIONNAME', __MIDL_IOleAutomationTypes_0004),
+]
+
+assert sizeof(_wireVARIANT) == 32, sizeof(_wireVARIANT)
+assert alignment(_wireVARIANT) == 8, alignment(_wireVARIANT)
+
+
+class _wireSAFEARR_UNKNOWN(Structure):
+    pass
+
+
+_wireSAFEARR_UNKNOWN._fields_ = [
+    ('Size', c_ulong),
+    ('apUnknown', POINTER(POINTER(IUnknown))),
+]
+
+assert sizeof(_wireSAFEARR_UNKNOWN) == 16, sizeof(_wireSAFEARR_UNKNOWN)
+assert alignment(_wireSAFEARR_UNKNOWN) == 8, alignment(_wireSAFEARR_UNKNOWN)
 
 
 class PortableDeviceDispatchFactory(CoClass):
@@ -2346,6 +1371,153 @@ class PortableDeviceDispatchFactory(CoClass):
 
 
 PortableDeviceDispatchFactory._com_interfaces_ = [IPortableDeviceDispatchFactory]
+
+tagCLIPDATA._fields_ = [
+    ('cbSize', c_ulong),
+    ('ulClipFmt', c_int),
+    ('pClipData', POINTER(c_ubyte)),
+]
+
+assert sizeof(tagCLIPDATA) == 16, sizeof(tagCLIPDATA)
+assert alignment(tagCLIPDATA) == 8, alignment(tagCLIPDATA)
+
+
+class _wireSAFEARR_BSTR(Structure):
+    pass
+
+
+_wireSAFEARR_BSTR._fields_ = [
+    ('Size', c_ulong),
+    ('aBstr', POINTER(POINTER(_FLAGGED_WORD_BLOB))),
+]
+
+assert sizeof(_wireSAFEARR_BSTR) == 16, sizeof(_wireSAFEARR_BSTR)
+assert alignment(_wireSAFEARR_BSTR) == 8, alignment(_wireSAFEARR_BSTR)
+
+
+class _wireSAFEARR_DISPATCH(Structure):
+    pass
+
+
+_wireSAFEARR_DISPATCH._fields_ = [
+    ('Size', c_ulong),
+    ('apDispatch', POINTER(POINTER(IDispatch))),
+]
+
+assert sizeof(_wireSAFEARR_DISPATCH) == 16, sizeof(_wireSAFEARR_DISPATCH)
+assert alignment(_wireSAFEARR_DISPATCH) == 8, alignment(_wireSAFEARR_DISPATCH)
+
+_wireBRECORD._fields_ = [
+    ('fFlags', c_ulong),
+    ('clSize', c_ulong),
+    ('pRecInfo', POINTER(IRecordInfo)),
+    ('pRecord', POINTER(c_ubyte)),
+]
+
+assert sizeof(_wireBRECORD) == 24, sizeof(_wireBRECORD)
+assert alignment(_wireBRECORD) == 8, alignment(_wireBRECORD)
+
+_FLAGGED_WORD_BLOB._pack_ = 4
+
+_FLAGGED_WORD_BLOB._fields_ = [
+    ('fFlags', c_ulong),
+    ('clSize', c_ulong),
+    ('asData', POINTER(c_ushort)),
+]
+
+assert sizeof(_FLAGGED_WORD_BLOB) == 16, sizeof(_FLAGGED_WORD_BLOB)
+assert alignment(_FLAGGED_WORD_BLOB) == 4, alignment(_FLAGGED_WORD_BLOB)
+
+
+class PortableDeviceFTM(CoClass):
+    """PortableDeviceFTM Class"""
+    _reg_clsid_ = GUID('{F7C0039A-4762-488A-B4B3-760EF9A1BA9B}')
+    _idlflags_ = []
+    _typelib_path_ = typelib_path
+    _reg_typelib_ = ('{1F001332-1A57-4934-BE31-AFFC99F4EE0A}', 1, 0)
+
+
+class IPortableDevice(_00020430_0000_0000_C000_000000000046_0_2_0.IUnknown):
+    """IPortableDevice Interface"""
+    _case_insensitive_ = True
+    _iid_ = GUID('{625E2DF8-6392-4CF0-9AD1-3CFA5F17775C}')
+    _idlflags_ = []
+
+    if TYPE_CHECKING:  # commembers
+        def Open(self, pszPnPDeviceID: hints.Incomplete, pClientInfo: hints.Incomplete) -> hints.Hresult: ...
+        def SendCommand(self, dwFlags: hints.Incomplete, pParameters: hints.Incomplete) -> 'IPortableDeviceValues': ...
+        def Content(self) -> 'IPortableDeviceContent': ...
+        def Capabilities(self) -> 'IPortableDeviceCapabilities': ...
+        def Cancel(self) -> hints.Hresult: ...
+        def Close(self) -> hints.Hresult: ...
+        def Advise(self, dwFlags: hints.Incomplete, pCallback: hints.Incomplete, pParameters: hints.Incomplete) -> hints.Incomplete: ...
+        def Unadvise(self, pszCookie: hints.Incomplete) -> hints.Hresult: ...
+        def GetPnPDeviceID(self) -> hints.Incomplete: ...
+
+
+PortableDeviceFTM._com_interfaces_ = [IPortableDevice]
+
+_tagpropertykey._fields_ = [
+    ('fmtid', _00020430_0000_0000_C000_000000000046_0_2_0.GUID),
+    ('pid', c_ulong),
+]
+
+assert sizeof(_tagpropertykey) == 20, sizeof(_tagpropertykey)
+assert alignment(_tagpropertykey) == 4, alignment(_tagpropertykey)
+
+
+class PortableDeviceServiceFTM(CoClass):
+    """PortableDeviceServiceFTM Class"""
+    _reg_clsid_ = GUID('{1649B154-C794-497A-9B03-F3F0121302F3}')
+    _idlflags_ = []
+    _typelib_path_ = typelib_path
+    _reg_typelib_ = ('{1F001332-1A57-4934-BE31-AFFC99F4EE0A}', 1, 0)
+
+
+class IPortableDeviceService(_00020430_0000_0000_C000_000000000046_0_2_0.IUnknown):
+    """IPortableDeviceService Interface"""
+    _case_insensitive_ = True
+    _iid_ = GUID('{D3BD3A44-D7B5-40A9-98B7-2FA4D01DEC08}')
+    _idlflags_ = []
+
+    if TYPE_CHECKING:  # commembers
+        def Open(self, pszPnPServiceID: hints.Incomplete, pClientInfo: hints.Incomplete) -> hints.Hresult: ...
+        def Capabilities(self) -> 'IPortableDeviceServiceCapabilities': ...
+        def Content(self) -> 'IPortableDeviceContent2': ...
+        def Methods(self) -> 'IPortableDeviceServiceMethods': ...
+        def Cancel(self) -> hints.Hresult: ...
+        def Close(self) -> hints.Hresult: ...
+        def GetServiceObjectID(self) -> hints.Incomplete: ...
+        def GetPnPServiceID(self) -> hints.Incomplete: ...
+        def Advise(self, dwFlags: hints.Incomplete, pCallback: hints.Incomplete, pParameters: hints.Incomplete) -> hints.Incomplete: ...
+        def Unadvise(self, pszCookie: hints.Incomplete) -> hints.Hresult: ...
+        def SendCommand(self, dwFlags: hints.Incomplete, pParameters: hints.Incomplete) -> 'IPortableDeviceValues': ...
+
+
+PortableDeviceServiceFTM._com_interfaces_ = [IPortableDeviceService]
+
+
+class tagRemSNB(Structure):
+    pass
+
+
+wireSNB = POINTER(tagRemSNB)
+
+
+class IPortableDeviceResources(_00020430_0000_0000_C000_000000000046_0_2_0.IUnknown):
+    """IPortableDeviceResources Interface"""
+    _case_insensitive_ = True
+    _iid_ = GUID('{FD8878AC-D841-4D17-891C-E6829CDB6934}')
+    _idlflags_ = []
+
+    if TYPE_CHECKING:  # commembers
+        def GetSupportedResources(self, pszObjectID: hints.Incomplete) -> 'IPortableDeviceKeyCollection': ...
+        def GetResourceAttributes(self, pszObjectID: hints.Incomplete, key: hints.Incomplete) -> 'IPortableDeviceValues': ...
+        def GetStream(self, pszObjectID: hints.Incomplete, key: hints.Incomplete, dwMode: hints.Incomplete, pdwOptimalBufferSize: hints.Incomplete) -> hints.Tuple[hints.Incomplete, 'IStream']: ...
+        def Delete(self, pszObjectID: hints.Incomplete, pKeys: hints.Incomplete) -> hints.Hresult: ...
+        def Cancel(self) -> hints.Hresult: ...
+        def CreateResource(self, pResourceAttributes: hints.Incomplete, pdwOptimalWriteBufferSize: hints.Incomplete, ppszCookie: hints.Incomplete) -> hints.Tuple['IStream', hints.Incomplete, hints.Incomplete]: ...
+
 
 IPortableDeviceResources._methods_ = [
     COMMETHOD(
@@ -2424,22 +1596,65 @@ IPortableDeviceResources._methods_ = [
 #         #return ppData, pdwOptimalWriteBufferSize, ppszCookie
 #
 
-tagSTATSTG._fields_ = [
-    ('pwcsName', WSTRING),
-    ('type', c_ulong),
-    ('cbSize', _ULARGE_INTEGER),
-    ('mtime', _FILETIME),
-    ('ctime', _FILETIME),
-    ('atime', _FILETIME),
-    ('grfMode', c_ulong),
-    ('grfLocksSupported', c_ulong),
-    ('clsid', _00020430_0000_0000_C000_000000000046_0_2_0.GUID),
-    ('grfStateBits', c_ulong),
-    ('reserved', c_ulong),
+
+class IPortableDeviceEventCallback(_00020430_0000_0000_C000_000000000046_0_2_0.IUnknown):
+    """IPortableDeviceEventCallback Interface"""
+    _case_insensitive_ = True
+    _iid_ = GUID('{A8792A31-F385-493C-A893-40F64EB45F6E}')
+    _idlflags_ = []
+
+    if TYPE_CHECKING:  # commembers
+        def OnEvent(self, pEventParameters: hints.Incomplete) -> hints.Hresult: ...
+
+
+IPortableDeviceEventCallback._methods_ = [
+    COMMETHOD(
+        [],
+        HRESULT,
+        'OnEvent',
+        (['in'], POINTER(IPortableDeviceValues), 'pEventParameters')
+    ),
 ]
 
-assert sizeof(tagSTATSTG) == 80, sizeof(tagSTATSTG)
-assert alignment(tagSTATSTG) == 8, alignment(tagSTATSTG)
+################################################################
+# code template for IPortableDeviceEventCallback implementation
+# class IPortableDeviceEventCallback_Impl(object):
+#     def OnEvent(self, pEventParameters):
+#         '-no docstring-'
+#         #return 
+#
+
+
+class IEnumPortableDeviceObjectIDs(_00020430_0000_0000_C000_000000000046_0_2_0.IUnknown):
+    """IEnumPortableDeviceObjectIDs Interface"""
+    _case_insensitive_ = True
+    _iid_ = GUID('{10ECE955-CF41-4728-BFA0-41EEDF1BBF19}')
+    _idlflags_ = []
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        item, fetched = self.Next(1)
+        if fetched:
+            return item
+        raise StopIteration
+
+    def __getitem__(self, index):
+        self.Reset()
+        self.Skip(index)
+        item, fetched = self.Next(1)
+        if fetched:
+            return item
+        raise IndexError(index)
+
+    if TYPE_CHECKING:  # commembers
+        def Next(self, cObjects: hints.Incomplete, pcFetched: hints.Incomplete) -> hints.Tuple[hints.Incomplete, hints.Incomplete]: ...
+        def Skip(self, cObjects: hints.Incomplete) -> hints.Hresult: ...
+        def Reset(self) -> hints.Hresult: ...
+        def Clone(self) -> 'IEnumPortableDeviceObjectIDs': ...
+        def Cancel(self) -> hints.Hresult: ...
+
 
 IEnumPortableDeviceObjectIDs._methods_ = [
     COMMETHOD(
@@ -2489,79 +1704,6 @@ IEnumPortableDeviceObjectIDs._methods_ = [
 #         '-no docstring-'
 #         #return 
 #
-
-IEnumSTATSTG._methods_ = [
-    COMMETHOD(
-        [],
-        HRESULT,
-        'RemoteNext',
-        (['in'], c_ulong, 'celt'),
-        (['out'], POINTER(tagSTATSTG), 'rgelt'),
-        (['out'], POINTER(c_ulong), 'pceltFetched')
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'Skip',
-        (['in'], c_ulong, 'celt')
-    ),
-    COMMETHOD([], HRESULT, 'Reset'),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'Clone',
-        (['out'], POINTER(POINTER(IEnumSTATSTG)), 'ppenum')
-    ),
-]
-
-################################################################
-# code template for IEnumSTATSTG implementation
-# class IEnumSTATSTG_Impl(object):
-#     def RemoteNext(self, celt):
-#         '-no docstring-'
-#         #return rgelt, pceltFetched
-#
-#     def Skip(self, celt):
-#         '-no docstring-'
-#         #return 
-#
-#     def Reset(self):
-#         '-no docstring-'
-#         #return 
-#
-#     def Clone(self):
-#         '-no docstring-'
-#         #return ppenum
-#
-
-
-class PortableDeviceFTM(CoClass):
-    """PortableDeviceFTM Class"""
-    _reg_clsid_ = GUID('{F7C0039A-4762-488A-B4B3-760EF9A1BA9B}')
-    _idlflags_ = []
-    _typelib_path_ = typelib_path
-    _reg_typelib_ = ('{1F001332-1A57-4934-BE31-AFFC99F4EE0A}', 1, 0)
-
-
-class IPortableDevice(_00020430_0000_0000_C000_000000000046_0_2_0.IUnknown):
-    """IPortableDevice Interface"""
-    _case_insensitive_ = True
-    _iid_ = GUID('{625E2DF8-6392-4CF0-9AD1-3CFA5F17775C}')
-    _idlflags_ = []
-
-    if TYPE_CHECKING:  # commembers
-        def Open(self, pszPnPDeviceID: hints.Incomplete, pClientInfo: hints.Incomplete) -> hints.Hresult: ...
-        def SendCommand(self, dwFlags: hints.Incomplete, pParameters: hints.Incomplete) -> 'IPortableDeviceValues': ...
-        def Content(self) -> 'IPortableDeviceContent': ...
-        def Capabilities(self) -> 'IPortableDeviceCapabilities': ...
-        def Cancel(self) -> hints.Hresult: ...
-        def Close(self) -> hints.Hresult: ...
-        def Advise(self, dwFlags: hints.Incomplete, pCallback: hints.Incomplete, pParameters: hints.Incomplete) -> hints.Incomplete: ...
-        def Unadvise(self, pszCookie: hints.Incomplete) -> hints.Hresult: ...
-        def GetPnPDeviceID(self) -> hints.Incomplete: ...
-
-
-PortableDeviceFTM._com_interfaces_ = [IPortableDevice]
 
 
 class IPortableDeviceCapabilities(_00020430_0000_0000_C000_000000000046_0_2_0.IUnknown):
@@ -2748,6 +1890,22 @@ IPortableDeviceCapabilities._methods_ = [
 #         #return ppOptions
 #
 
+
+class IPortableDeviceProperties(_00020430_0000_0000_C000_000000000046_0_2_0.IUnknown):
+    """IPortableDeviceProperties Interface"""
+    _case_insensitive_ = True
+    _iid_ = GUID('{7F6D695C-03DF-4439-A809-59266BEEE3A6}')
+    _idlflags_ = []
+
+    if TYPE_CHECKING:  # commembers
+        def GetSupportedProperties(self, pszObjectID: hints.Incomplete) -> 'IPortableDeviceKeyCollection': ...
+        def GetPropertyAttributes(self, pszObjectID: hints.Incomplete, key: hints.Incomplete) -> 'IPortableDeviceValues': ...
+        def GetValues(self, pszObjectID: hints.Incomplete, pKeys: hints.Incomplete) -> 'IPortableDeviceValues': ...
+        def SetValues(self, pszObjectID: hints.Incomplete, pValues: hints.Incomplete) -> 'IPortableDeviceValues': ...
+        def Delete(self, pszObjectID: hints.Incomplete, pKeys: hints.Incomplete) -> hints.Hresult: ...
+        def Cancel(self) -> hints.Hresult: ...
+
+
 IPortableDeviceProperties._methods_ = [
     COMMETHOD(
         [],
@@ -2819,116 +1977,26 @@ IPortableDeviceProperties._methods_ = [
 #
 
 
-class IPortableDeviceManager(_00020430_0000_0000_C000_000000000046_0_2_0.IUnknown):
-    """IPortableDeviceManager Interface"""
-    _case_insensitive_ = True
-    _iid_ = GUID('{A1567595-4C2F-4574-A6FA-ECEF917B9A40}')
-    _idlflags_ = []
-
-    if TYPE_CHECKING:  # commembers
-        def GetDevices(self, pPnPDeviceIDs: hints.Incomplete, pcPnPDeviceIDs: hints.Incomplete) -> hints.Tuple[hints.Incomplete, hints.Incomplete]: ...
-        def RefreshDeviceList(self) -> hints.Hresult: ...
-        def GetDeviceFriendlyName(self, pszPnPDeviceID: hints.Incomplete, pDeviceFriendlyName: hints.Incomplete, pcchDeviceFriendlyName: hints.Incomplete) -> hints.Tuple[hints.Incomplete, hints.Incomplete]: ...
-        def GetDeviceDescription(self, pszPnPDeviceID: hints.Incomplete, pDeviceDescription: hints.Incomplete, pcchDeviceDescription: hints.Incomplete) -> hints.Tuple[hints.Incomplete, hints.Incomplete]: ...
-        def GetDeviceManufacturer(self, pszPnPDeviceID: hints.Incomplete, pDeviceManufacturer: hints.Incomplete, pcchDeviceManufacturer: hints.Incomplete) -> hints.Tuple[hints.Incomplete, hints.Incomplete]: ...
-        def GetDeviceProperty(self, pszPnPDeviceID: hints.Incomplete, pszDevicePropertyName: hints.Incomplete, pData: hints.Incomplete, pcbData: hints.Incomplete, pdwType: hints.Incomplete) -> hints.Tuple[hints.Incomplete, hints.Incomplete, hints.Incomplete]: ...
-        def GetPrivateDevices(self, pPnPDeviceIDs: hints.Incomplete, pcPnPDeviceIDs: hints.Incomplete) -> hints.Tuple[hints.Incomplete, hints.Incomplete]: ...
+class tagSTATSTG(Structure):
+    pass
 
 
-IPortableDeviceManager._methods_ = [
-    COMMETHOD(
-        [],
-        HRESULT,
-        'GetDevices',
-        (['in', 'out'], POINTER(WSTRING), 'pPnPDeviceIDs'),
-        (['in', 'out'], POINTER(c_ulong), 'pcPnPDeviceIDs')
-    ),
-    COMMETHOD([], HRESULT, 'RefreshDeviceList'),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'GetDeviceFriendlyName',
-        (['in'], WSTRING, 'pszPnPDeviceID'),
-        (['in', 'out'], POINTER(c_ushort), 'pDeviceFriendlyName'),
-        (['in', 'out'], POINTER(c_ulong), 'pcchDeviceFriendlyName')
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'GetDeviceDescription',
-        (['in'], WSTRING, 'pszPnPDeviceID'),
-        (['in', 'out'], POINTER(c_ushort), 'pDeviceDescription'),
-        (['in', 'out'], POINTER(c_ulong), 'pcchDeviceDescription')
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'GetDeviceManufacturer',
-        (['in'], WSTRING, 'pszPnPDeviceID'),
-        (['in', 'out'], POINTER(c_ushort), 'pDeviceManufacturer'),
-        (['in', 'out'], POINTER(c_ulong), 'pcchDeviceManufacturer')
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'GetDeviceProperty',
-        (['in'], WSTRING, 'pszPnPDeviceID'),
-        (['in'], WSTRING, 'pszDevicePropertyName'),
-        (['in', 'out'], POINTER(c_ubyte), 'pData'),
-        (['in', 'out'], POINTER(c_ulong), 'pcbData'),
-        (['in', 'out'], POINTER(c_ulong), 'pdwType')
-    ),
-    COMMETHOD(
-        [],
-        HRESULT,
-        'GetPrivateDevices',
-        (['in', 'out'], POINTER(WSTRING), 'pPnPDeviceIDs'),
-        (['in', 'out'], POINTER(c_ulong), 'pcPnPDeviceIDs')
-    ),
+tagSTATSTG._fields_ = [
+    ('pwcsName', WSTRING),
+    ('type', c_ulong),
+    ('cbSize', _ULARGE_INTEGER),
+    ('mtime', _FILETIME),
+    ('ctime', _FILETIME),
+    ('atime', _FILETIME),
+    ('grfMode', c_ulong),
+    ('grfLocksSupported', c_ulong),
+    ('clsid', _00020430_0000_0000_C000_000000000046_0_2_0.GUID),
+    ('grfStateBits', c_ulong),
+    ('reserved', c_ulong),
 ]
 
-################################################################
-# code template for IPortableDeviceManager implementation
-# class IPortableDeviceManager_Impl(object):
-#     def GetDevices(self):
-#         '-no docstring-'
-#         #return pPnPDeviceIDs, pcPnPDeviceIDs
-#
-#     def RefreshDeviceList(self):
-#         '-no docstring-'
-#         #return 
-#
-#     def GetDeviceFriendlyName(self, pszPnPDeviceID):
-#         '-no docstring-'
-#         #return pDeviceFriendlyName, pcchDeviceFriendlyName
-#
-#     def GetDeviceDescription(self, pszPnPDeviceID):
-#         '-no docstring-'
-#         #return pDeviceDescription, pcchDeviceDescription
-#
-#     def GetDeviceManufacturer(self, pszPnPDeviceID):
-#         '-no docstring-'
-#         #return pDeviceManufacturer, pcchDeviceManufacturer
-#
-#     def GetDeviceProperty(self, pszPnPDeviceID, pszDevicePropertyName):
-#         '-no docstring-'
-#         #return pData, pcbData, pdwType
-#
-#     def GetPrivateDevices(self):
-#         '-no docstring-'
-#         #return pPnPDeviceIDs, pcPnPDeviceIDs
-#
-
-
-class PortableDeviceWebControl(CoClass):
-    """Dispatch Class for Web Host Applications"""
-    _reg_clsid_ = GUID('{186DD02C-2DEC-41B5-A7D4-B59056FADE51}')
-    _idlflags_ = []
-    _typelib_path_ = typelib_path
-    _reg_typelib_ = ('{1F001332-1A57-4934-BE31-AFFC99F4EE0A}', 1, 0)
-
-
-PortableDeviceWebControl._com_interfaces_ = [IPortableDeviceWebControl]
+assert sizeof(tagSTATSTG) == 80, sizeof(tagSTATSTG)
+assert alignment(tagSTATSTG) == 8, alignment(tagSTATSTG)
 
 IStream._methods_ = [
     COMMETHOD(
@@ -3039,18 +2107,6 @@ class Library(object):
     _reg_typelib_ = ('{1F001332-1A57-4934-BE31-AFFC99F4EE0A}', 1, 0)
 
 
-tagRemSNB._pack_ = 4
-
-tagRemSNB._fields_ = [
-    ('ulCntStr', c_ulong),
-    ('ulCntChar', c_ulong),
-    ('rgString', POINTER(c_ushort)),
-]
-
-assert sizeof(tagRemSNB) == 16, sizeof(tagRemSNB)
-assert alignment(tagRemSNB) == 4, alignment(tagRemSNB)
-
-
 class PortableDevice(CoClass):
     """PortableDevice Class"""
     _reg_clsid_ = GUID('{728A21C5-3D9E-48D7-9810-864848F0F404}')
@@ -3060,6 +2116,124 @@ class PortableDevice(CoClass):
 
 
 PortableDevice._com_interfaces_ = [IPortableDevice]
+
+
+class _wireSAFEARRAY_UNION(Structure):
+    pass
+
+
+class __MIDL_IOleAutomationTypes_0001(Union):
+    pass
+
+
+class _wireSAFEARR_BRECORD(Structure):
+    pass
+
+
+_wireSAFEARR_BRECORD._fields_ = [
+    ('Size', c_ulong),
+    ('aRecord', POINTER(POINTER(_wireBRECORD))),
+]
+
+assert sizeof(_wireSAFEARR_BRECORD) == 16, sizeof(_wireSAFEARR_BRECORD)
+assert alignment(_wireSAFEARR_BRECORD) == 8, alignment(_wireSAFEARR_BRECORD)
+
+
+class _wireSAFEARR_HAVEIID(Structure):
+    pass
+
+
+_wireSAFEARR_HAVEIID._fields_ = [
+    ('Size', c_ulong),
+    ('apUnknown', POINTER(POINTER(IUnknown))),
+    ('iid', _00020430_0000_0000_C000_000000000046_0_2_0.GUID),
+]
+
+assert sizeof(_wireSAFEARR_HAVEIID) == 32, sizeof(_wireSAFEARR_HAVEIID)
+assert alignment(_wireSAFEARR_HAVEIID) == 8, alignment(_wireSAFEARR_HAVEIID)
+
+
+class _BYTE_SIZEDARR(Structure):
+    pass
+
+
+_BYTE_SIZEDARR._fields_ = [
+    ('clSize', c_ulong),
+    ('pData', POINTER(c_ubyte)),
+]
+
+assert sizeof(_BYTE_SIZEDARR) == 16, sizeof(_BYTE_SIZEDARR)
+assert alignment(_BYTE_SIZEDARR) == 8, alignment(_BYTE_SIZEDARR)
+
+
+class _SHORT_SIZEDARR(Structure):
+    pass
+
+
+_SHORT_SIZEDARR._fields_ = [
+    ('clSize', c_ulong),
+    ('pData', POINTER(c_ushort)),
+]
+
+assert sizeof(_SHORT_SIZEDARR) == 16, sizeof(_SHORT_SIZEDARR)
+assert alignment(_SHORT_SIZEDARR) == 8, alignment(_SHORT_SIZEDARR)
+
+
+class _LONG_SIZEDARR(Structure):
+    pass
+
+
+_LONG_SIZEDARR._fields_ = [
+    ('clSize', c_ulong),
+    ('pData', POINTER(c_ulong)),
+]
+
+assert sizeof(_LONG_SIZEDARR) == 16, sizeof(_LONG_SIZEDARR)
+assert alignment(_LONG_SIZEDARR) == 8, alignment(_LONG_SIZEDARR)
+
+__MIDL_IOleAutomationTypes_0001._fields_ = [
+    ('BstrStr', _wireSAFEARR_BSTR),
+    ('UnknownStr', _wireSAFEARR_UNKNOWN),
+    ('DispatchStr', _wireSAFEARR_DISPATCH),
+    ('VariantStr', _wireSAFEARR_VARIANT),
+    ('RecordStr', _wireSAFEARR_BRECORD),
+    ('HaveIidStr', _wireSAFEARR_HAVEIID),
+    ('ByteStr', _BYTE_SIZEDARR),
+    ('WordStr', _SHORT_SIZEDARR),
+    ('LongStr', _LONG_SIZEDARR),
+    ('HyperStr', _HYPER_SIZEDARR),
+]
+
+assert sizeof(__MIDL_IOleAutomationTypes_0001) == 32, sizeof(__MIDL_IOleAutomationTypes_0001)
+assert alignment(__MIDL_IOleAutomationTypes_0001) == 8, alignment(__MIDL_IOleAutomationTypes_0001)
+
+_wireSAFEARRAY_UNION._fields_ = [
+    ('sfType', c_ulong),
+    ('u', __MIDL_IOleAutomationTypes_0001),
+]
+
+assert sizeof(_wireSAFEARRAY_UNION) == 40, sizeof(_wireSAFEARRAY_UNION)
+assert alignment(_wireSAFEARRAY_UNION) == 8, alignment(_wireSAFEARRAY_UNION)
+
+
+class IPortableDeviceContent(_00020430_0000_0000_C000_000000000046_0_2_0.IUnknown):
+    """IPortableDeviceContent Interface"""
+    _case_insensitive_ = True
+    _iid_ = GUID('{6A96ED84-7C73-4480-9938-BF5AF477D426}')
+    _idlflags_ = []
+
+    if TYPE_CHECKING:  # commembers
+        def EnumObjects(self, dwFlags: hints.Incomplete, pszParentObjectID: hints.Incomplete, pFilter: hints.Incomplete) -> 'IEnumPortableDeviceObjectIDs': ...
+        def Properties(self) -> 'IPortableDeviceProperties': ...
+        def Transfer(self) -> 'IPortableDeviceResources': ...
+        def CreateObjectWithPropertiesOnly(self, pValues: hints.Incomplete, ppszObjectID: hints.Incomplete) -> hints.Incomplete: ...
+        def CreateObjectWithPropertiesAndData(self, pValues: hints.Incomplete, pdwOptimalWriteBufferSize: hints.Incomplete, ppszCookie: hints.Incomplete) -> hints.Tuple['IStream', hints.Incomplete, hints.Incomplete]: ...
+        def Delete(self, dwOptions: hints.Incomplete, pObjectIDs: hints.Incomplete, ppResults: hints.Incomplete) -> 'IPortableDevicePropVariantCollection': ...
+        def GetObjectIDsFromPersistentUniqueIDs(self, pPersistentUniqueIDs: hints.Incomplete) -> 'IPortableDevicePropVariantCollection': ...
+        def Cancel(self) -> hints.Hresult: ...
+        def Move(self, pObjectIDs: hints.Incomplete, pszDestinationFolderObjectID: hints.Incomplete, ppResults: hints.Incomplete) -> 'IPortableDevicePropVariantCollection': ...
+        def Copy(self, pObjectIDs: hints.Incomplete, pszDestinationFolderObjectID: hints.Incomplete, ppResults: hints.Incomplete) -> 'IPortableDevicePropVariantCollection': ...
+
 
 IPortableDevice._methods_ = [
     COMMETHOD(
@@ -3158,60 +2332,341 @@ IPortableDevice._methods_ = [
 #         #return ppszPnPDeviceID
 #
 
+tagRemSNB._pack_ = 4
 
-class __MIDL_IOleAutomationTypes_0004(Union):
-    pass
-
-
-__MIDL_IOleAutomationTypes_0004._fields_ = [
-    ('llVal', c_longlong),
-    ('lVal', c_int),
-    ('bVal', c_ubyte),
-    ('iVal', c_short),
-    ('fltVal', c_float),
-    ('dblVal', c_double),
-    ('boolVal', VARIANT_BOOL),
-    ('scode', SCODE),
-    ('cyVal', c_longlong),
-    ('date', c_double),
-    ('bstrVal', POINTER(_FLAGGED_WORD_BLOB)),
-    ('punkVal', POINTER(IUnknown)),
-    ('pdispVal', POINTER(IDispatch)),
-    ('parray', POINTER(POINTER(_wireSAFEARRAY))),
-    ('brecVal', POINTER(_wireBRECORD)),
-    ('pbVal', POINTER(c_ubyte)),
-    ('piVal', POINTER(c_short)),
-    ('plVal', POINTER(c_int)),
-    ('pllVal', POINTER(c_longlong)),
-    ('pfltVal', POINTER(c_float)),
-    ('pdblVal', POINTER(c_double)),
-    ('pboolVal', POINTER(VARIANT_BOOL)),
-    ('pscode', POINTER(SCODE)),
-    ('pcyVal', POINTER(c_longlong)),
-    ('pdate', POINTER(c_double)),
-    ('pbstrVal', POINTER(POINTER(_FLAGGED_WORD_BLOB))),
-    ('ppunkVal', POINTER(POINTER(IUnknown))),
-    ('ppdispVal', POINTER(POINTER(IDispatch))),
-    ('pparray', POINTER(POINTER(POINTER(_wireSAFEARRAY)))),
-    ('pvarVal', POINTER(POINTER(_wireVARIANT))),
-    ('cVal', c_char),
-    ('uiVal', c_ushort),
-    ('ulVal', c_ulong),
-    ('ullVal', c_ulonglong),
-    ('intVal', c_int),
-    ('uintVal', c_uint),
-    ('decVal', DECIMAL),
-    ('pdecVal', POINTER(DECIMAL)),
-    ('pcVal', STRING),
-    ('puiVal', POINTER(c_ushort)),
-    ('pulVal', POINTER(c_ulong)),
-    ('pullVal', POINTER(c_ulonglong)),
-    ('pintVal', POINTER(c_int)),
-    ('puintVal', POINTER(c_uint)),
+tagRemSNB._fields_ = [
+    ('ulCntStr', c_ulong),
+    ('ulCntChar', c_ulong),
+    ('rgString', POINTER(c_ushort)),
 ]
 
-assert sizeof(__MIDL_IOleAutomationTypes_0004) == 16, sizeof(__MIDL_IOleAutomationTypes_0004)
-assert alignment(__MIDL_IOleAutomationTypes_0004) == 8, alignment(__MIDL_IOleAutomationTypes_0004)
+assert sizeof(tagRemSNB) == 16, sizeof(tagRemSNB)
+assert alignment(tagRemSNB) == 4, alignment(tagRemSNB)
+
+tagVersionedStream._fields_ = [
+    ('guidVersion', _00020430_0000_0000_C000_000000000046_0_2_0.GUID),
+    ('pStream', POINTER(IStream)),
+]
+
+assert sizeof(tagVersionedStream) == 24, sizeof(tagVersionedStream)
+assert alignment(tagVersionedStream) == 8, alignment(tagVersionedStream)
+
+
+class IEnumSTATSTG(_00020430_0000_0000_C000_000000000046_0_2_0.IUnknown):
+    _case_insensitive_ = True
+    _iid_ = GUID('{0000000D-0000-0000-C000-000000000046}')
+    _idlflags_ = []
+
+    if TYPE_CHECKING:  # commembers
+        def RemoteNext(self, celt: hints.Incomplete) -> hints.Tuple[hints.Incomplete, hints.Incomplete]: ...
+        def Skip(self, celt: hints.Incomplete) -> hints.Hresult: ...
+        def Reset(self) -> hints.Hresult: ...
+        def Clone(self) -> 'IEnumSTATSTG': ...
+
+
+IEnumSTATSTG._methods_ = [
+    COMMETHOD(
+        [],
+        HRESULT,
+        'RemoteNext',
+        (['in'], c_ulong, 'celt'),
+        (['out'], POINTER(tagSTATSTG), 'rgelt'),
+        (['out'], POINTER(c_ulong), 'pceltFetched')
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'Skip',
+        (['in'], c_ulong, 'celt')
+    ),
+    COMMETHOD([], HRESULT, 'Reset'),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'Clone',
+        (['out'], POINTER(POINTER(IEnumSTATSTG)), 'ppenum')
+    ),
+]
+
+################################################################
+# code template for IEnumSTATSTG implementation
+# class IEnumSTATSTG_Impl(object):
+#     def RemoteNext(self, celt):
+#         '-no docstring-'
+#         #return rgelt, pceltFetched
+#
+#     def Skip(self, celt):
+#         '-no docstring-'
+#         #return 
+#
+#     def Reset(self):
+#         '-no docstring-'
+#         #return 
+#
+#     def Clone(self):
+#         '-no docstring-'
+#         #return ppenum
+#
+
+IPortableDeviceContent._methods_ = [
+    COMMETHOD(
+        [],
+        HRESULT,
+        'EnumObjects',
+        (['in'], c_ulong, 'dwFlags'),
+        (['in'], WSTRING, 'pszParentObjectID'),
+        (['in'], POINTER(IPortableDeviceValues), 'pFilter'),
+        (['out'], POINTER(POINTER(IEnumPortableDeviceObjectIDs)), 'ppenum')
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'Properties',
+        (['out'], POINTER(POINTER(IPortableDeviceProperties)), 'ppProperties')
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'Transfer',
+        (['out'], POINTER(POINTER(IPortableDeviceResources)), 'ppResources')
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'CreateObjectWithPropertiesOnly',
+        (['in'], POINTER(IPortableDeviceValues), 'pValues'),
+        (['in', 'out'], POINTER(WSTRING), 'ppszObjectID')
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'CreateObjectWithPropertiesAndData',
+        (['in'], POINTER(IPortableDeviceValues), 'pValues'),
+        (['in', 'out'], POINTER(POINTER(IStream)), 'ppData'),
+        (['in', 'out'], POINTER(c_ulong), 'pdwOptimalWriteBufferSize'),
+        (['in', 'out'], POINTER(WSTRING), 'ppszCookie')
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'Delete',
+        (['in'], c_ulong, 'dwOptions'),
+        (['in'], POINTER(IPortableDevicePropVariantCollection), 'pObjectIDs'),
+        (
+            ['in'],
+            POINTER(POINTER(IPortableDevicePropVariantCollection)),
+            'ppResults',
+        )
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'GetObjectIDsFromPersistentUniqueIDs',
+        (
+            ['in'],
+            POINTER(IPortableDevicePropVariantCollection),
+            'pPersistentUniqueIDs',
+        ),
+        (
+            ['out'],
+            POINTER(POINTER(IPortableDevicePropVariantCollection)),
+            'ppObjectIDs',
+        )
+    ),
+    COMMETHOD([], HRESULT, 'Cancel'),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'Move',
+        (['in'], POINTER(IPortableDevicePropVariantCollection), 'pObjectIDs'),
+        (['in'], WSTRING, 'pszDestinationFolderObjectID'),
+        (
+            ['in', 'out'],
+            POINTER(POINTER(IPortableDevicePropVariantCollection)),
+            'ppResults',
+        )
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'Copy',
+        (['in'], POINTER(IPortableDevicePropVariantCollection), 'pObjectIDs'),
+        (['in'], WSTRING, 'pszDestinationFolderObjectID'),
+        (
+            ['in', 'out'],
+            POINTER(POINTER(IPortableDevicePropVariantCollection)),
+            'ppResults',
+        )
+    ),
+]
+
+################################################################
+# code template for IPortableDeviceContent implementation
+# class IPortableDeviceContent_Impl(object):
+#     def EnumObjects(self, dwFlags, pszParentObjectID, pFilter):
+#         '-no docstring-'
+#         #return ppenum
+#
+#     def Properties(self):
+#         '-no docstring-'
+#         #return ppProperties
+#
+#     def Transfer(self):
+#         '-no docstring-'
+#         #return ppResources
+#
+#     def CreateObjectWithPropertiesOnly(self, pValues):
+#         '-no docstring-'
+#         #return ppszObjectID
+#
+#     def CreateObjectWithPropertiesAndData(self, pValues):
+#         '-no docstring-'
+#         #return ppData, pdwOptimalWriteBufferSize, ppszCookie
+#
+#     def Delete(self, dwOptions, pObjectIDs):
+#         '-no docstring-'
+#         #return ppResults
+#
+#     def GetObjectIDsFromPersistentUniqueIDs(self, pPersistentUniqueIDs):
+#         '-no docstring-'
+#         #return ppObjectIDs
+#
+#     def Cancel(self):
+#         '-no docstring-'
+#         #return 
+#
+#     def Move(self, pObjectIDs, pszDestinationFolderObjectID):
+#         '-no docstring-'
+#         #return ppResults
+#
+#     def Copy(self, pObjectIDs, pszDestinationFolderObjectID):
+#         '-no docstring-'
+#         #return ppResults
+#
+
+
+class PortableDeviceWebControl(CoClass):
+    """Dispatch Class for Web Host Applications"""
+    _reg_clsid_ = GUID('{186DD02C-2DEC-41B5-A7D4-B59056FADE51}')
+    _idlflags_ = []
+    _typelib_path_ = typelib_path
+    _reg_typelib_ = ('{1F001332-1A57-4934-BE31-AFFC99F4EE0A}', 1, 0)
+
+
+PortableDeviceWebControl._com_interfaces_ = [IPortableDeviceWebControl]
+
+
+class IPortableDeviceManager(_00020430_0000_0000_C000_000000000046_0_2_0.IUnknown):
+    """IPortableDeviceManager Interface"""
+    _case_insensitive_ = True
+    _iid_ = GUID('{A1567595-4C2F-4574-A6FA-ECEF917B9A40}')
+    _idlflags_ = []
+
+    if TYPE_CHECKING:  # commembers
+        def GetDevices(self, pPnPDeviceIDs: hints.Incomplete, pcPnPDeviceIDs: hints.Incomplete) -> hints.Tuple[hints.Incomplete, hints.Incomplete]: ...
+        def RefreshDeviceList(self) -> hints.Hresult: ...
+        def GetDeviceFriendlyName(self, pszPnPDeviceID: hints.Incomplete, pDeviceFriendlyName: hints.Incomplete, pcchDeviceFriendlyName: hints.Incomplete) -> hints.Tuple[hints.Incomplete, hints.Incomplete]: ...
+        def GetDeviceDescription(self, pszPnPDeviceID: hints.Incomplete, pDeviceDescription: hints.Incomplete, pcchDeviceDescription: hints.Incomplete) -> hints.Tuple[hints.Incomplete, hints.Incomplete]: ...
+        def GetDeviceManufacturer(self, pszPnPDeviceID: hints.Incomplete, pDeviceManufacturer: hints.Incomplete, pcchDeviceManufacturer: hints.Incomplete) -> hints.Tuple[hints.Incomplete, hints.Incomplete]: ...
+        def GetDeviceProperty(self, pszPnPDeviceID: hints.Incomplete, pszDevicePropertyName: hints.Incomplete, pData: hints.Incomplete, pcbData: hints.Incomplete, pdwType: hints.Incomplete) -> hints.Tuple[hints.Incomplete, hints.Incomplete, hints.Incomplete]: ...
+        def GetPrivateDevices(self, pPnPDeviceIDs: hints.Incomplete, pcPnPDeviceIDs: hints.Incomplete) -> hints.Tuple[hints.Incomplete, hints.Incomplete]: ...
+
+
+IPortableDeviceManager._methods_ = [
+    COMMETHOD(
+        [],
+        HRESULT,
+        'GetDevices',
+        (['in', 'out'], POINTER(WSTRING), 'pPnPDeviceIDs'),
+        (['in', 'out'], POINTER(c_ulong), 'pcPnPDeviceIDs')
+    ),
+    COMMETHOD([], HRESULT, 'RefreshDeviceList'),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'GetDeviceFriendlyName',
+        (['in'], WSTRING, 'pszPnPDeviceID'),
+        (['in', 'out'], POINTER(c_ushort), 'pDeviceFriendlyName'),
+        (['in', 'out'], POINTER(c_ulong), 'pcchDeviceFriendlyName')
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'GetDeviceDescription',
+        (['in'], WSTRING, 'pszPnPDeviceID'),
+        (['in', 'out'], POINTER(c_ushort), 'pDeviceDescription'),
+        (['in', 'out'], POINTER(c_ulong), 'pcchDeviceDescription')
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'GetDeviceManufacturer',
+        (['in'], WSTRING, 'pszPnPDeviceID'),
+        (['in', 'out'], POINTER(c_ushort), 'pDeviceManufacturer'),
+        (['in', 'out'], POINTER(c_ulong), 'pcchDeviceManufacturer')
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'GetDeviceProperty',
+        (['in'], WSTRING, 'pszPnPDeviceID'),
+        (['in'], WSTRING, 'pszDevicePropertyName'),
+        (['in', 'out'], POINTER(c_ubyte), 'pData'),
+        (['in', 'out'], POINTER(c_ulong), 'pcbData'),
+        (['in', 'out'], POINTER(c_ulong), 'pdwType')
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'GetPrivateDevices',
+        (['in', 'out'], POINTER(WSTRING), 'pPnPDeviceIDs'),
+        (['in', 'out'], POINTER(c_ulong), 'pcPnPDeviceIDs')
+    ),
+]
+
+################################################################
+# code template for IPortableDeviceManager implementation
+# class IPortableDeviceManager_Impl(object):
+#     def GetDevices(self):
+#         '-no docstring-'
+#         #return pPnPDeviceIDs, pcPnPDeviceIDs
+#
+#     def RefreshDeviceList(self):
+#         '-no docstring-'
+#         #return 
+#
+#     def GetDeviceFriendlyName(self, pszPnPDeviceID):
+#         '-no docstring-'
+#         #return pDeviceFriendlyName, pcchDeviceFriendlyName
+#
+#     def GetDeviceDescription(self, pszPnPDeviceID):
+#         '-no docstring-'
+#         #return pDeviceDescription, pcchDeviceDescription
+#
+#     def GetDeviceManufacturer(self, pszPnPDeviceID):
+#         '-no docstring-'
+#         #return pDeviceManufacturer, pcchDeviceManufacturer
+#
+#     def GetDeviceProperty(self, pszPnPDeviceID, pszDevicePropertyName):
+#         '-no docstring-'
+#         #return pData, pcbData, pdwType
+#
+#     def GetPrivateDevices(self):
+#         '-no docstring-'
+#         #return pPnPDeviceIDs, pcPnPDeviceIDs
+#
+
+_wireSAFEARRAY._fields_ = [
+    ('cDims', c_ushort),
+    ('fFeatures', c_ushort),
+    ('cbElements', c_ulong),
+    ('cLocks', c_ulong),
+    ('uArrayStructs', _wireSAFEARRAY_UNION),
+    ('rgsabound', POINTER(tagSAFEARRAYBOUND)),
+]
+
+assert sizeof(_wireSAFEARRAY) == 64, sizeof(_wireSAFEARRAY)
+assert alignment(_wireSAFEARRAY) == 8, alignment(_wireSAFEARRAY)
 
 IPortableDevicePropVariantCollection._methods_ = [
     COMMETHOD(
@@ -3286,110 +2741,199 @@ IPortableDevicePropVariantCollection._methods_ = [
 #         #return 
 #
 
-IPortableDeviceKeyCollection._methods_ = [
+IStorage._methods_ = [
     COMMETHOD(
         [],
         HRESULT,
-        'GetCount',
-        (['in'], POINTER(c_ulong), 'pcElems')
+        'CreateStream',
+        (['in'], WSTRING, 'pwcsName'),
+        (['in'], c_ulong, 'grfMode'),
+        (['in'], c_ulong, 'reserved1'),
+        (['in'], c_ulong, 'reserved2'),
+        (['out'], POINTER(POINTER(IStream)), 'ppstm')
     ),
     COMMETHOD(
         [],
         HRESULT,
-        'GetAt',
-        (['in'], c_ulong, 'dwIndex'),
-        (['in'], POINTER(_tagpropertykey), 'pKey')
+        'RemoteOpenStream',
+        (['in'], WSTRING, 'pwcsName'),
+        (['in'], c_ulong, 'cbReserved1'),
+        (['in'], POINTER(c_ubyte), 'reserved1'),
+        (['in'], c_ulong, 'grfMode'),
+        (['in'], c_ulong, 'reserved2'),
+        (['out'], POINTER(POINTER(IStream)), 'ppstm')
     ),
     COMMETHOD(
         [],
         HRESULT,
-        'Add',
-        (['in'], POINTER(_tagpropertykey), 'key')
+        'CreateStorage',
+        (['in'], WSTRING, 'pwcsName'),
+        (['in'], c_ulong, 'grfMode'),
+        (['in'], c_ulong, 'reserved1'),
+        (['in'], c_ulong, 'reserved2'),
+        (['out'], POINTER(POINTER(IStorage)), 'ppstg')
     ),
-    COMMETHOD([], HRESULT, 'Clear'),
     COMMETHOD(
         [],
         HRESULT,
-        'RemoveAt',
-        (['in'], c_ulong, 'dwIndex')
+        'OpenStorage',
+        (['in'], WSTRING, 'pwcsName'),
+        (['in'], POINTER(IStorage), 'pstgPriority'),
+        (['in'], c_ulong, 'grfMode'),
+        (['in'], wireSNB, 'snbExclude'),
+        (['in'], c_ulong, 'reserved'),
+        (['out'], POINTER(POINTER(IStorage)), 'ppstg')
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'RemoteCopyTo',
+        (['in'], c_ulong, 'ciidExclude'),
+        (
+            ['in'],
+            POINTER(_00020430_0000_0000_C000_000000000046_0_2_0.GUID),
+            'rgiidExclude',
+        ),
+        (['in'], wireSNB, 'snbExclude'),
+        (['in'], POINTER(IStorage), 'pstgDest')
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'MoveElementTo',
+        (['in'], WSTRING, 'pwcsName'),
+        (['in'], POINTER(IStorage), 'pstgDest'),
+        (['in'], WSTRING, 'pwcsNewName'),
+        (['in'], c_ulong, 'grfFlags')
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'Commit',
+        (['in'], c_ulong, 'grfCommitFlags')
+    ),
+    COMMETHOD([], HRESULT, 'Revert'),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'RemoteEnumElements',
+        (['in'], c_ulong, 'reserved1'),
+        (['in'], c_ulong, 'cbReserved2'),
+        (['in'], POINTER(c_ubyte), 'reserved2'),
+        (['in'], c_ulong, 'reserved3'),
+        (['out'], POINTER(POINTER(IEnumSTATSTG)), 'ppenum')
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'DestroyElement',
+        (['in'], WSTRING, 'pwcsName')
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'RenameElement',
+        (['in'], WSTRING, 'pwcsOldName'),
+        (['in'], WSTRING, 'pwcsNewName')
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'SetElementTimes',
+        (['in'], WSTRING, 'pwcsName'),
+        (['in'], POINTER(_FILETIME), 'pctime'),
+        (['in'], POINTER(_FILETIME), 'patime'),
+        (['in'], POINTER(_FILETIME), 'pmtime')
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'SetClass',
+        (
+            ['in'],
+            POINTER(_00020430_0000_0000_C000_000000000046_0_2_0.GUID),
+            'clsid',
+        )
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'SetStateBits',
+        (['in'], c_ulong, 'grfStateBits'),
+        (['in'], c_ulong, 'grfMask')
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'Stat',
+        (['out'], POINTER(tagSTATSTG), 'pstatstg'),
+        (['in'], c_ulong, 'grfStatFlag')
     ),
 ]
 
 ################################################################
-# code template for IPortableDeviceKeyCollection implementation
-# class IPortableDeviceKeyCollection_Impl(object):
-#     def GetCount(self, pcElems):
+# code template for IStorage implementation
+# class IStorage_Impl(object):
+#     def CreateStream(self, pwcsName, grfMode, reserved1, reserved2):
+#         '-no docstring-'
+#         #return ppstm
+#
+#     def RemoteOpenStream(self, pwcsName, cbReserved1, reserved1, grfMode, reserved2):
+#         '-no docstring-'
+#         #return ppstm
+#
+#     def CreateStorage(self, pwcsName, grfMode, reserved1, reserved2):
+#         '-no docstring-'
+#         #return ppstg
+#
+#     def OpenStorage(self, pwcsName, pstgPriority, grfMode, snbExclude, reserved):
+#         '-no docstring-'
+#         #return ppstg
+#
+#     def RemoteCopyTo(self, ciidExclude, rgiidExclude, snbExclude, pstgDest):
 #         '-no docstring-'
 #         #return 
 #
-#     def GetAt(self, dwIndex, pKey):
+#     def MoveElementTo(self, pwcsName, pstgDest, pwcsNewName, grfFlags):
 #         '-no docstring-'
 #         #return 
 #
-#     def Add(self, key):
+#     def Commit(self, grfCommitFlags):
 #         '-no docstring-'
 #         #return 
 #
-#     def Clear(self):
+#     def Revert(self):
 #         '-no docstring-'
 #         #return 
 #
-#     def RemoveAt(self, dwIndex):
+#     def RemoteEnumElements(self, reserved1, cbReserved2, reserved2, reserved3):
+#         '-no docstring-'
+#         #return ppenum
+#
+#     def DestroyElement(self, pwcsName):
 #         '-no docstring-'
 #         #return 
 #
-
-tagVersionedStream._fields_ = [
-    ('guidVersion', _00020430_0000_0000_C000_000000000046_0_2_0.GUID),
-    ('pStream', POINTER(IStream)),
-]
-
-assert sizeof(tagVersionedStream) == 24, sizeof(tagVersionedStream)
-assert alignment(tagVersionedStream) == 8, alignment(tagVersionedStream)
-
-
-class PortableDeviceServiceFTM(CoClass):
-    """PortableDeviceServiceFTM Class"""
-    _reg_clsid_ = GUID('{1649B154-C794-497A-9B03-F3F0121302F3}')
-    _idlflags_ = []
-    _typelib_path_ = typelib_path
-    _reg_typelib_ = ('{1F001332-1A57-4934-BE31-AFFC99F4EE0A}', 1, 0)
-
-
-class IPortableDeviceService(_00020430_0000_0000_C000_000000000046_0_2_0.IUnknown):
-    """IPortableDeviceService Interface"""
-    _case_insensitive_ = True
-    _iid_ = GUID('{D3BD3A44-D7B5-40A9-98B7-2FA4D01DEC08}')
-    _idlflags_ = []
-
-    if TYPE_CHECKING:  # commembers
-        def Open(self, pszPnPServiceID: hints.Incomplete, pClientInfo: hints.Incomplete) -> hints.Hresult: ...
-        def Capabilities(self) -> 'IPortableDeviceServiceCapabilities': ...
-        def Content(self) -> 'IPortableDeviceContent2': ...
-        def Methods(self) -> 'IPortableDeviceServiceMethods': ...
-        def Cancel(self) -> hints.Hresult: ...
-        def Close(self) -> hints.Hresult: ...
-        def GetServiceObjectID(self) -> hints.Incomplete: ...
-        def GetPnPServiceID(self) -> hints.Incomplete: ...
-        def Advise(self, dwFlags: hints.Incomplete, pCallback: hints.Incomplete, pParameters: hints.Incomplete) -> hints.Incomplete: ...
-        def Unadvise(self, pszCookie: hints.Incomplete) -> hints.Hresult: ...
-        def SendCommand(self, dwFlags: hints.Incomplete, pParameters: hints.Incomplete) -> 'IPortableDeviceValues': ...
-
-
-PortableDeviceServiceFTM._com_interfaces_ = [IPortableDeviceService]
-
-_wireVARIANT._fields_ = [
-    ('clSize', c_ulong),
-    ('rpcReserved', c_ulong),
-    ('vt', c_ushort),
-    ('wReserved1', c_ushort),
-    ('wReserved2', c_ushort),
-    ('wReserved3', c_ushort),
-    ('DUMMYUNIONNAME', __MIDL_IOleAutomationTypes_0004),
-]
-
-assert sizeof(_wireVARIANT) == 32, sizeof(_wireVARIANT)
-assert alignment(_wireVARIANT) == 8, alignment(_wireVARIANT)
+#     def RenameElement(self, pwcsOldName, pwcsNewName):
+#         '-no docstring-'
+#         #return 
+#
+#     def SetElementTimes(self, pwcsName, pctime, patime, pmtime):
+#         '-no docstring-'
+#         #return 
+#
+#     def SetClass(self, clsid):
+#         '-no docstring-'
+#         #return 
+#
+#     def SetStateBits(self, grfStateBits, grfMask):
+#         '-no docstring-'
+#         #return 
+#
+#     def Stat(self, grfStatFlag):
+#         '-no docstring-'
+#         #return pstatstg
+#
 
 
 class PortableDeviceManager(CoClass):
@@ -3401,6 +2945,54 @@ class PortableDeviceManager(CoClass):
 
 
 PortableDeviceManager._com_interfaces_ = [IPortableDeviceManager]
+
+
+class IPortableDeviceServiceCapabilities(_00020430_0000_0000_C000_000000000046_0_2_0.IUnknown):
+    """IPortableDeviceServiceCapabilities Interface"""
+    _case_insensitive_ = True
+    _iid_ = GUID('{24DBD89D-413E-43E0-BD5B-197F3C56C886}')
+    _idlflags_ = []
+
+    if TYPE_CHECKING:  # commembers
+        def GetSupportedMethods(self) -> 'IPortableDevicePropVariantCollection': ...
+        def GetSupportedMethodsByFormat(self, Format: hints.Incomplete) -> 'IPortableDevicePropVariantCollection': ...
+        def GetMethodAttributes(self, Method: hints.Incomplete) -> 'IPortableDeviceValues': ...
+        def GetMethodParameterAttributes(self, Method: hints.Incomplete, Parameter: hints.Incomplete) -> 'IPortableDeviceValues': ...
+        def GetSupportedFormats(self) -> 'IPortableDevicePropVariantCollection': ...
+        def GetFormatAttributes(self, Format: hints.Incomplete) -> 'IPortableDeviceValues': ...
+        def GetSupportedFormatProperties(self, Format: hints.Incomplete) -> 'IPortableDeviceKeyCollection': ...
+        def GetFormatPropertyAttributes(self, Format: hints.Incomplete, Property: hints.Incomplete) -> 'IPortableDeviceValues': ...
+        def GetSupportedEvents(self) -> 'IPortableDevicePropVariantCollection': ...
+        def GetEventAttributes(self, Event: hints.Incomplete) -> 'IPortableDeviceValues': ...
+        def GetEventParameterAttributes(self, Event: hints.Incomplete, Parameter: hints.Incomplete) -> 'IPortableDeviceValues': ...
+        def GetInheritedServices(self, dwInheritanceType: hints.Incomplete) -> 'IPortableDevicePropVariantCollection': ...
+        def GetFormatRenderingProfiles(self, Format: hints.Incomplete) -> 'IPortableDeviceValuesCollection': ...
+        def GetSupportedCommands(self) -> 'IPortableDeviceKeyCollection': ...
+        def GetCommandOptions(self, Command: hints.Incomplete) -> 'IPortableDeviceValues': ...
+        def Cancel(self) -> hints.Hresult: ...
+
+
+class IPortableDeviceContent2(IPortableDeviceContent):
+    """IPortableDeviceContent2 Interface"""
+    _case_insensitive_ = True
+    _iid_ = GUID('{9B4ADD96-F6BF-4034-8708-ECA72BF10554}')
+    _idlflags_ = []
+
+    if TYPE_CHECKING:  # commembers
+        def UpdateObjectWithPropertiesAndData(self, pszObjectID: hints.Incomplete, pProperties: hints.Incomplete, pdwOptimalWriteBufferSize: hints.Incomplete) -> hints.Tuple['IStream', hints.Incomplete]: ...
+
+
+class IPortableDeviceServiceMethods(_00020430_0000_0000_C000_000000000046_0_2_0.IUnknown):
+    """IPortableDeviceServiceMethods Interface"""
+    _case_insensitive_ = True
+    _iid_ = GUID('{E20333C9-FD34-412D-A381-CC6F2D820DF7}')
+    _idlflags_ = []
+
+    if TYPE_CHECKING:  # commembers
+        def Invoke(self, Method: hints.Incomplete, pParameters: hints.Incomplete, ppResults: hints.Incomplete) -> 'IPortableDeviceValues': ...
+        def InvokeAsync(self, Method: hints.Incomplete, pParameters: hints.Incomplete, pCallback: hints.Incomplete) -> hints.Hresult: ...
+        def Cancel(self, pCallback: hints.Incomplete) -> hints.Hresult: ...
+
 
 IPortableDeviceService._methods_ = [
     COMMETHOD(
@@ -3530,39 +3122,452 @@ class PortableDeviceService(CoClass):
 
 PortableDeviceService._com_interfaces_ = [IPortableDeviceService]
 
-__all__ = [
-    'IPortableDeviceKeyCollection', '_wireSAFEARR_HAVEIID',
-    'PortableDeviceDispatchFactory', 'Library', 'IEnumSTATSTG',
-    'tagCAC', 'PortableDeviceService', 'tagCALPWSTR', 'tagCABSTRBLOB',
-    '_wireSAFEARRAY', '_wireSAFEARR_BSTR', '_wireSAFEARRAY_UNION',
-    '_tagpropertykey', 'tagCABOOL', '__MIDL_IOleAutomationTypes_0005',
-    'IPortableDeviceServiceCapabilities', '_wireSAFEARR_VARIANT',
-    'tagSTATSTG', '__MIDL_IOleAutomationTypes_0001', 'typelib_path',
-    'tagCAUH', 'IPortableDevice', 'IPortableDeviceProperties',
-    'tagCAI', 'IPortableDeviceService', 'tagCAL', '_wireVARIANT',
-    'PortableDeviceWebControl', 'tagCAUL', 'tagBLOB',
-    '_wireSAFEARR_BRECORD', 'IPortableDeviceCapabilities',
-    'tagRemSNB', 'tagCACLSID', '_FLAGGED_WORD_BLOB',
-    '__MIDL_IOleAutomationTypes_0004', 'tagCACY', '_HYPER_SIZEDARR',
-    'IPortableDeviceResources', 'PortableDeviceManager',
-    'PortableDeviceServiceFTM', 'IPortableDeviceManager',
-    '_wireSAFEARR_DISPATCH', 'tagCAH', 'tagCAPROPVARIANT', 'tagCAUB',
-    'IStream', '__MIDL___MIDL_itf_PortableDeviceApi_0001_0000_0001',
-    'tagCACLIPDATA', 'IPortableDevicePropVariantCollection',
-    'IPortableDeviceServiceMethods', 'IPortableDeviceContent2',
-    '_LONG_SIZEDARR', 'IPortableDeviceServiceMethodCallback',
-    'PortableDevice', 'IPortableDeviceWebControl', '_wireBRECORD',
-    'tagCALPSTR', 'PortableDeviceFTM', 'IEnumPortableDeviceObjectIDs',
-    'tagCAFLT', 'IStorage', 'IPortableDeviceValues', 'tagCLIPDATA',
-    'tagCADBL', 'tagCAFILETIME', '_SHORT_SIZEDARR',
-    'IPortableDeviceDispatchFactory', 'tagCADATE', 'tagCABSTR',
-    'IPropertyStore', 'wireSNB', '__MIDL_IOleAutomationTypes_0006',
-    'tagVersionedStream', 'IPortableDeviceContent', 'tagCASCODE',
-    'tag_inner_PROPVARIANT', 'IPortableDeviceEventCallback',
-    'IPortableDeviceValuesCollection', 'tagBSTRBLOB',
-    'wirePSAFEARRAY', 'tagCAUI', '_wireSAFEARR_UNKNOWN',
-    '_BYTE_SIZEDARR'
+IPortableDeviceKeyCollection._methods_ = [
+    COMMETHOD(
+        [],
+        HRESULT,
+        'GetCount',
+        (['in'], POINTER(c_ulong), 'pcElems')
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'GetAt',
+        (['in'], c_ulong, 'dwIndex'),
+        (['in'], POINTER(_tagpropertykey), 'pKey')
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'Add',
+        (['in'], POINTER(_tagpropertykey), 'key')
+    ),
+    COMMETHOD([], HRESULT, 'Clear'),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'RemoveAt',
+        (['in'], c_ulong, 'dwIndex')
+    ),
 ]
 
-_check_version('1.4.10', 1741532197.736273)
+################################################################
+# code template for IPortableDeviceKeyCollection implementation
+# class IPortableDeviceKeyCollection_Impl(object):
+#     def GetCount(self, pcElems):
+#         '-no docstring-'
+#         #return 
+#
+#     def GetAt(self, dwIndex, pKey):
+#         '-no docstring-'
+#         #return 
+#
+#     def Add(self, key):
+#         '-no docstring-'
+#         #return 
+#
+#     def Clear(self):
+#         '-no docstring-'
+#         #return 
+#
+#     def RemoveAt(self, dwIndex):
+#         '-no docstring-'
+#         #return 
+#
+
+IPortableDeviceServiceCapabilities._methods_ = [
+    COMMETHOD(
+        [],
+        HRESULT,
+        'GetSupportedMethods',
+        (
+            ['out'],
+            POINTER(POINTER(IPortableDevicePropVariantCollection)),
+            'ppMethods',
+        )
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'GetSupportedMethodsByFormat',
+        (
+            ['in'],
+            POINTER(_00020430_0000_0000_C000_000000000046_0_2_0.GUID),
+            'Format',
+        ),
+        (
+            ['out'],
+            POINTER(POINTER(IPortableDevicePropVariantCollection)),
+            'ppMethods',
+        )
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'GetMethodAttributes',
+        (
+            ['in'],
+            POINTER(_00020430_0000_0000_C000_000000000046_0_2_0.GUID),
+            'Method',
+        ),
+        (['out'], POINTER(POINTER(IPortableDeviceValues)), 'ppAttributes')
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'GetMethodParameterAttributes',
+        (
+            ['in'],
+            POINTER(_00020430_0000_0000_C000_000000000046_0_2_0.GUID),
+            'Method',
+        ),
+        (['in'], POINTER(_tagpropertykey), 'Parameter'),
+        (['out'], POINTER(POINTER(IPortableDeviceValues)), 'ppAttributes')
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'GetSupportedFormats',
+        (
+            ['out'],
+            POINTER(POINTER(IPortableDevicePropVariantCollection)),
+            'ppFormats',
+        )
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'GetFormatAttributes',
+        (
+            ['in'],
+            POINTER(_00020430_0000_0000_C000_000000000046_0_2_0.GUID),
+            'Format',
+        ),
+        (['out'], POINTER(POINTER(IPortableDeviceValues)), 'ppAttributes')
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'GetSupportedFormatProperties',
+        (
+            ['in'],
+            POINTER(_00020430_0000_0000_C000_000000000046_0_2_0.GUID),
+            'Format',
+        ),
+        (['out'], POINTER(POINTER(IPortableDeviceKeyCollection)), 'ppKeys')
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'GetFormatPropertyAttributes',
+        (
+            ['in'],
+            POINTER(_00020430_0000_0000_C000_000000000046_0_2_0.GUID),
+            'Format',
+        ),
+        (['in'], POINTER(_tagpropertykey), 'Property'),
+        (['out'], POINTER(POINTER(IPortableDeviceValues)), 'ppAttributes')
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'GetSupportedEvents',
+        (
+            ['out'],
+            POINTER(POINTER(IPortableDevicePropVariantCollection)),
+            'ppEvents',
+        )
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'GetEventAttributes',
+        (
+            ['in'],
+            POINTER(_00020430_0000_0000_C000_000000000046_0_2_0.GUID),
+            'Event',
+        ),
+        (['out'], POINTER(POINTER(IPortableDeviceValues)), 'ppAttributes')
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'GetEventParameterAttributes',
+        (
+            ['in'],
+            POINTER(_00020430_0000_0000_C000_000000000046_0_2_0.GUID),
+            'Event',
+        ),
+        (['in'], POINTER(_tagpropertykey), 'Parameter'),
+        (['out'], POINTER(POINTER(IPortableDeviceValues)), 'ppAttributes')
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'GetInheritedServices',
+        (['in'], c_ulong, 'dwInheritanceType'),
+        (
+            ['out'],
+            POINTER(POINTER(IPortableDevicePropVariantCollection)),
+            'ppServices',
+        )
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'GetFormatRenderingProfiles',
+        (
+            ['in'],
+            POINTER(_00020430_0000_0000_C000_000000000046_0_2_0.GUID),
+            'Format',
+        ),
+        (
+            ['out'],
+            POINTER(POINTER(IPortableDeviceValuesCollection)),
+            'ppRenderingProfiles',
+        )
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'GetSupportedCommands',
+        (['out'], POINTER(POINTER(IPortableDeviceKeyCollection)), 'ppCommands')
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'GetCommandOptions',
+        (['in'], POINTER(_tagpropertykey), 'Command'),
+        (['out'], POINTER(POINTER(IPortableDeviceValues)), 'ppOptions')
+    ),
+    COMMETHOD([], HRESULT, 'Cancel'),
+]
+
+################################################################
+# code template for IPortableDeviceServiceCapabilities implementation
+# class IPortableDeviceServiceCapabilities_Impl(object):
+#     def GetSupportedMethods(self):
+#         '-no docstring-'
+#         #return ppMethods
+#
+#     def GetSupportedMethodsByFormat(self, Format):
+#         '-no docstring-'
+#         #return ppMethods
+#
+#     def GetMethodAttributes(self, Method):
+#         '-no docstring-'
+#         #return ppAttributes
+#
+#     def GetMethodParameterAttributes(self, Method, Parameter):
+#         '-no docstring-'
+#         #return ppAttributes
+#
+#     def GetSupportedFormats(self):
+#         '-no docstring-'
+#         #return ppFormats
+#
+#     def GetFormatAttributes(self, Format):
+#         '-no docstring-'
+#         #return ppAttributes
+#
+#     def GetSupportedFormatProperties(self, Format):
+#         '-no docstring-'
+#         #return ppKeys
+#
+#     def GetFormatPropertyAttributes(self, Format, Property):
+#         '-no docstring-'
+#         #return ppAttributes
+#
+#     def GetSupportedEvents(self):
+#         '-no docstring-'
+#         #return ppEvents
+#
+#     def GetEventAttributes(self, Event):
+#         '-no docstring-'
+#         #return ppAttributes
+#
+#     def GetEventParameterAttributes(self, Event, Parameter):
+#         '-no docstring-'
+#         #return ppAttributes
+#
+#     def GetInheritedServices(self, dwInheritanceType):
+#         '-no docstring-'
+#         #return ppServices
+#
+#     def GetFormatRenderingProfiles(self, Format):
+#         '-no docstring-'
+#         #return ppRenderingProfiles
+#
+#     def GetSupportedCommands(self):
+#         '-no docstring-'
+#         #return ppCommands
+#
+#     def GetCommandOptions(self, Command):
+#         '-no docstring-'
+#         #return ppOptions
+#
+#     def Cancel(self):
+#         '-no docstring-'
+#         #return 
+#
+
+IPortableDeviceValuesCollection._methods_ = [
+    COMMETHOD(
+        [],
+        HRESULT,
+        'GetCount',
+        (['in'], POINTER(c_ulong), 'pcElems')
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'GetAt',
+        (['in'], c_ulong, 'dwIndex'),
+        (['out'], POINTER(POINTER(IPortableDeviceValues)), 'ppValues')
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'Add',
+        (['in'], POINTER(IPortableDeviceValues), 'pValues')
+    ),
+    COMMETHOD([], HRESULT, 'Clear'),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'RemoveAt',
+        (['in'], c_ulong, 'dwIndex')
+    ),
+]
+
+################################################################
+# code template for IPortableDeviceValuesCollection implementation
+# class IPortableDeviceValuesCollection_Impl(object):
+#     def GetCount(self, pcElems):
+#         '-no docstring-'
+#         #return 
+#
+#     def GetAt(self, dwIndex):
+#         '-no docstring-'
+#         #return ppValues
+#
+#     def Add(self, pValues):
+#         '-no docstring-'
+#         #return 
+#
+#     def Clear(self):
+#         '-no docstring-'
+#         #return 
+#
+#     def RemoveAt(self, dwIndex):
+#         '-no docstring-'
+#         #return 
+#
+
+IPortableDeviceContent2._methods_ = [
+    COMMETHOD(
+        [],
+        HRESULT,
+        'UpdateObjectWithPropertiesAndData',
+        (['in'], WSTRING, 'pszObjectID'),
+        (['in'], POINTER(IPortableDeviceValues), 'pProperties'),
+        (['out'], POINTER(POINTER(IStream)), 'ppData'),
+        (['in', 'out'], POINTER(c_ulong), 'pdwOptimalWriteBufferSize')
+    ),
+]
+
+################################################################
+# code template for IPortableDeviceContent2 implementation
+# class IPortableDeviceContent2_Impl(object):
+#     def UpdateObjectWithPropertiesAndData(self, pszObjectID, pProperties):
+#         '-no docstring-'
+#         #return ppData, pdwOptimalWriteBufferSize
+#
+
+IPortableDeviceServiceMethods._methods_ = [
+    COMMETHOD(
+        [],
+        HRESULT,
+        'Invoke',
+        (
+            ['in'],
+            POINTER(_00020430_0000_0000_C000_000000000046_0_2_0.GUID),
+            'Method',
+        ),
+        (['in'], POINTER(IPortableDeviceValues), 'pParameters'),
+        (['in', 'out'], POINTER(POINTER(IPortableDeviceValues)), 'ppResults')
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'InvokeAsync',
+        (
+            ['in'],
+            POINTER(_00020430_0000_0000_C000_000000000046_0_2_0.GUID),
+            'Method',
+        ),
+        (['in'], POINTER(IPortableDeviceValues), 'pParameters'),
+        (['in'], POINTER(IPortableDeviceServiceMethodCallback), 'pCallback')
+    ),
+    COMMETHOD(
+        [],
+        HRESULT,
+        'Cancel',
+        (['in'], POINTER(IPortableDeviceServiceMethodCallback), 'pCallback')
+    ),
+]
+
+################################################################
+# code template for IPortableDeviceServiceMethods implementation
+# class IPortableDeviceServiceMethods_Impl(object):
+#     def Invoke(self, Method, pParameters):
+#         '-no docstring-'
+#         #return ppResults
+#
+#     def InvokeAsync(self, Method, pParameters, pCallback):
+#         '-no docstring-'
+#         #return 
+#
+#     def Cancel(self, pCallback):
+#         '-no docstring-'
+#         #return 
+#
+
+__all__ = [
+    'IPortableDevicePropVariantCollection', 'IPortableDeviceManager',
+    '_wireSAFEARRAY', 'tagBLOB', 'tagCALPSTR', 'tagCAC', 'tagCACLSID',
+    'tagCADBL', '_wireBRECORD', 'wirePSAFEARRAY',
+    'PortableDeviceService', 'IPortableDeviceService',
+    'PortableDeviceServiceFTM', '_wireSAFEARR_HAVEIID',
+    'tagCAPROPVARIANT', 'tagCABSTRBLOB', 'PortableDeviceManager',
+    '__MIDL___MIDL_itf_PortableDeviceApi_0001_0000_0001',
+    'IPropertyStore', '_wireSAFEARR_DISPATCH', 'tagCAL',
+    'PortableDevice', 'tagCACY', 'IPortableDeviceValuesCollection',
+    '_wireSAFEARR_BRECORD', 'IPortableDeviceServiceMethodCallback',
+    'PortableDeviceDispatchFactory', 'tagCAH',
+    'IPortableDeviceCapabilities', 'Library', 'tagCAUL',
+    'tag_inner_PROPVARIANT', 'tagCAUI', 'tagCAUB', '_tagpropertykey',
+    '_LONG_SIZEDARR', 'tagCAUH', 'IPortableDeviceKeyCollection',
+    'IEnumSTATSTG', 'IPortableDeviceEventCallback', 'IStorage',
+    'tagVersionedStream', 'tagCADATE',
+    'IPortableDeviceServiceMethods', 'tagCAFILETIME', 'tagCACLIPDATA',
+    'IPortableDeviceContent', '__MIDL_IOleAutomationTypes_0004',
+    'IPortableDeviceValues', 'IEnumPortableDeviceObjectIDs',
+    '_SHORT_SIZEDARR', 'tagBSTRBLOB', 'wireSNB',
+    '_wireSAFEARR_UNKNOWN', '_wireSAFEARR_BSTR',
+    'IPortableDeviceResources', '__MIDL_IOleAutomationTypes_0001',
+    '_wireSAFEARRAY_UNION', 'IPortableDeviceWebControl',
+    'IPortableDeviceProperties', 'PortableDeviceFTM', 'tagSTATSTG',
+    'tagCAI', 'tagCAFLT', '_wireSAFEARR_VARIANT',
+    'IPortableDeviceServiceCapabilities',
+    'IPortableDeviceDispatchFactory', '_wireVARIANT',
+    '_HYPER_SIZEDARR', 'IPortableDevice', 'tagCLIPDATA',
+    '__MIDL_IOleAutomationTypes_0005', 'tagCASCODE',
+    '_FLAGGED_WORD_BLOB', 'tagCABSTR',
+    '__MIDL_IOleAutomationTypes_0006', 'IPortableDeviceContent2',
+    '_BYTE_SIZEDARR', 'PortableDeviceWebControl', 'IStream',
+    'typelib_path', 'tagCABOOL', 'tagRemSNB', 'tagCALPWSTR'
+]
+
+# _check_version('1.4.11', 1741532197.736273)
 

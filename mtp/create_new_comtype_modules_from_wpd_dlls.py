@@ -18,6 +18,7 @@ import os
 
 def modify_generated_files(gen_dir: str) -> None:
     """Modifies the from comtypes generated files because some call are incorrect"""
+    # PortableDeviceApiLib
     filename = os.path.join(gen_dir, "_1F001332_1A57_4934_BE31_AFFC99F4EE0A_0_1_0.py")
     with open(filename, encoding="utf-8") as inp:
         content = inp.read()
@@ -103,6 +104,8 @@ def modify_generated_files(gen_dir: str) -> None:
                 line = line.replace("import comtypes.gen.", "from . import ")
             elif "comtypes.gen." in line:
                 line = line.replace("comtypes.gen.", "")
+            elif line.startswith("_check_version("):
+                line = f"# {line}"
             outlines.append(line)
     with open(filename, "wt", encoding="UTF-8") as outp:
         outp.write("".join(outlines))
@@ -115,6 +118,18 @@ def modify_generated_files(gen_dir: str) -> None:
                 line = line.replace("import comtypes.gen.", "from . import ")
             elif "comtypes.gen." in line:
                 line = line.replace("comtypes.gen.", "")
+            elif line.startswith("_check_version("):
+                line = f"# {line}"
+            outlines.append(line)
+    with open(filename, "wt", encoding="UTF-8") as outp:
+        outp.write("".join(outlines))
+
+    filename = os.path.join(gen_dir, "_00020430_0000_0000_C000_000000000046_0_2_0.py")
+    outlines: list[str] = []
+    with open(filename, "rt", encoding="utf-8") as inp:
+        for line in inp:
+            if line.startswith("_check_version("):
+                line = f"# {line}"
             outlines.append(line)
     with open(filename, "wt", encoding="UTF-8") as outp:
         outp.write("".join(outlines))

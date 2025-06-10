@@ -4,7 +4,7 @@ Implements access to basic functions of the Windows WPD API
 
 Author:  Heribert Füchtenhans
 
-Version: 2025.4.4
+Version: 2025.6.10
 
 For examples please look into the examples directory.
 
@@ -667,7 +667,7 @@ class PortableDevice:
 
     def close(self) -> None:
         """Close the connection to the device. This must be called when the device is no more needed."""
-        pass
+        comtypes.CoUninitialize()
 
     def _get_description(self) -> Tuple[str, str]:
         """Get the name and the description of the device. If no description is available

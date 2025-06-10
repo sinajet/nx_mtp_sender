@@ -156,8 +156,8 @@ class PortableDevice:
                 parts = self.devicename.split("_")
                 try:
                     self.name = parts[0]
-                    self.description = parts[1]
-                    self.serialnumber = parts[2]
+                    self.description = parts[-2]
+                    self.serialnumber = parts[-1]
                 except IndexError:
                     pass
         else:
