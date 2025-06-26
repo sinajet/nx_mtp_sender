@@ -11,7 +11,7 @@ For detailed description see [https://Heribert17.github.io/win_mtp/](https://Her
 
 Tested with:
 * Python 3.12 and above
-* comptypes 1.4.10
+* comptypes 1.4.10 and above
 * Windows 10 / 11
 * Linux Mint, Zorin, Debian 12 with KDE
 
@@ -28,6 +28,10 @@ dialog.py implements a directory searcher in tkinter that shows the attached MTP
 
 
 # Changelog
+* 2.0.6
+    * Removed the need for modified comtypes files under Windows. The comtypes files to access the windows mtp api are now automatically
+        created in the users temp directory in the comtypes folder.
+    * Switched from PyLint to BasedPyRight
 * 2.0.5
     * Updated comtypes files for comtypes version 1.4.11
     * Added comtypes.CoUninitialize to close function to free Windows memory

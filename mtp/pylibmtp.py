@@ -9,7 +9,7 @@
 # Renamed and modified for my MTP project by Heribert Füchtenhans
 # Attention: Only those function I needed for MTP are modfied
 #    to work with python version 3.x
-# Version: 2025.4.6
+# Version: 2025.6.26
 
 
 """
@@ -28,11 +28,12 @@ Example Usage (or see examples/):
         >>>
 """
 
-# pyright: reportPrivateUsage=false
+# pyright: basic
 
 from __future__ import annotations
+from typing import Any, override
 
-__VERSION__ = "0.0.5"
+__VERSION__ = "0.0.6"
 __VERSION_MACRO__ = 5
 __VERSION_MINOR__ = 0
 __VERSION_MAJOR__ = 0
@@ -121,7 +122,8 @@ class LIBMTP_Error(ctypes.Structure):
     Contains the ctypes structure for LIBMTP_error_t
     """
 
-    def __repr__(self):
+    @override
+    def __repr__(self) -> str:
         return self.errornumber
 
 
@@ -138,7 +140,8 @@ class LIBMTP_DeviceStorage(ctypes.Structure):
     Contains the ctypes structure for LIBMTP_devicestorage_t
     """
 
-    def __repr__(self):
+    @override
+    def __repr__(self) -> str:
         return self.id
 
 
@@ -163,7 +166,8 @@ class LIBMTP_DeviceEntry(ctypes.Structure):
     Contains the ctypes structure for LIBMTP_device_entry_t
     """
 
-    def __repr__(self):
+    @override
+    def __repr__(self) -> str:
         return self.vendor
 
 
@@ -182,7 +186,8 @@ class LIBMTP_RawDevice(ctypes.Structure):
     Contains the ctypes structure for LIBMTP_raw_device_t
     """
 
-    def __repr__(self):
+    @override
+    def __repr__(self) -> str:
         return self.device_entry
 
 
@@ -199,7 +204,8 @@ class LIBMTP_MTPDevice(ctypes.Structure):
     Contains the ctypes structure for LIBMTP_mtpdevice_t
     """
 
-    def __repr__(self):
+    @override
+    def __repr__(self) -> str:
         return self.interface_number
 
 
@@ -229,6 +235,7 @@ class LIBMTP_File(ctypes.Structure):
     Contains the ctypes structure for LIBMTP_file_t
     """
 
+    @override
     def __repr__(self):
         return "%s (%s)" % (self.filename, self.item_id)
 
@@ -251,6 +258,7 @@ class LIBMTP_Track(ctypes.Structure):
     Contains the ctypes structure for LIBMTP_track_t
     """
 
+    @override
     def __repr__(self):
         return "%s - %s (%s)" % (self.artist, self.title, self.item_id)
 
@@ -282,99 +290,13 @@ LIBMTP_Track._fields_ = [
 ]
 
 
-class LIBMTP_Playlist(ctypes.Structure):
-    """
-    LIBMTP_Playlist
-    Contains the ctypes structure for LIBMTP_playlist_t
-    """
-
-    def __init__(self):
-        self.tracks = ctypes.pointer(ctypes.c_uint32(0))
-        self.no_tracks = ctypes.c_uint32(0)
-
-    def __repr__(self):
-        return "%s (%s)" % (self.name, self.playlist_id)
-
-    def __iter__(self):
-        """
-        This allows the playlist object to act like a list with
-        a generator.
-        """
-        for track in range(self.no_tracks.value):
-            yield self.tracks[track]
-
-    def __getitem__(self, key): # type: ignore
-        """
-        This allows the playlist to return tracks like a list
-        """
-
-        if key > (self.no_tracks.value - 1):
-            raise IndexError
-
-        return self.tracks[key]
-
-    def __setitem__(self, key, value): # type: ignore
-        """
-        This allows the user to manipulate the playlist like a
-        list. However, this will only modify existing objects,
-        you can't try to set a key outside of the current size.
-        """
-
-        if key > (self.no_tracks.value - 1):
-            raise IndexError
-
-        self.tracks[key] = value
-
-    def __delitem__(self, key): # type: ignore
-        """
-        This allows the user to delete an object
-        from the playlist
-        """
-
-        if key > (self.no_tracks.value - 1):
-            raise IndexError
-
-        for i in range(key, (self.no_tracks.value - 1)): # type: ignore
-            self.tracks[i] = self.tracks[i + 1]
-
-        self.no_tracks.value -= 1
-
-    def append(self, value): # type: ignore
-        """
-        This function appends a track to the end of the tracks
-        list.
-        """
-        if self.tracks is None: # type: ignore
-            self.tracks = ctypes.pointer(ctypes.c_uint32(0))
-
-        self.no_tracks.value += 1
-        self.tracks[(self.no_tracks.value - 1)] = value
-
-    def __len__(self):
-        """
-        This returns the number of tracks in the playlist
-        """
-
-        return self.no_tracks
-
-
-LIBMTP_Playlist._fields_ = [
-    ("playlist_id", ctypes.c_uint32),
-    ("parent_id", ctypes.c_uint32),
-    ("storage_id", ctypes.c_uint32),
-    ("name", ctypes.c_char_p),
-    ("tracks", ctypes.POINTER(ctypes.c_uint32)),
-    ("no_tracks", ctypes.c_uint32),
-    ("next", ctypes.POINTER(LIBMTP_Playlist)),
-]
-
-
 class LIBMTP_Folder(ctypes.Structure):
     """
     LIBMTP_Folder
     Contains the ctypes structure for LIBMTP_folder_t
     """
 
+    @override
     def __repr__(self):
         return "%s (%s)" % (self.name, self.folder_id)
 
@@ -489,8 +411,8 @@ _libmtp.LIBMTP_Get_Filemetadata.restype = ctypes.POINTER(LIBMTP_File)
 _libmtp.LIBMTP_Get_Trackmetadata.restype = ctypes.POINTER(LIBMTP_Track)
 _libmtp.LIBMTP_Get_First_Device.restype = ctypes.POINTER(LIBMTP_MTPDevice)
 _libmtp.LIBMTP_Open_Raw_Device_Uncached.restype = ctypes.POINTER(LIBMTP_MTPDevice)
-_libmtp.LIBMTP_Get_Playlist_List.restype = ctypes.POINTER(LIBMTP_Playlist)
-_libmtp.LIBMTP_Get_Playlist.restype = ctypes.POINTER(LIBMTP_Playlist)
+# _libmtp.LIBMTP_Get_Playlist_List.restype = ctypes.POINTER(LIBMTP_Playlist)
+# _libmtp.LIBMTP_Get_Playlist.restype = ctypes.POINTER(LIBMTP_Playlist)
 _libmtp.LIBMTP_Get_Folder_List.restype = ctypes.POINTER(LIBMTP_Folder)
 _libmtp.LIBMTP_Find_Folder.restype = ctypes.POINTER(LIBMTP_Folder)
 _libmtp.LIBMTP_Get_Errorstack.restype = ctypes.POINTER(LIBMTP_Error)
@@ -508,9 +430,9 @@ class MTP:
     This is the main wrapper around libmtp
     """
 
-    libmtp_is_initialized = False
+    libmtp_is_initialized: bool = False
 
-    def __init__(self, new_raw_device: ctypes._Pointer[LIBMTP_RawDevice] | None=None):
+    def __init__(self, new_raw_device: ctypes._Pointer[LIBMTP_RawDevice] | str | None = None):
         """
         Initializes the MTP object
 
@@ -518,13 +440,13 @@ class MTP:
         @return: None
         """
 
-        self.mtp = _libmtp
+        self.mtp: ctypes.CDLL = _libmtp
         if not self.libmtp_is_initialized:
             self.mtp.LIBMTP_Init()
             self.libmtp_is_initialized = True
-        self.device = None
-        self._new_raw_device = new_raw_device
-        self.raw_devices: ctypes._Pointer[ctypes._Pointer] # type: ignore
+        self.device: str | None = None
+        self._new_raw_device: ctypes._Pointer[LIBMTP_RawDevice] | str | None = new_raw_device
+        self.raw_devices: ctypes._Pointer[ctypes._Pointer[LIBMTP_RawDevice]]
 
     def debug_stack(self):
         """
@@ -552,9 +474,7 @@ class MTP:
         device = LIBMTP_RawDevice()
         self.raw_devices = ctypes.pointer(ctypes.pointer(device))
         numdevs = ctypes.c_int(0)
-        err = self.mtp.LIBMTP_Detect_Raw_Devices(
-            ctypes.byref(self.raw_devices), ctypes.byref(numdevs) # type: ignore
-        )
+        err = self.mtp.LIBMTP_Detect_Raw_Devices(ctypes.byref(self.raw_devices), ctypes.byref(numdevs))
         if err == LIBMTP_Error_Number["NO_DEVICE_ATTACHED"]:
             return devlist
         elif err == LIBMTP_Error_Number["STORAGE_FULL"]:
@@ -575,7 +495,7 @@ class MTP:
         if numdevs.value == 0:
             return devlist
         for i in range(numdevs.value):
-            devlist.append(self.raw_devices[i]) # type: ignore
+            devlist.append(self.raw_devices[i])
         return devlist
 
     def connect(self) -> None:
@@ -593,7 +513,9 @@ class MTP:
             raise ObjectNotFound
 
         # self.device = self.mtp.LIBMTP_Get_First_Device()
-        self.device = self.mtp.LIBMTP_Open_Raw_Device_Uncached(ctypes.byref(self._new_raw_device))
+        self.device = self.mtp.LIBMTP_Open_Raw_Device_Uncached(
+            ctypes.byref(self._new_raw_device)  # pyright: ignore[reportArgumentType]
+        )
 
         if not self.device:
             self.device = None
@@ -642,7 +564,7 @@ class MTP:
 
         return self.mtp.LIBMTP_Get_Modelname(self.device).decode("UTF-8")
 
-    def create_folder(self, name: str, parent:int=0, storage:int=0) -> int:
+    def create_folder(self, name: str, parent: int = 0, storage: int = 0) -> int:
         """
         This creates a new folder in the parent. If the parent
         is 0, it will go in the main directory.
@@ -661,7 +583,7 @@ class MTP:
         if self.device is None:
             raise NotConnected
 
-        ret = self.mtp.LIBMTP_Create_Folder(self.device, name.encode("UTF-8"), parent, storage)
+        ret: int = int(self.mtp.LIBMTP_Create_Folder(self.device, name.encode("UTF-8"), parent, storage))
 
         if ret == 0:
             self.debug_stack()
@@ -669,9 +591,7 @@ class MTP:
 
         return ret
 
-    def send_file_from_file(
-        self, source: str, target: str, storage_id: int, parent_id: int
-    ) -> int:
+    def send_file_from_file(self, source: str, target: str, storage_id: int, parent_id: int) -> int:
         """
         Sends a file from the filesystem to the connected device
         and stores it at the target filename inside the parent.
@@ -695,7 +615,7 @@ class MTP:
             raise NotConnected
 
         if os.path.isfile(source) == False:
-            raise IOError(f'File {source} not found')
+            raise IOError(f"File {source} not found")
 
         metadata = LIBMTP_File(
             filename=target.encode("UTF-8"),
@@ -705,8 +625,10 @@ class MTP:
             parent_id=parent_id,
         )
 
-        ret = self.mtp.LIBMTP_Send_File_From_File(
-            self.device, source.encode("UTF-8"), ctypes.pointer(metadata), None, None
+        ret = int(
+            self.mtp.LIBMTP_Send_File_From_File(
+                self.device, source.encode("UTF-8"), ctypes.pointer(metadata), None, None
+            )
         )
 
         if ret != 0:
@@ -733,13 +655,13 @@ class MTP:
         if self.device is None:
             raise NotConnected
 
-        ret = self.mtp.LIBMTP_Get_File_To_File(self.device, file_id, target.encode("UTF-8"), None, None)
+        ret = int(self.mtp.LIBMTP_Get_File_To_File(self.device, file_id, target.encode("UTF-8"), None, None))
 
         if ret != 0:
             self.debug_stack()
             raise CommandFailed
 
-    def delete_object(self, object_id: int) -> None: # type: ignore
+    def delete_object(self, object_id: int) -> None:
         """
         Deletes the object off the connected device.
 
@@ -750,12 +672,11 @@ class MTP:
         if self.device is None:
             raise NotConnected
 
-        ret = self.mtp.LIBMTP_Delete_Object(self.device, object_id)
+        ret: int = int(self.mtp.LIBMTP_Delete_Object(self.device, object_id))
 
         if ret != 0:
             self.debug_stack()
             raise CommandFailed
-
 
     def get_serialnumber(self) -> str:
         """
@@ -768,7 +689,7 @@ class MTP:
         if self.device is None:
             raise NotConnected
 
-        return self.mtp.LIBMTP_Get_Serialnumber(self.device).decode("UTF-8")
+        return str(self.mtp.LIBMTP_Get_Serialnumber(self.device).decode("UTF-8"))
 
     def get_files_and_folder(self, storage_id: int, parent_id: int) -> list[LIBMTP_File]:
         """
@@ -787,7 +708,6 @@ class MTP:
                 break
             next = next.contents.next
         return ret
-
 
     def get_storage(self) -> list[tuple[str, int]]:
         """
@@ -811,10 +731,15 @@ class MTP:
             self.mtp.LIBMTP_Clear_Errorstack(self.device)
             raise CommandFailed
         ret: list[tuple[str, int]] = []
-        next = self.device.contents.storage
+        next: Any = self.device.contents.storage  # pyright: ignore[reportAttributeAccessIssue]
 
         while next:
-            ret.append((next.contents.StorageDescription.decode("UTF-8"), next.contents.id))
+            ret.append(
+                (
+                    next.contents.StorageDescription.decode("UTF-8"),
+                    next.contents.id,
+                )
+            )
             if next.contents.next is None:
                 break
             next = next.contents.next
@@ -833,7 +758,7 @@ class MTP:
         @return: The integer of the Filetype
         """
 
-        fileext = filename.lower().split(".")[-1] # type: ignore
+        fileext = filename.lower().split(".")[-1]  # type: ignore
 
         if fileext == "wav" or fileext == "wave":
             return LIBMTP_Filetype["WAV"]
@@ -873,13 +798,7 @@ class MTP:
             return LIBMTP_Filetype["WINDOWSIMAGEFORMAT"]
         elif fileext == "ics":
             return LIBMTP_Filetype["VCALENDAR2"]
-        elif (
-            fileext == "exe"
-            or fileext == "com"
-            or fileext == "bat"
-            or fileext == "dll"
-            or fileext == "sys"
-        ):
+        elif fileext == "exe" or fileext == "com" or fileext == "bat" or fileext == "dll" or fileext == "sys":
             return LIBMTP_Filetype["WINEXEC"]
         elif fileext == "aac":
             return LIBMTP_Filetype["AAC"]
@@ -905,8 +824,6 @@ class MTP:
             return LIBMTP_Filetype["JPX"]
         else:
             return LIBMTP_Filetype["UNKNOWN"]
-
-
 
     # def get_manufacturer(self):
     #     """
@@ -964,7 +881,6 @@ class MTP:
 
     #     return (maximum_level.value, current_level.value)
 
-
     # def get_deviceversion(self):
     #     """
     #     Returns the connected device's version (such as
@@ -979,7 +895,6 @@ class MTP:
     #         raise NotConnected
 
     #     return self.mtp.LIBMTP_Get_Deviceversion(self.device)
-
 
     # def get_filelisting(self, callback=None): # type: ignore
     #     """
@@ -1104,7 +1019,6 @@ class MTP:
 
     #     return ret.contents
 
-
     # def get_track_to_file(self, track_id, target, callback=None): # type: ignore
     #     """
     #     Downloads the track from the connected device and stores it at
@@ -1131,8 +1045,6 @@ class MTP:
     #     if ret != 0:
     #         self.debug_stack()
     #         raise CommandFailed
-
-
 
     # def send_track_from_file(self, source, target, metadata, callback=None): # type: ignore
     #     """
@@ -1236,7 +1148,6 @@ class MTP:
     #     # LIBMTP_Get_Storage
     #     usedspace = storage.MaxCapacity - storage.FreeSpaceInBytes
     #     return (float(usedspace) / float(storage.MaxCapacity)) * 100
-
 
     # def get_playlists(self): # type: ignore
     #     """
@@ -1419,7 +1330,6 @@ class MTP:
 
     #     return ret # type: ignore
 
-
     # def get_errorstack(self):
     #     """
     #     Returns the connected device's errorstack from
@@ -1437,3 +1347,91 @@ class MTP:
     #         raise CommandFailed
 
     #     return ret
+
+
+# class LIBMTP_Playlist(ctypes.Structure):
+#     """
+#     LIBMTP_Playlist
+#     Contains the ctypes structure for LIBMTP_playlist_t
+#     """
+
+#     def __init__(self):
+#         super().__init__()
+#         self.tracks = ctypes.pointer(ctypes.c_uint32(0))
+#         self.no_tracks = ctypes.c_uint32(0)
+
+#     def __repr__(self):
+#         return "%s (%s)" % (self.name, self.playlist_id)
+
+#     def __iter__(self):
+#         """
+#         This allows the playlist object to act like a list with
+#         a generator.
+#         """
+#         for track in range(self.no_tracks.value):
+#             yield self.tracks[track]
+
+#     def __getitem__(self, key): # type: ignore
+#         """
+#         This allows the playlist to return tracks like a list
+#         """
+
+#         if key > (self.no_tracks.value - 1):
+#             raise IndexError
+
+#         return self.tracks[key]
+
+#     def __setitem__(self, key, value): # type: ignore
+#         """
+#         This allows the user to manipulate the playlist like a
+#         list. However, this will only modify existing objects,
+#         you can't try to set a key outside of the current size.
+#         """
+
+#         if key > (self.no_tracks.value - 1):
+#             raise IndexError
+
+#         self.tracks[key] = value
+
+#     def __delitem__(self, key): # type: ignore
+#         """
+#         This allows the user to delete an object
+#         from the playlist
+#         """
+
+#         if key > (self.no_tracks.value - 1):
+#             raise IndexError
+
+#         for i in range(key, (self.no_tracks.value - 1)): # type: ignore
+#             self.tracks[i] = self.tracks[i + 1]
+
+#         self.no_tracks.value -= 1
+
+#     def append(self, value): # type: ignore
+#         """
+#         This function appends a track to the end of the tracks
+#         list.
+#         """
+#         if self.tracks is None: # type: ignore
+#             self.tracks = ctypes.pointer(ctypes.c_uint32(0))
+
+#         self.no_tracks.value += 1
+#         self.tracks[(self.no_tracks.value - 1)] = value
+
+#     def __len__(self):
+#         """
+#         This returns the number of tracks in the playlist
+#         """
+
+#         return self.no_tracks
+
+
+# LIBMTP_Playlist._fields_ = [
+#     ("playlist_id", ctypes.c_uint32),
+#     ("parent_id", ctypes.c_uint32),
+#     ("storage_id", ctypes.c_uint32),
+#     ("name", ctypes.c_char_p),
+#     ("tracks", ctypes.POINTER(ctypes.c_uint32)),
+#     ("no_tracks", ctypes.c_uint32),
+#     ("next", ctypes.POINTER(LIBMTP_Playlist)),
+# ]

@@ -8,7 +8,7 @@ libmtp.
 
 Author:  Heribert Füchtenhans
 
-Version: 2025.4.6
+Version: 2025.6.26
 
 For examples please look into the examples directory.
 
@@ -52,15 +52,15 @@ Examples:
 
 """
 
-# __pylint: disable=global-statement
-# pyright: reportPrivateUsage=false
 
+import collections.abc
 import ctypes
 import datetime
 import os
 import shutil
 import subprocess
-from typing import Generator, List, Optional, Callable
+from typing import Callable, Literal
+from typing_extensions import override
 import urllib.parse
 
 
@@ -135,25 +135,29 @@ class PortableDevice:
         IOError: If something went wrong
     """
 
-    def __init__(self, device: "str | ctypes._Pointer[pylibmtp.LIBMTP_RawDevice]") -> None: # type: ignore
+    def __init__(
+        self, device: "str | ctypes._Pointer[pylibmtp.LIBMTP_RawDevice]"  # pyright: ignore[reportPrivateUsage]
+    ) -> None:
         """Init the class.
 
         Parameters:
            device: Linux path to the device on Gnome or a libmtp device pointer on KDE
         """
-        self.description = "Unknown"
-        self.name = "Unknown"
-        self.serialnumber = "Unknown"
+        self.description: str = "Unknown"
+        self.name: str = "Unknown"
+        self.serialnumber: str = "Unknown"
+        self.device_start_part: str
+        self.devicename: str
         if type(device) == str:
-            self._device = device
+            self._device: str = device
             if "=" in device:
-                self._device_start_part, self.devicename = device.split("=", 1)
-                self._device_start_part += "="
+                self.device_start_part, self.devicename = device.split("=", 1)
+                self.device_start_part += "="
             else:
-                self._device_start_part = ""
+                self.device_start_part = ""
                 self.devicename = device
             if "_" in self.devicename:
-                parts = self.devicename.split("_")
+                parts: list[str] = self.devicename.split("_")
                 try:
                     self.name = parts[0]
                     self.description = parts[-2]
@@ -166,21 +170,21 @@ class PortableDevice:
             # greps libmtp back is very small
             if _libmtp is None:
                 _init_libmtp()
-            self._libmntp_device = pylibmtp.MTP(device) # type: ignore
-            self._libmntp_device.connect()
-            self.name = self._libmntp_device.get_devicename()
-            self.description = self._libmntp_device.get_modelname()
+            self.libmntp_device: pylibmtp.MTP = pylibmtp.MTP(device)
+            self.libmntp_device.connect()
+            self.name = self.libmntp_device.get_devicename()
+            self.description = self.libmntp_device.get_modelname()
             if self.name == "":
                 self.name = self.description
-            self.serialnumber = self._libmntp_device.get_serialnumber()
+            self.serialnumber = self.libmntp_device.get_serialnumber()
             self.devicename = f"{self.name}_{self.description}_{self.serialnumber}"
 
     def close(self) -> None:
         """Close the connection to the device. This must be called when the device is no more needed."""
         if not _gvfs_found:
-            self._libmntp_device.disconnect()
+            self.libmntp_device.disconnect()
 
-    def get_content(self) -> List["PortableDeviceContent"]:
+    def get_content(self) -> list["PortableDeviceContent"]:
         """Get the content of a device, the storages
 
         Returns:
@@ -209,14 +213,14 @@ class PortableDevice:
                 raise IOError(f"Can't access {self.devicename}.") from err
         else:
             try:
-                for entry in self._libmntp_device.get_storage():
+                for entry in self.libmntp_device.get_storage():
                     full_name = os.path.join(self.devicename, entry[0])
-                    pdc = PortableDeviceContent(
-                        self,
-                        full_name,
-                        entry[1],
-                        pylibmtp.LIBMTP_FILES_AND_FOLDERS_ROOT,
-                        WPD_CONTENT_TYPE_STORAGE,
+                    pdc: PortableDeviceContent = PortableDeviceContent(
+                        port_device=self,
+                        dirpath=full_name,
+                        storage_id=entry[1],
+                        entry_id=pylibmtp.LIBMTP_FILES_AND_FOLDERS_ROOT,
+                        typ=WPD_CONTENT_TYPE_STORAGE,
                     )
                     ret_objs.append(pdc)
             except pylibmtp.CommandFailed as err:
@@ -224,6 +228,7 @@ class PortableDevice:
         ret_objs.sort(key=lambda entry: entry.name)
         return ret_objs
 
+    @override
     def __repr__(self) -> str:
         return f"PortableDevice: {self.serialnumber} ({self.name})"
 
@@ -271,18 +276,20 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
     ) -> None:
         """Instance constructor"""
 
-        self._port_device = port_device
-        self.full_filename = dirpath
-        self.name = os.path.basename(dirpath)
-        self.storage_id = storage_id
-        self.entry_id = entry_id
-        self.content_type = typ
-        self.size = -1
-        self.date_modified = datetime.datetime.now()
+        self._port_device: PortableDevice = port_device
+        self.full_filename: str = dirpath
+        self.name: str = os.path.basename(dirpath)
+        self.storage_id: int = storage_id
+        self.entry_id: int = entry_id
+        self.content_type: int = typ
+        self.size: int = -1
+        self.date_modified: datetime.datetime = datetime.datetime.now()
         if typ == WPD_CONTENT_TYPE_FILE:
             if _gvfs_found:
                 try:
-                    full_filename = os.path.join(_gvfs_search_path, port_device._device_start_part + dirpath)
+                    full_filename = os.path.join(
+                        _gvfs_search_path, port_device.device_start_part + dirpath 
+                    ) 
                     self.size = os.path.getsize(full_filename)
                     self.date_modified = datetime.datetime.fromtimestamp(os.path.getmtime(full_filename))
                 except OSError:
@@ -293,7 +300,7 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
         elif typ == WPD_CONTENT_TYPE_DEVICE:
             self.full_filename = port_device.devicename
 
-    def get_children(self) -> Generator["PortableDeviceContent", None, None]:
+    def get_children(self) -> collections.abc.Generator["PortableDeviceContent", None, None]:
         """Get the child items (dirs and files) of a folder.
 
         Returns:
@@ -311,7 +318,9 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             >>> dev[0].close()
         """
         if _gvfs_found:
-            full_filename = os.path.join(_gvfs_search_path, self._port_device._device_start_part + self.full_filename)
+            full_filename: str = os.path.join(
+                _gvfs_search_path, self._port_device.device_start_part + self.full_filename  
+            )
             if not os.path.isdir(full_filename):
                 return
             for entry in os.listdir(full_filename):
@@ -330,20 +339,22 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
         else:
             if _libmtp is None:
                 return
-            for entry in self._port_device._libmntp_device.get_files_and_folder(self.storage_id, self.entry_id):
-                type = (
+            for entry in self._port_device.libmntp_device.get_files_and_folder(  
+                self.storage_id, self.entry_id
+            ):
+                type: Literal[1, 2] = (
                     WPD_CONTENT_TYPE_DIRECTORY
-                    if entry.filetype == pylibmtp.LIBMTP_Filetype["FOLDER"].value
+                    if entry.filetype == pylibmtp.LIBMTP_Filetype["FOLDER"].value  # pyright: ignore[reportAny]
                     else WPD_CONTENT_TYPE_FILE
                 )
                 yield PortableDeviceContent(
                     self._port_device,
-                    os.path.join(self.full_filename, entry.filename.decode("utf-8")),
+                    os.path.join(self.full_filename, entry.filename.decode("utf-8")),  # pyright: ignore[reportAny]
                     self.storage_id,
-                    entry.item_id,
+                    entry.item_id,  # pyright: ignore[reportAny]
                     type,
-                    entry.filesize,
-                    entry.modificationdate,
+                    entry.filesize,  # pyright: ignore[reportAny]
+                    entry.modificationdate,  # pyright: ignore[reportAny]
                 )
 
     def get_child(self, name: str) -> "PortableDeviceContent | None":
@@ -368,7 +379,9 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             >>> dev[0].close()
         """
         if _gvfs_found:
-            fullname = os.path.join(_gvfs_search_path, self._port_device._device_start_part + self.full_filename, name)
+            fullname = os.path.join(
+                _gvfs_search_path, self._port_device.device_start_part + self.full_filename, name  
+            )
             if not os.path.exists(fullname):
                 return None
             return PortableDeviceContent(
@@ -381,28 +394,30 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
         else:
             if _libmtp is None:
                 return
-            for entry in self._port_device._libmntp_device.get_files_and_folder(self.storage_id, self.entry_id):
-                entry_filename = entry.filename.decode("UTF-8")
+            for entry in self._port_device.libmntp_device.get_files_and_folder(  
+                self.storage_id, self.entry_id
+            ):
+                entry_filename = entry.filename.decode("UTF-8")  # pyright: ignore[reportAny]
                 if entry_filename != name:
                     continue
                 # Ok found, so do a direct return
-                type = (
+                type: Literal[1, 2] = (
                     WPD_CONTENT_TYPE_DIRECTORY
-                    if entry.filetype == pylibmtp.LIBMTP_Filetype["FOLDER"].value
+                    if entry.filetype == pylibmtp.LIBMTP_Filetype["FOLDER"].value  # pyright: ignore[reportAny]
                     else WPD_CONTENT_TYPE_FILE
                 )
                 return PortableDeviceContent(
                     self._port_device,
-                    os.path.join(self.full_filename, entry_filename),
+                    os.path.join(self.full_filename, entry_filename),  # pyright: ignore[reportAny]
                     self.storage_id,
-                    entry.item_id,
+                    entry.item_id,  # pyright: ignore[reportAny]
                     type,
-                    entry.filesize,
-                    entry.modificationdate,
+                    entry.filesize,  # pyright: ignore[reportAny]
+                    entry.modificationdate,  # pyright: ignore[reportAny]
                 )
             return None
 
-    def get_path(self, path: str) -> Optional["PortableDeviceContent"]:
+    def get_path(self, path: str) -> "PortableDeviceContent | None":
         """Returns a PortableDeviceContent for a child who's path in the tree is known.
         The path can be fully qualified or starting from the current content.
 
@@ -434,7 +449,9 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
         # Difference between gvfs and libmtp
         if _gvfs_found:
             full_filename = os.path.join(
-                _gvfs_search_path, self._port_device._device_start_part + self.full_filename, path
+                _gvfs_search_path,
+                self._port_device.device_start_part + self.full_filename, 
+                path, 
             )
             if not os.path.exists(full_filename):
                 return None
@@ -446,13 +463,14 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
                 (WPD_CONTENT_TYPE_DIRECTORY if os.path.isdir(full_filename) else WPD_CONTENT_TYPE_FILE),
             )
         else:
-            cur: Optional["PortableDeviceContent"] = self
+            cur: "PortableDeviceContent | None" = self
             for part in path.split(os.path.sep):
                 if not cur:
                     return None
                 cur = cur.get_child(part)
             return cur
 
+    @override
     def __repr__(self) -> str:
         """ """
         return f"PortableDeviceContent {self.name} ({self.content_type})"
@@ -482,14 +500,18 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
         """
         fullname = os.path.join(self.full_filename, dirname)
         if _gvfs_found:
-            full_filename = os.path.join(_gvfs_search_path, self._port_device._device_start_part + fullname)
+            full_filename = os.path.join(
+                _gvfs_search_path, self._port_device.device_start_part + fullname  
+            )
             if os.path.exists(full_filename):
                 raise IOError(f"Directory '{fullname}' allready exists")
             os.mkdir(full_filename)
             pdc = PortableDeviceContent(self._port_device, fullname, 0, 0, WPD_CONTENT_TYPE_DIRECTORY)
         else:
             try:
-                id = self._port_device._libmntp_device.create_folder(dirname, self.entry_id, self.storage_id)
+                id = self._port_device.libmntp_device.create_folder(  
+                    dirname, self.entry_id, self.storage_id
+                )
                 pdc = PortableDeviceContent(
                     self._port_device, fullname, self.storage_id, id, WPD_CONTENT_TYPE_DIRECTORY
                 )
@@ -525,11 +547,11 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
         if _gvfs_found:
             full_filename = os.path.join(
                 _gvfs_search_path,
-                self._port_device._device_start_part + self.full_filename,
+                self._port_device.device_start_part + self.full_filename,  
                 filename,
             )
             try:
-                shutil.copyfile(inputfilename, full_filename)
+                _ = shutil.copyfile(inputfilename, full_filename)
             except OSError:
                 # Ok can't copy with shutil on older Gnomes (for example Zorin). si we use gio
                 gio_full_filename = "mtp://" + full_filename.split("=", 1)[1]
@@ -541,12 +563,11 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
                     )
                 except subprocess.CalledProcessError as err:
                     raise IOError(
-                        f"Error copying file '{inputfilename}' to '{gio_full_filename}'"
-                        f": {urllib.parse.unquote(err.output.decode('utf-8'))}"
+                        f"Error copying file '{inputfilename}' to '{gio_full_filename}': {urllib.parse.unquote(err.output.decode('utf-8'))}"  # pyright: ignore[reportAny]
                     ) from err
             # shutil.copy(inputfilename, full_filename)
         else:
-            self._port_device._libmntp_device.send_file_from_file(
+            _ = self._port_device.libmntp_device.send_file_from_file(  
                 inputfilename, filename, self.storage_id, self.entry_id
             )
 
@@ -572,10 +593,14 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             >>> dev[0].close()
         """
         if _gvfs_found:
-            full_filename = os.path.join(_gvfs_search_path, self._port_device._device_start_part + self.full_filename)
-            shutil.copy2(full_filename, outputfilename)
+            full_filename = os.path.join(
+                _gvfs_search_path, self._port_device.device_start_part + self.full_filename  
+            )
+            _ = shutil.copy2(full_filename, outputfilename)
         else:
-            self._port_device._libmntp_device.get_file_to_file(self.entry_id, outputfilename)
+            self._port_device.libmntp_device.get_file_to_file(  
+                self.entry_id, outputfilename
+            )
 
     def remove(self) -> None:
         """Deletes the current directory or file.
@@ -599,7 +624,9 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             >>> dev[0].close()
         """
         if _gvfs_found:
-            full_name = os.path.join(_gvfs_search_path, self._port_device._device_start_part + self.full_filename)
+            full_name = os.path.join(
+                _gvfs_search_path, self._port_device.device_start_part + self.full_filename  
+            )
             if not os.path.exists(full_name):
                 return
             if self.content_type == WPD_CONTENT_TYPE_FILE:
@@ -607,7 +634,7 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             else:
                 shutil.rmtree(full_name)
         else:
-            self._port_device._libmntp_device.delete_object(self.entry_id)
+            self._port_device.libmntp_device.delete_object(self.entry_id)  
 
 
 # -------------------------------------------------------------------------------------------------
@@ -632,12 +659,14 @@ def get_portable_devices() -> list[PortableDevice]:
         >>> devs[0].close()
     """
     global _gvfs_found
-    devices: List[PortableDevice] = []
+    devices: list[PortableDevice] = []
     if not os.path.exists(_gvfs_search_path):
         # We assume, we are not on a GNOME system with installed gvfs
         # So we try to use libmtp
         if _libmtp is None:
             _init_libmtp()
+        if _libmtp is None:
+            raise OSError("Can't init libmtp")
         for entry in _libmtp.detect_devices():  # type: ignore
             dev = PortableDevice(entry)
             # Device is not ready if we don't get a content
@@ -683,7 +712,9 @@ def get_content_from_device_path(dev: PortableDevice, fpath: str) -> PortableDev
     if fpath == dev.devicename:
         raise IOError("get_content_from_device_path needs a devicename and a storage as paramter")
     if _gvfs_found:
-        full_fpath = os.path.join(_gvfs_search_path, dev._device_start_part + fpath)
+        full_fpath = os.path.join(
+            _gvfs_search_path, dev.device_start_part + fpath  
+        )
         if not os.path.exists(full_fpath):
             return None
         content_type = WPD_CONTENT_TYPE_DIRECTORY if os.path.isdir(full_fpath) else WPD_CONTENT_TYPE_FILE
@@ -715,13 +746,9 @@ def get_content_from_device_path(dev: PortableDevice, fpath: str) -> PortableDev
 def walk(
     dev: PortableDevice,
     path: str,
-    callback: Optional[Callable[[str], bool]] = None,
-    error_callback: Optional[Callable[[str], bool]] = None,
-) -> Generator[
-    tuple[str, list[PortableDeviceContent], list[PortableDeviceContent]],
-    None,
-    None
-    ]:
+    callback: Callable[[str], bool] | None = None,
+    error_callback: Callable[[str], bool] | None = None,
+) -> collections.abc.Generator[tuple[str, list[PortableDeviceContent], list[PortableDeviceContent]], None, None]:
     """Iterates ower all files in a tree just like os.walk
 
     Parameters:
@@ -799,17 +826,17 @@ def walk(
         walk_cont.extend(directories)
 
 
-def makedirs(dev: PortableDevice, path: str) -> PortableDeviceContent:
+def makedirs(dev: PortableDevice, create_path: str) -> PortableDeviceContent:
     """Creates the directories in path on the MTP device if they don't exist.
 
     Parameters:
         dev: Portable device to create the dirs on
-        path: pathname of the dir to create. Any directories in path that don't exist
+        create_path: pathname of the dir to create. Any directories in path that don't exist
             will be created automatically.
 
     Returns:
         A PortableDeviceContent instance for the last directory in path.
-            
+
     Exceptions:
         IOError: If something went wrong
 
@@ -826,10 +853,12 @@ def makedirs(dev: PortableDevice, path: str) -> PortableDeviceContent:
         >>> cont.remove()
         >>> dev[0].close()
     """
-    path = path.replace("\\", os.path.sep)
+    path: str = create_path.replace("\\", os.path.sep)
     if _gvfs_found:
         try:
-            fullpath = os.path.join(_gvfs_search_path, dev._device_start_part + path)
+            fullpath = os.path.join(
+                _gvfs_search_path, dev.device_start_part + path  
+            )
             if not os.path.exists(fullpath):
                 os.makedirs(fullpath, exist_ok=True)
             cont = get_content_from_device_path(dev, path)

@@ -4,6 +4,7 @@ Be aware that there is no error handling in these examples. Error handling
 should be used for production code
 """
 
+import gc
 import os
 import platform
 import sys
@@ -115,17 +116,17 @@ def test_6_create_delete_file() -> None:
     downloadfilename = os.path.join(os.path.dirname(__file__), "test.mp3")
     for dev in mtp_access.get_portable_devices():
         print(f"Device: {dev.devicename}")
+        # Create the directory for the new file
+        new_path = os.path.join(dev.get_content()[0].full_filename, "example/temp")
+        cont = mtp_access.makedirs(dev, new_path)  # type: ignore
         for i in range(TESTRUNS):
             print(f"Create and delete file on test run {i+1}:")
-            # Create the directory for the new file
-            new_path = os.path.join(dev.get_content()[0].full_filename, "example/temp")
-            cont = mtp_access.makedirs(dev, new_path)  # type: ignore
             # Delete the file if it exists
             fcont = cont.get_child(mtp_filename)
             if fcont is not None:
                 fcont.remove()
             # Upload the file to the mtp device
-            print(f"Uploading file, test nr {i}")
+            print("Uploading file")
             cont.upload_file(mtp_filename, uploadfilename)
             # Test if it exists on the MTP device
             fcont = cont.get_child(mtp_filename)
@@ -144,6 +145,7 @@ def test_6_create_delete_file() -> None:
             if os.path.getsize(uploadfilename) != os.path.getsize(downloadfilename):
                 print(f"Filesizes of uploaded and download file are different.")
             os.remove(downloadfilename)
+            gc.collect()
         dev.close()
 
 

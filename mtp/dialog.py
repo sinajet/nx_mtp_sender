@@ -3,7 +3,7 @@ A module with MTP relevant dialogs for tkinter
 
 Author:  Heribert Füchtenhans
 
-Version: 2025.3.27
+Version: 2025.6.25
 
 Requirements:
     - Python modules
@@ -26,7 +26,7 @@ import platform
 import tkinter
 import tkinter.simpledialog
 from tkinter import ttk
-from typing import Any, Dict, Optional
+from typing import override
 
 if platform.system() == "windows":
     from . import win_access as access
@@ -92,18 +92,19 @@ class AskDirectory(tkinter.simpledialog.Dialog):  # pylint: disable=too-many-ins
             buttons: A tuple with the text for the OK and cancel button to chnage them
                      for other languages.
         """
-        self._parent = parent
-        self._dialog_title = title
+        self._parent: tkinter.Tk = parent
+        self._dialog_title: str = title
         self._tree: ttk.Treeview
-        self._smartphone_icon = tkinter.PhotoImage(data=SMARTPHONE_ICON)
-        self._buttons = buttons
-        self._tree_entries: Dict[str, _TreeEntry] = {}
+        self._smartphone_icon:tkinter.PhotoImage = tkinter.PhotoImage(data=SMARTPHONE_ICON)
+        self._buttons: tuple[str, str] = buttons
+        self._tree_entries: dict[str, _TreeEntry] = {}
         # external variables
-        self.answer = ""
+        self.answer: str = ""
         self.wpd_device: access.PortableDevice | None = None
         tkinter.simpledialog.Dialog.__init__(self, parent, title=title)
         self.update_idletasks()
 
+    @override
     def buttonbox(self) -> None:
         """Create own buttons"""
         box = ttk.Frame(self)
@@ -113,15 +114,16 @@ class AskDirectory(tkinter.simpledialog.Dialog):  # pylint: disable=too-many-ins
         but = ttk.Button(box, text=self._buttons[0], command=self._on_ok, default=tkinter.ACTIVE)
         but.pack(side=tkinter.RIGHT, padx=5, pady=5)
         but.focus_set()
-        but.bind("<Return>", self.ok)
+        _ = but.bind("<Return>", self.ok)
 
-    def body(self, master: Any) -> None:
+    @override
+    def body(self, master: tkinter.Frame) -> None:
         """Create body"""
         box = ttk.Frame(self)
         box.pack(side=tkinter.TOP, fill=tkinter.BOTH, expand=True, padx=5, pady=5)
         self._tree = ttk.Treeview(box, height=20, show="tree")
-        self._tree.column("#0", width=500)
-        self._tree.bind("<<TreeviewOpen>>", self._on_treeselect)
+        _ = self._tree.column("#0", width=500)
+        _ = self._tree.bind("<<TreeviewOpen>>", self._on_treeselect)
         # adding data, get devices
         for dev in access.get_portable_devices():
             if devicename := dev.devicename:
@@ -133,10 +135,10 @@ class AskDirectory(tkinter.simpledialog.Dialog):  # pylint: disable=too-many-ins
                     image=self._smartphone_icon,
                 )
                 self._tree_entries[treeid] = _TreeEntry(dev, None, [], False)
-                self.config(cursor="watch")
+                _ = self.config(cursor="watch")
                 self.update_idletasks()
                 self._process_directory(treeid)
-                self.config(cursor="")
+                _ = self.config(cursor="")
         # place the Treeview widget on the root window
         self._tree.pack(side=tkinter.TOP, fill=tkinter.BOTH, expand=True)
 
@@ -166,17 +168,17 @@ class AskDirectory(tkinter.simpledialog.Dialog):  # pylint: disable=too-many-ins
                 treeentry.child_treeids.append(treeid)
         self._tree_entries[insert_after_id].content_loaded = True
 
-    def _on_treeselect(self, _: Any) -> None:
+    def _on_treeselect(self, _: tkinter.Event) -> None:
         """Will be called on very selection"""
         treeid = self._tree.focus()
         status = self._tree.item(treeid, "open")
         if not status:
-            self.config(cursor="watch")
+            __ = self.config(cursor="watch")
             self.update_idletasks()
             for c_id in self._tree_entries[treeid].child_treeids:
                 if not self._tree_entries[c_id].content_loaded:
                     self._process_directory(c_id)
-            self.config(cursor="")
+            __ = self.config(cursor="")
             self._tree.item(treeid, open=True)
         else:
             self._tree.item(treeid, open=False)
