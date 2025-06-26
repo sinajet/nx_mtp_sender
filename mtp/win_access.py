@@ -49,9 +49,6 @@ Examples:
     >>> devs[0].close()
 """
 
-# pyright: basic
-# # pyright: reportIgnoreCommentWithoutRule=false, reportAny=false
-
 import collections.abc
 import ctypes
 import datetime
@@ -68,94 +65,70 @@ import comtypes.automation
 # Generate .py files from dlls for comtypes
 comtypes.client.gen_dir = os.path.join(os.environ["Temp"], "comtypes")
 os.makedirs(comtypes.client.gen_dir, exist_ok=True)
-_ = comtypes.client.GetModule("portabledeviceapi.dll")
-_ = comtypes.client.GetModule("portabledevicetypes.dll")
-from comtypes.gen import PortableDeviceApiLib as port  # pyright: ignore[reportAttributeAccessIssue]
-from comtypes.gen import PortableDeviceTypesLib as types  # pyright: ignore[reportAttributeAccessIssue]
+comtypes.client.GetModule("portabledeviceapi.dll")
+comtypes.client.GetModule("portabledevicetypes.dll")
+from comtypes.gen import PortableDeviceApiLib as port
+from comtypes.gen import PortableDeviceTypesLib as types
 
 
 # ComType Verweise anlegen
 WPD_RESOURCE_DEFAULT = comtypes.pointer(port._tagpropertykey())
-WPD_RESOURCE_DEFAULT.contents.fmtid = comtypes.GUID(  # pyright: ignore[reportAttributeAccessIssue]
-    "{E81E79BE-34F0-41BF-B53F-F1A06AE87842}"
-)
+WPD_RESOURCE_DEFAULT.contents.fmtid = comtypes.GUID("{E81E79BE-34F0-41BF-B53F-F1A06AE87842}")
 WPD_RESOURCE_DEFAULT.contents.pid = 0
 
 # ---------
 WPD_OBJECT_NAME = comtypes.pointer(port._tagpropertykey())
-WPD_OBJECT_NAME.contents.fmtid = comtypes.GUID(  # pyright: ignore[reportAttributeAccessIssue]
-    "{EF6B490D-5CD8-437A-AFFC-DA8B60EE4A3C}"
-)
+WPD_OBJECT_NAME.contents.fmtid = comtypes.GUID("{EF6B490D-5CD8-437A-AFFC-DA8B60EE4A3C}")
 WPD_OBJECT_NAME.contents.pid = 4
 
 # ---------
 WPD_STORAGE_CAPACITY = comtypes.pointer(port._tagpropertykey())
-WPD_STORAGE_CAPACITY.contents.fmtid = comtypes.GUID(  # pyright: ignore[reportAttributeAccessIssue]
-    "{01A3057A-74D6-4E80-BEA7-DC4C212CE50A}"
-)
+WPD_STORAGE_CAPACITY.contents.fmtid = comtypes.GUID("{01A3057A-74D6-4E80-BEA7-DC4C212CE50A}")
 WPD_STORAGE_CAPACITY.contents.pid = 4
 
 # ---------
 WPD_STORAGE_FREE_SPACE_IN_BYTES = comtypes.pointer(port._tagpropertykey())
-WPD_STORAGE_FREE_SPACE_IN_BYTES.contents.fmtid = comtypes.GUID(  # pyright: ignore[reportAttributeAccessIssue]
-    "{01A3057A-74D6-4E80-BEA7-DC4C212CE50A}"
-)
+WPD_STORAGE_FREE_SPACE_IN_BYTES.contents.fmtid = comtypes.GUID("{01A3057A-74D6-4E80-BEA7-DC4C212CE50A}")
 WPD_STORAGE_FREE_SPACE_IN_BYTES.contents.pid = 5
 
 # ---------
 WPD_DEVICE_SERIAL_NUMBER = comtypes.pointer(port._tagpropertykey())
-WPD_DEVICE_SERIAL_NUMBER.contents.fmtid = comtypes.GUID(  # pyright: ignore[reportAttributeAccessIssue]
-    "{26D4979A-E643-4626-9E2B-736DC0C92FDC}"
-)
+WPD_DEVICE_SERIAL_NUMBER.contents.fmtid = comtypes.GUID("{26D4979A-E643-4626-9E2B-736DC0C92FDC}")
 WPD_DEVICE_SERIAL_NUMBER.contents.pid = 9
 
 # ---------
 WPD_OBJECT_PARENT_ID = comtypes.pointer(port._tagpropertykey())
-WPD_OBJECT_PARENT_ID.contents.fmtid = comtypes.GUID(  # pyright: ignore[reportAttributeAccessIssue]
-    "{EF6B490D-5CD8-437A-AFFC-DA8B60EE4A3C}"
-)
+WPD_OBJECT_PARENT_ID.contents.fmtid = comtypes.GUID("{EF6B490D-5CD8-437A-AFFC-DA8B60EE4A3C}")
 WPD_OBJECT_PARENT_ID.contents.pid = 3
 
 # ---------
 WPD_OBJECT_CONTENT_TYPE = comtypes.pointer(port._tagpropertykey())
-WPD_OBJECT_CONTENT_TYPE.contents.fmtid = comtypes.GUID(  # pyright: ignore[reportAttributeAccessIssue]
-    "{EF6B490D-5CD8-437A-AFFC-DA8B60EE4A3C}"
-)
+WPD_OBJECT_CONTENT_TYPE.contents.fmtid = comtypes.GUID("{EF6B490D-5CD8-437A-AFFC-DA8B60EE4A3C}")
 WPD_OBJECT_CONTENT_TYPE.contents.pid = 7
 
 
 # ---------
 WPD_OBJECT_SIZE = comtypes.pointer(port._tagpropertykey())
-WPD_OBJECT_SIZE.contents.fmtid = comtypes.GUID(  # pyright: ignore[reportAttributeAccessIssue]
-    "{EF6B490D-5CD8-437A-AFFC-DA8B60EE4A3C}"
-)
+WPD_OBJECT_SIZE.contents.fmtid = comtypes.GUID("{EF6B490D-5CD8-437A-AFFC-DA8B60EE4A3C}")
 WPD_OBJECT_SIZE.contents.pid = 11
 
 # ---------
 WPD_OBJECT_ORIGINAL_FILE_NAME = comtypes.pointer(port._tagpropertykey())
-WPD_OBJECT_ORIGINAL_FILE_NAME.contents.fmtid = comtypes.GUID(  # pyright: ignore[reportAttributeAccessIssue]
-    "{EF6B490D-5CD8-437A-AFFC-DA8B60EE4A3C}"
-)
+WPD_OBJECT_ORIGINAL_FILE_NAME.contents.fmtid = comtypes.GUID("{EF6B490D-5CD8-437A-AFFC-DA8B60EE4A3C}")
 WPD_OBJECT_ORIGINAL_FILE_NAME.contents.pid = 12
 
 # ---------
 WPD_OBJECT_DATE_CREATED = comtypes.pointer(port._tagpropertykey())
-WPD_OBJECT_DATE_CREATED.contents.fmtid = comtypes.GUID(  # pyright: ignore[reportAttributeAccessIssue]
-    "{ef6b490d-5cd8-437a-affc-da8b60ee4a3c}"
-)
+WPD_OBJECT_DATE_CREATED.contents.fmtid = comtypes.GUID("{ef6b490d-5cd8-437a-affc-da8b60ee4a3c}")
 WPD_OBJECT_DATE_CREATED.contents.pid = 18
 
 # ---------
 WPD_OBJECT_DATE_MODIFIED = comtypes.pointer(port._tagpropertykey())
-WPD_OBJECT_DATE_MODIFIED.contents.fmtid = comtypes.GUID(  # pyright: ignore[reportAttributeAccessIssue]
-    "{EF6B490D-5CD8-437A-AFFC-DA8B60EE4A3C}"
-)
+WPD_OBJECT_DATE_MODIFIED.contents.fmtid = comtypes.GUID("{EF6B490D-5CD8-437A-AFFC-DA8B60EE4A3C}")
 WPD_OBJECT_DATE_MODIFIED.contents.pid = 19
 
 # ----------
-WPD_CONTENT_TYPE_FOLDER_GUID = comtypes.GUID(  # pyright: ignore[reportAttributeAccessIssue]
-    "{27E2E392-A111-48E0-AB0C-E17705A05F85}"
-)
+WPD_CONTENT_TYPE_FOLDER_GUID = comtypes.GUID("{27E2E392-A111-48E0-AB0C-E17705A05F85}")
 
 
 # Constants for the type entries returned bei PortableDeviceContent.get_properties
@@ -232,38 +205,36 @@ class PortableDeviceContent:
         self.date_modified: datetime.datetime = datetime.datetime.now()
         self._serialnumber: str = ""
         self._port_device = device
-        self._properties = properties or content.properties()  # pyright: ignore[reportAttributeAccessIssue]
+        self._properties = properties or content.properties()
         if PortableDeviceContent._properties_to_read is None:
             # We haven't set the properties wie will read, so do it now
             PortableDeviceContent._properties_to_read = comtypes.client.CreateObject(
                 types.PortableDeviceKeyCollection,
                 clsctx=comtypes.CLSCTX_INPROC_SERVER,
-                interface=port.IPortableDeviceKeyCollection
+                interface=port.IPortableDeviceKeyCollection,
             )
-            PortableDeviceContent._properties_to_read.Add(WPD_OBJECT_NAME)  # pyright: ignore[reportOptionalMemberAccess]
-            PortableDeviceContent._properties_to_read.Add(WPD_OBJECT_ORIGINAL_FILE_NAME)  # pyright: ignore[reportOptionalMemberAccess]
-            PortableDeviceContent._properties_to_read.Add(WPD_OBJECT_CONTENT_TYPE)  # pyright: ignore[reportOptionalMemberAccess]
-            PortableDeviceContent._properties_to_read.Add(WPD_OBJECT_SIZE)  # pyright: ignore[reportOptionalMemberAccess]
-            PortableDeviceContent._properties_to_read.Add(WPD_OBJECT_DATE_MODIFIED)  # pyright: ignore[reportOptionalMemberAccess]
-            PortableDeviceContent._properties_to_read.Add(WPD_DEVICE_SERIAL_NUMBER)  # pyright: ignore[reportOptionalMemberAccess]
+            PortableDeviceContent._properties_to_read.Add(WPD_OBJECT_NAME)
+            PortableDeviceContent._properties_to_read.Add(WPD_OBJECT_ORIGINAL_FILE_NAME)
+            PortableDeviceContent._properties_to_read.Add(WPD_OBJECT_CONTENT_TYPE)
+            PortableDeviceContent._properties_to_read.Add(WPD_OBJECT_SIZE)
+            PortableDeviceContent._properties_to_read.Add(WPD_OBJECT_DATE_MODIFIED)
+            PortableDeviceContent._properties_to_read.Add(WPD_DEVICE_SERIAL_NUMBER)
         self._get_properties()
 
     def _get_properties(
         self,
     ) -> None:
         """Sets the properties of this content."""
-        propvalues = self._properties.GetValues(
-            self._object_id, PortableDeviceContent._properties_to_read
-        )
+        propvalues = self._properties.GetValues(self._object_id, PortableDeviceContent._properties_to_read)
         self.content_type = WPD_CONTENT_TYPE_UNDEFINED
         try:
             self._plain_name = str(propvalues.GetStringValue(WPD_OBJECT_NAME))
-        except comtypes.COMError:  # pyright: ignore[reportAttributeAccessIssue]
+        except comtypes.COMError:
             self.content_type = WPD_CONTENT_TYPE_DIRECTORY
             self.name = self._plain_name = ""
         try:
             self.name = self._plain_name = str(propvalues.GetStringValue(WPD_OBJECT_ORIGINAL_FILE_NAME))
-        except comtypes.COMError:  # pyright: ignore[reportAttributeAccessIssue]
+        except comtypes.COMError:
             self.name = self._plain_name
         content_id = str(propvalues.GetGuidValue(WPD_OBJECT_CONTENT_TYPE))
         if content_id in {
@@ -271,7 +242,7 @@ class PortableDeviceContent:
             "{99ED0160-17FF-4C44-9D98-1D7A6F941921}",
         }:
             # It's a storage
-            with contextlib.suppress(comtypes.COMError):  # pyright: ignore[reportAttributeAccessIssue]
+            with contextlib.suppress(comtypes.COMError):
                 self._serialnumber = str(propvalues.GetStringValue(WPD_DEVICE_SERIAL_NUMBER))
             self.content_type = WPD_CONTENT_TYPE_STORAGE
         else:
@@ -281,7 +252,11 @@ class PortableDeviceContent:
                 self.content_type = WPD_CONTENT_TYPE_FILE
             self.size = int(propvalues.GetUnsignedLargeIntegerValue(WPD_OBJECT_SIZE))
             x = propvalues.GetValue(WPD_OBJECT_DATE_MODIFIED)
-            filetime = float(getattr(propvalues.GetValue(WPD_OBJECT_DATE_MODIFIED), "__MIDL____MIDL_itf_PortableDeviceApi_0001_00000001").date)
+            filetime = float(
+                getattr(
+                    propvalues.GetValue(WPD_OBJECT_DATE_MODIFIED), "__MIDL____MIDL_itf_PortableDeviceApi_0001_00000001"
+                ).date
+            )
             # filetime = float(propvalues.GetFloatValue(WPD_OBJECT_DATE_MODIFIED).__MIDL____MIDL_itf_PortableDeviceApi_0001_00000001.date)
             filedate = abs(int(filetime))
             days_since_1970 = filedate - (datetime.datetime(1970, 1, 1) - datetime.datetime(1899, 12, 30)).days
@@ -317,7 +292,7 @@ class PortableDeviceContent:
             >>> dev[0].close()
         """
         try:
-            enumobject_ids = self._content.EnumObjects(  # pyright: ignore[reportAttributeAccessIssue]
+            enumobject_ids = self._content.EnumObjects(
                 ctypes.c_ulong(0),
                 self._object_id,
                 ctypes.POINTER(port.IPortableDeviceValues)(),
@@ -332,9 +307,11 @@ class PortableDeviceContent:
                 if num_fetched.contents.value == 0:
                     break
                 curobject_id = str(object_id_array[0])
-                value = PortableDeviceContent(curobject_id, self._content, self._port_device, self._properties, self.full_filename)
+                value = PortableDeviceContent(
+                    curobject_id, self._content, self._port_device, self._properties, self.full_filename
+                )
                 yield value
-        except comtypes.COMError as err:  # pyright: ignore[reportAttributeAccessIssue]
+        except comtypes.COMError as err:
             raise IOError(f"Error getting child item from '{self.full_filename}': {err.args[1]}")
 
     def get_child(self, name: str) -> "PortableDeviceContent | None":
@@ -418,7 +395,7 @@ class PortableDeviceContent:
             >>> dev = mtp.win_access.get_portable_devices()
             >>> stor = dev[0].get_content()[0]
             >>> mycont = stor.get_path(f"{stor.full_filename}/MyMusic")
-            >>> if mycont: _ = mycont.remove()
+            >>> if mycont: mycont.remove()
             >>> cont = stor.create_content("MyMusic")
             >>> cont.full_filename
             'Nokia 6_Nokia 6_PLEGAR1791402808\\\\Interner gemeinsamer Speicher\\\\MyMusic'
@@ -435,11 +412,9 @@ class PortableDeviceContent:
             object_properties.SetStringValue(WPD_OBJECT_NAME, dirname)
             object_properties.SetStringValue(WPD_OBJECT_ORIGINAL_FILE_NAME, dirname)
             object_properties.SetGuidValue(WPD_OBJECT_CONTENT_TYPE, WPD_CONTENT_TYPE_FOLDER_GUID)
-            self._content.CreateObjectWithPropertiesOnly(  # pyright: ignore[reportAttributeAccessIssue]
-                object_properties, ctypes.POINTER(ctypes.c_wchar_p)()
-            )
+            self._content.CreateObjectWithPropertiesOnly(object_properties, ctypes.POINTER(ctypes.c_wchar_p)())
             pdc = self.get_child(dirname)
-        except comtypes.COMError as err:  # pyright: ignore[reportAttributeAccessIssue]
+        except comtypes.COMError as err:
             raise IOError(f"Error creating directory '{dirname}': {err.args[1]}")
         finally:
             object_properties = None
@@ -466,9 +441,8 @@ class PortableDeviceContent:
             object_properties.SetStringValue(WPD_OBJECT_ORIGINAL_FILE_NAME, filename)
             object_properties.SetStringValue(WPD_OBJECT_NAME, filename)
             optimal_transfer_size_bytes = ctypes.pointer(ctypes.c_ulong(0))
-            filestream, _, _ = self._content.CreateObjectWithPropertiesAndData(  # pyright: ignore[reportAttributeAccessIssue]
+            filestream, _, _ = self._content.CreateObjectWithPropertiesAndData(
                 object_properties,
-                # p_filestream,
                 optimal_transfer_size_bytes,
                 ctypes.POINTER(ctypes.c_wchar_p)(),
             )
@@ -483,7 +457,7 @@ class PortableDeviceContent:
                     len(block),
                 )
             filestream.Commit(0)
-        except comtypes.COMError as err:  # pyright: ignore[reportAttributeAccessIssue]
+        except comtypes.COMError as err:
             raise IOError(f"Error storing stream '{filename}': {err.args[1]}")
         finally:
             object_properties = None
@@ -503,7 +477,7 @@ class PortableDeviceContent:
             >>> dev = mtp.win_access.get_portable_devices()
             >>> stor = dev[0].get_content()[0]
             >>> mycont = stor.get_path("DCIM/Camera/test.jpg")
-            >>> if mycont: _ = mycont.remove()
+            >>> if mycont: mycont.remove()
             >>> cont = stor.get_path("DCIM/Camera")
             >>> name = './tests/pic.jpg'
             >>> cont.upload_file("test.jpg", name)
@@ -517,7 +491,7 @@ class PortableDeviceContent:
             length = os.path.getsize(inputfilename)
             with io.FileIO(inputfilename, "r") as input_stream:
                 self._upload_stream(filename, input_stream, length)
-        except comtypes.COMError as err:  # pyright: ignore[reportAttributeAccessIssue]
+        except comtypes.COMError as err:
             raise IOError(f"Error storing file '{filename}': {err.args[1]}")
 
     def _download_stream(self, outputstream: IO[bytes]) -> None:
@@ -528,7 +502,7 @@ class PortableDeviceContent:
             outputstream: Open python file for writing
         """
         try:
-            resources = self._content.Transfer()  # pyright: ignore[reportAttributeAccessIssue]
+            resources = self._content.Transfer()
             stgm_read = ctypes.c_uint(0)
             optimal_transfer_size_bytes = ctypes.pointer(ctypes.c_ulong(0))
             optimal_transfer_size_bytes, q_filestream = resources.GetStream(
@@ -544,7 +518,7 @@ class PortableDeviceContent:
                 if length == 0:
                     break
                 outputstream.write(bytearray(buf[:length]))
-        except comtypes.COMError as err:  # pyright: ignore[reportAttributeAccessIssue]
+        except comtypes.COMError as err:
             raise IOError(f"Error getting file': {err.args[1]}")
 
     def download_file(self, outputfilename: str) -> None:
@@ -571,7 +545,7 @@ class PortableDeviceContent:
         try:
             with io.FileIO(outputfilename, "w") as output_stream:
                 self._download_stream(output_stream)
-        except comtypes.COMError as err:  # pyright: ignore[reportAttributeAccessIssue]
+        except comtypes.COMError as err:
             raise IOError(f"Error getting file '{outputfilename}': {err.args[1]}")
 
     def remove(self) -> None:
@@ -585,7 +559,7 @@ class PortableDeviceContent:
             >>> dev = mtp.win_access.get_portable_devices()
             >>> stor = dev[0].get_content()[0]
             >>> mycont = stor.get_path("DCIM/Camera/test.jpg")
-            >>> if mycont: _ = mycont.remove()
+            >>> if mycont: mycont.remove()
             >>> cont = stor.get_path("DCIM/Camera")
             >>> name = './tests/pic.jpg'
             >>> cont.upload_file("test.jpg", name)
@@ -613,10 +587,8 @@ class PortableDeviceContent:
                 clsctx=comtypes.CLSCTX_INPROC_SERVER,
                 interface=port.IPortableDevicePropVariantCollection,
             )
-            _ = self._content.Delete(WPD_DELETE_WITH_RECURSION, objects_to_delete, ctypes.pointer(errors))  # pyright: ignore[reportAttributeAccessIssue]
-            # if result != 0:
-            #     raise IOError(f"Error deleting directory/file '{self.full_filename}': {result}")
-        except comtypes.COMError as err:  # pyright: ignore[reportAttributeAccessIssue]
+            self._content.Delete(WPD_DELETE_WITH_RECURSION, objects_to_delete, ctypes.pointer(errors))
+        except comtypes.COMError as err:
             raise IOError(f"Error deleting directory/file '{self.full_filename}': {err.args[1]}")
         finally:
             errors = None
@@ -708,14 +680,10 @@ class PortableDevice:
     def _set_device(self):
         """Open a device and sets self._device"""
         client_information = comtypes.client.CreateObject(
-            types.PortableDeviceValues,
-            clsctx=comtypes.CLSCTX_INPROC_SERVER,
-            interface=port.IPortableDeviceValues
+            types.PortableDeviceValues, clsctx=comtypes.CLSCTX_INPROC_SERVER, interface=port.IPortableDeviceValues
         )
         self._device = comtypes.client.CreateObject(
-            port.PortableDevice,
-            clsctx=comtypes.CLSCTX_INPROC_SERVER,
-            interface=port.IPortableDevice
+            port.PortableDevice, clsctx=comtypes.CLSCTX_INPROC_SERVER, interface=port.IPortableDevice
         )
         if self._device is not None:
             self._device.Open(self._p_id, client_information)
@@ -771,9 +739,7 @@ def get_portable_devices() -> list[PortableDevice]:
         if DEVICE_MANAGER is None:
             comtypes.CoInitialize()
             DEVICE_MANAGER = comtypes.client.CreateObject(
-                port.PortableDeviceManager,
-                clsctx=comtypes.CLSCTX_INPROC_SERVER,
-                interface=port.IPortableDeviceManager
+                port.PortableDeviceManager, clsctx=comtypes.CLSCTX_INPROC_SERVER, interface=port.IPortableDeviceManager
             )
         if DEVICE_MANAGER is None:
             raise IOError("Error initialising Windows PortableDeviceManager")
