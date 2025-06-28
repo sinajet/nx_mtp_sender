@@ -4,7 +4,9 @@ Be aware that there is no error handling in these examples. Error handling
 should be used for production code
 """
 
-import gc
+# import gc
+import mtp.win_access
+import mtp.linux_access
 import os
 import platform
 import sys
@@ -22,7 +24,7 @@ else:
 
 
 TESTNUMBER = 0  # 1 - 9, 0 for all tests
-TESTRUNS = 1    # how many times a test should be executed
+TESTRUNS = 1  # how many times a test should be executed
 
 
 def test_1_connect_disconnct() -> None:
@@ -36,8 +38,7 @@ def test_1_connect_disconnct() -> None:
             return
         for dev in devices:
             print(
-                f"Found device: Name: {dev.name}: Desc.: {dev.description}: Serialnr.: {dev.serialnumber}"
-                f" Fullname: {dev.devicename}"
+                f"Found device: Name: {dev.name}: Desc.: {dev.description}: Serialnr.: {dev.serialnumber} Fullname: {dev.devicename}"
             )
             dev.close()
 
@@ -68,11 +69,13 @@ def test_3_list_childs_with_walk() -> None:
             for storage in dev.get_content():
                 print(f"Walk Storage: {storage.full_filename}")
                 count = 0
-                for root, dirs, files in mtp_access.walk(dev, storage.full_filename, None, error_function):  # type: ignore
-                    for directory in dirs:
+                for _, dirs, files in mtp_access.walk(
+                    dev, storage.full_filename, None, error_function  # pyright: ignore[reportArgumentType]
+                ):
+                    for _ in dirs:
                         count += 1
                         # print(f"dir: {directory.full_filename}")
-                    for file in files:
+                    for _ in files:
                         count += 1
                         # print(f"file: {file.full_filename}")
                 print(f"   Found {count} entries on that storage.")
@@ -85,7 +88,12 @@ def test_4_get_cont_from_path() -> None:
     for dev in mtp_access.get_portable_devices():
         for i in range(TESTRUNS):
             print(f"Find content of a full qualified path on test run {i+1}:")
-            cont = mtp_access.get_content_from_device_path(dev, f"{dev.devicename}/Interner gemeinsamer Speicher/Android/data/com.google.android.apps.maps/cache/diskcache")  # type: ignore
+            cont: mtp.win_access.PortableDeviceContent | mtp.linux_access.PortableDeviceContent | None = (
+                mtp_access.get_content_from_device_path(
+                    dev,  # pyright: ignore[reportArgumentType]
+                    f"{dev.devicename}/Interner gemeinsamer Speicher/Android/data/com.google.android.apps.maps/cache/diskcache",
+                )
+            )
             print(f"Content found: {cont}")
         dev.close()
 
@@ -97,14 +105,15 @@ def test_5_create_delete_folder() -> None:
         for i in range(TESTRUNS):
             print(f"Create and delete folder on test run {i+1}:")
             new_path = os.path.join(dev.get_content()[0].full_filename, "example/temp")
-            cont = mtp_access.makedirs(dev, new_path)  # type: ignore
-            print(f"Content created: {cont}")
+            cont = mtp_access.makedirs(dev, new_path)  # pyright: ignore[reportArgumentType]
+            cont.remove()
+            cont = mtp_access.get_content_from_device_path(
+                dev,  # pyright: ignore[reportArgumentType]
+                os.path.join(dev.get_content()[0].full_filename, "example/temp"),
+            )
             if cont is not None:
-                cont.remove()
-                cont = mtp_access.get_content_from_device_path(dev, os.path.join(dev.get_content()[0].full_filename, "example/temp"))  # type: ignore
-                if cont is not None:
-                    raise IOError("Can't delete folder in test_create_delete_folder")
-                print(f"   Content (temp) removed")
+                raise IOError("Can't delete folder in test_create_delete_folder")
+            print(f"   Content (temp) removed")
         dev.close()
 
 
@@ -118,7 +127,7 @@ def test_6_create_delete_file() -> None:
         print(f"Device: {dev.devicename}")
         # Create the directory for the new file
         new_path = os.path.join(dev.get_content()[0].full_filename, "example/temp")
-        cont = mtp_access.makedirs(dev, new_path)  # type: ignore
+        cont = mtp_access.makedirs(dev, new_path)  # pyright: ignore[reportArgumentType]
         for i in range(TESTRUNS):
             print(f"Create and delete file on test run {i+1}:")
             # Delete the file if it exists
@@ -145,7 +154,7 @@ def test_6_create_delete_file() -> None:
             if os.path.getsize(uploadfilename) != os.path.getsize(downloadfilename):
                 print(f"Filesizes of uploaded and download file are different.")
             os.remove(downloadfilename)
-            gc.collect()
+            # _ = gc.collect()
         dev.close()
 
 
@@ -155,7 +164,7 @@ def test_7_display_childs() -> None:
 
     def show_childs(dev: mtp_access.PortableDevice, root: str) -> None:
         """Show all cont, but don't use walk"""
-        if cont := mtp_access.get_content_from_device_path(dev, root):  # type: ignore
+        if cont := mtp_access.get_content_from_device_path(dev, root):  # pyright: ignore[reportArgumentType]
             for child in cont.get_children():
                 fullpath = child.full_filename
                 if child.content_type == mtp_access.WPD_CONTENT_TYPE_STORAGE:

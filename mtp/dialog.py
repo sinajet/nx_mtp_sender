@@ -3,7 +3,7 @@ A module with MTP relevant dialogs for tkinter
 
 Author:  Heribert Füchtenhans
 
-Version: 2025.6.25
+Version: 2025.6.28
 
 Requirements:
     - Python modules
@@ -26,7 +26,12 @@ import platform
 import tkinter
 import tkinter.simpledialog
 from tkinter import ttk
+from tkinter.ttk import Button
+from tkinter.ttk import Frame
 from typing import override
+
+import mtp.win_access
+import mtp.linux_access
 
 if platform.system() == "windows":
     from . import win_access as access
@@ -95,7 +100,7 @@ class AskDirectory(tkinter.simpledialog.Dialog):  # pylint: disable=too-many-ins
         self._parent: tkinter.Tk = parent
         self._dialog_title: str = title
         self._tree: ttk.Treeview
-        self._smartphone_icon:tkinter.PhotoImage = tkinter.PhotoImage(data=SMARTPHONE_ICON)
+        self._smartphone_icon: tkinter.PhotoImage = tkinter.PhotoImage(data=SMARTPHONE_ICON)
         self._buttons: tuple[str, str] = buttons
         self._tree_entries: dict[str, _TreeEntry] = {}
         # external variables
@@ -107,48 +112,49 @@ class AskDirectory(tkinter.simpledialog.Dialog):  # pylint: disable=too-many-ins
     @override
     def buttonbox(self) -> None:
         """Create own buttons"""
-        box = ttk.Frame(self)
+        box: Frame = ttk.Frame(master=self)
         box.pack(side=tkinter.TOP, fill=tkinter.BOTH)
-        but = ttk.Button(box, text=self._buttons[1], command=self.cancel)
-        but.pack(side=tkinter.RIGHT, padx=5, pady=5)
-        but = ttk.Button(box, text=self._buttons[0], command=self._on_ok, default=tkinter.ACTIVE)
-        but.pack(side=tkinter.RIGHT, padx=5, pady=5)
-        but.focus_set()
-        _ = but.bind("<Return>", self.ok)
+        but1: Button = ttk.Button(master=box, text=self._buttons[1], command=self.cancel)
+        but1.pack(side=tkinter.RIGHT, padx=5, pady=5)
+        but2: Button = ttk.Button(master=box, text=self._buttons[0], command=self._on_ok, default=tkinter.ACTIVE)
+        but2.pack(side=tkinter.RIGHT, padx=5, pady=5)
+        but2.focus_set()
+        _ = but2.bind("<Return>", self.ok)
 
     @override
     def body(self, master: tkinter.Frame) -> None:
         """Create body"""
-        box = ttk.Frame(self)
+        box: Frame = ttk.Frame(master=self)
         box.pack(side=tkinter.TOP, fill=tkinter.BOTH, expand=True, padx=5, pady=5)
-        self._tree = ttk.Treeview(box, height=20, show="tree")
+        self._tree = ttk.Treeview(master=box, height=20, show="tree")
         _ = self._tree.column("#0", width=500)
         _ = self._tree.bind("<<TreeviewOpen>>", self._on_treeselect)
         # adding data, get devices
         for dev in access.get_portable_devices():
             if devicename := dev.devicename:
-                treeid = self._tree.insert(
-                    "",
-                    tkinter.END,
+                treeid: str = self._tree.insert(
+                    parent="",
+                    index=tkinter.END,
                     text=devicename,
                     open=False,
                     image=self._smartphone_icon,
                 )
-                self._tree_entries[treeid] = _TreeEntry(dev, None, [], False)
+                self._tree_entries[treeid] = _TreeEntry(dev, content=None, child_treeids=[], content_loaded=False)
                 _ = self.config(cursor="watch")
                 self.update_idletasks()
-                self._process_directory(treeid)
+                self._process_directory(insert_after_id=treeid)
                 _ = self.config(cursor="")
         # place the Treeview widget on the root window
         self._tree.pack(side=tkinter.TOP, fill=tkinter.BOTH, expand=True)
 
     def _process_directory(self, insert_after_id: str) -> None:
         """Insert directory listing until depth is 0"""
-        treeentry = self._tree_entries[insert_after_id]
-        if treeentry.content is not None:
-            cont = list(treeentry.content.get_children())
-        else:
-            cont = list(treeentry.dev.get_content())
+        treeentry: _TreeEntry = self._tree_entries[insert_after_id]
+        cont: list[mtp.win_access.PortableDeviceContent | mtp.linux_access.PortableDeviceContent] = (
+            list(treeentry.content.get_children())
+            if treeentry.content is not None
+            else list(treeentry.dev.get_content())
+        )
         if len(cont) == 0:  # no children
             return
         for child in cont:
@@ -158,26 +164,28 @@ class AskDirectory(tkinter.simpledialog.Dialog):  # pylint: disable=too-many-ins
             ):
                 continue
             with contextlib.suppress(tkinter.TclError):
-                treeid = self._tree.insert(
-                    insert_after_id,
-                    tkinter.END,
+                treeid: str = self._tree.insert(
+                    parent=insert_after_id,
+                    index=tkinter.END,
                     text=child.name,
                     open=False,
                 )
-                self._tree_entries[treeid] = _TreeEntry(treeentry.dev, child, [], False)
+                self._tree_entries[treeid] = _TreeEntry(
+                    dev=treeentry.dev, content=child, child_treeids=[], content_loaded=False
+                )
                 treeentry.child_treeids.append(treeid)
         self._tree_entries[insert_after_id].content_loaded = True
 
     def _on_treeselect(self, _: tkinter.Event) -> None:
         """Will be called on very selection"""
-        treeid = self._tree.focus()
-        status = self._tree.item(treeid, "open")
+        treeid: str = self._tree.focus()
+        status: bool = self._tree.item(treeid, "open")
         if not status:
             __ = self.config(cursor="watch")
             self.update_idletasks()
             for c_id in self._tree_entries[treeid].child_treeids:
                 if not self._tree_entries[c_id].content_loaded:
-                    self._process_directory(c_id)
+                    self._process_directory(insert_after_id=c_id)
             __ = self.config(cursor="")
             self._tree.item(treeid, open=True)
         else:
@@ -187,11 +195,13 @@ class AskDirectory(tkinter.simpledialog.Dialog):  # pylint: disable=too-many-ins
         """OK Button"""
         self.withdraw()
         self.update_idletasks()
-        treeid = self._tree.focus()
+        treeid: str = self._tree.focus()
         if treeid == "":
             self.cancel()
         else:
-            cont = self._tree_entries[treeid].content
+            cont: mtp.win_access.PortableDeviceContent | mtp.linux_access.PortableDeviceContent | None = (
+                self._tree_entries[treeid].content
+            )
             if cont is None:
                 self.cancel()
                 return

@@ -52,6 +52,9 @@ Examples:
 
 """
 
+from subprocess import Popen
+
+
 import collections.abc
 import ctypes
 import datetime
@@ -94,18 +97,18 @@ def _init_libmtp() -> None:
         return
     # Kill any process that uses libmtp
     # Getting MTP devices from lsusb
-    p = subprocess.Popen("lsusb", stdout=subprocess.PIPE, shell=True)
-    (output, _) = p.communicate()
-    if p.wait() != 0:
+    pl: Popen[bytes] = subprocess.Popen("lsusb", stdout=subprocess.PIPE, shell=True)
+    (output, _) = pl.communicate()
+    if pl.wait() != 0:
         raise IOError("Can't get output from lsusb!")
     for o in output.decode("ascii").split("\n"):
         if o.upper().endswith("(MTP MODE)"):
-            bus = o[4:7]
-            dev = o[15:18]
+            bus: str = o[4:7]
+            dev: str = o[15:18]
             # Get programm that uses libmtp return pid
-            p = subprocess.Popen(f"fuser -k /dev/bus/usb/{bus}/{dev}", stdout=subprocess.PIPE, shell=True)
-            (output, _) = p.communicate()
-            if p.wait() != 0:
+            pf: Popen[bytes] = subprocess.Popen(f"fuser -k /dev/bus/usb/{bus}/{dev}", stdout=subprocess.PIPE, shell=True)
+            (output, _) = pf.communicate()
+            if pf.wait() != 0:
                 if len(output) != 0:
                     raise IOError(f'Can\'t get programs that use libmtp: {output.decode("utf-8")}')
                 else:
@@ -133,7 +136,9 @@ class PortableDevice:
         IOError: If something went wrong
     """
 
-    def __init__(self, device: "str | ctypes._Pointer[pylibmtp.LIBMTP_RawDevice]") -> None:
+    def __init__(
+        self, device: "str | ctypes._Pointer[pylibmtp.LIBMTP_RawDevice]"  # pyright: ignore[reportPrivateUsage]
+    ) -> None:
         """Init the class.
 
         Parameters:
@@ -147,13 +152,13 @@ class PortableDevice:
         if type(device) == str:
             self._device: str = device
             if "=" in device:
-                self.device_start_part, self.devicename = device.split("=", 1)
+                self.device_start_part, self.devicename = device.split(sep="=", maxsplit=1)
                 self.device_start_part += "="
             else:
                 self.device_start_part = ""
                 self.devicename = device
             if "_" in self.devicename:
-                parts: list[str] = self.devicename.split("_")
+                parts: list[str] = self.devicename.split(sep="_")
                 try:
                     self.name = parts[0]
                     self.description = parts[-2]
@@ -320,11 +325,11 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             for entry in os.listdir(full_filename):
                 full_name = os.path.join(self.full_filename, entry)
                 yield PortableDeviceContent(
-                    self._port_device,
-                    full_name,
-                    1,
-                    0,
-                    (
+                    port_device=self._port_device,
+                    dirpath=full_name,
+                    storage_id=1,
+                    entry_id=0,
+                    typ=(
                         WPD_CONTENT_TYPE_DIRECTORY
                         if os.path.isdir(os.path.join(full_filename, entry))
                         else WPD_CONTENT_TYPE_FILE
@@ -336,17 +341,19 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             for entry in self._port_device.libmntp_device.get_files_and_folder(self.storage_id, self.entry_id):
                 type: Literal[1, 2] = (
                     WPD_CONTENT_TYPE_DIRECTORY
-                    if entry.filetype == pylibmtp.LIBMTP_Filetype["FOLDER"].value
+                    if entry.filetype == pylibmtp.LIBMTP_Filetype["FOLDER"].value  # pyright: ignore[reportAny]
                     else WPD_CONTENT_TYPE_FILE
                 )
                 yield PortableDeviceContent(
-                    self._port_device,
-                    os.path.join(self.full_filename, entry.filename.decode("utf-8")),
-                    self.storage_id,
-                    entry.item_id,
-                    type,
-                    entry.filesize,
-                    entry.modificationdate,
+                    port_device=self._port_device,
+                    dirpath=os.path.join(
+                        self.full_filename, entry.filename.decode("utf-8")  # pyright: ignore[reportAny]
+                    ),
+                    storage_id=self.storage_id,
+                    entry_id=entry.item_id,  # pyright: ignore[reportAny]
+                    typ=type,
+                    size=entry.filesize,  # pyright: ignore[reportAny]
+                    date_modified=entry.modificationdate,  # pyright: ignore[reportAny]
                 )
 
     def get_child(self, name: str) -> "PortableDeviceContent | None":
@@ -385,23 +392,23 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
             if _libmtp is None:
                 return
             for entry in self._port_device.libmntp_device.get_files_and_folder(self.storage_id, self.entry_id):
-                entry_filename = entry.filename.decode("UTF-8")
+                entry_filename = entry.filename.decode("UTF-8")  # pyright: ignore[reportAny]
                 if entry_filename != name:
                     continue
                 # Ok found, so do a direct return
                 type: Literal[1, 2] = (
                     WPD_CONTENT_TYPE_DIRECTORY
-                    if entry.filetype == pylibmtp.LIBMTP_Filetype["FOLDER"].value
+                    if entry.filetype == pylibmtp.LIBMTP_Filetype["FOLDER"].value  # pyright: ignore[reportAny]
                     else WPD_CONTENT_TYPE_FILE
                 )
                 return PortableDeviceContent(
                     self._port_device,
-                    os.path.join(self.full_filename, entry_filename),
+                    os.path.join(self.full_filename, entry_filename),  # pyright: ignore[reportAny]
                     self.storage_id,
-                    entry.item_id,
+                    entry.item_id,  # pyright: ignore[reportAny]
                     type,
-                    entry.filesize,
-                    entry.modificationdate,
+                    entry.filesize,  # pyright: ignore[reportAny]
+                    entry.modificationdate,  # pyright: ignore[reportAny]
                 )
             return None
 
@@ -547,7 +554,7 @@ class PortableDeviceContent:  # pylint: disable=too-many-instance-attributes
                     )
                 except subprocess.CalledProcessError as err:
                     raise IOError(
-                        f"Error copying file '{inputfilename}' to '{gio_full_filename}': {urllib.parse.unquote(err.output.decode('utf-8'))}"
+                        f"Error copying file '{inputfilename}' to '{gio_full_filename}': {urllib.parse.unquote(err.output.decode('utf-8'))}"  # pyright: ignore[reportAny]
                     ) from err
             # shutil.copy(inputfilename, full_filename)
         else:

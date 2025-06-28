@@ -28,6 +28,7 @@ Example Usage (or see examples/):
         >>>
 """
 
+#pyright: basic
 
 from __future__ import annotations
 from typing import Any, override
@@ -512,7 +513,7 @@ class MTP:
             raise ObjectNotFound
 
         # self.device = self.mtp.LIBMTP_Get_First_Device()
-        self.device = self.mtp.LIBMTP_Open_Raw_Device_Uncached(ctypes.byref(self._new_raw_device))
+        self.device = self.mtp.LIBMTP_Open_Raw_Device_Uncached(ctypes.byref(self._new_raw_device)) # pyright: ignore[reportArgumentType]
 
         if not self.device:
             self.device = None
@@ -728,7 +729,7 @@ class MTP:
             self.mtp.LIBMTP_Clear_Errorstack(self.device)
             raise CommandFailed
         ret: list[tuple[str, int]] = []
-        next: Any = self.device.contents.storage
+        next: Any = self.device.contents.storage    # pyright: ignore[reportAttributeAccessIssue]
 
         while next:
             ret.append(

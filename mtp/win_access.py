@@ -4,7 +4,7 @@ Implements access to basic functions of the Windows WPD API
 
 Author:  Heribert Füchtenhans
 
-Version: 2025.6.26
+Version: 2025.6.28
 
 For examples please look into the examples directory.
 
@@ -49,6 +49,8 @@ Examples:
     >>> devs[0].close()
 """
 
+# pyright: basic
+
 import collections.abc
 import ctypes
 import datetime
@@ -67,8 +69,8 @@ comtypes.client.gen_dir = os.path.join(os.environ["Temp"], "comtypes")
 os.makedirs(comtypes.client.gen_dir, exist_ok=True)
 comtypes.client.GetModule("portabledeviceapi.dll")
 comtypes.client.GetModule("portabledevicetypes.dll")
-from comtypes.gen import PortableDeviceApiLib as port
-from comtypes.gen import PortableDeviceTypesLib as types
+from comtypes.gen import PortableDeviceApiLib as port  # pyright: ignore[reportAttributeAccessIssue]
+from comtypes.gen import PortableDeviceTypesLib as types  # pyright: ignore[reportAttributeAccessIssue]
 
 
 # ComType Verweise anlegen
@@ -205,7 +207,7 @@ class PortableDeviceContent:
         self.date_modified: datetime.datetime = datetime.datetime.now()
         self._serialnumber: str = ""
         self._port_device = device
-        self._properties = properties or content.properties()
+        self._properties = properties or content.properties()  # pyright: ignore[reportAttributeAccessIssue]
         if PortableDeviceContent._properties_to_read is None:
             # We haven't set the properties wie will read, so do it now
             PortableDeviceContent._properties_to_read = comtypes.client.CreateObject(
@@ -213,12 +215,24 @@ class PortableDeviceContent:
                 clsctx=comtypes.CLSCTX_INPROC_SERVER,
                 interface=port.IPortableDeviceKeyCollection,
             )
-            PortableDeviceContent._properties_to_read.Add(WPD_OBJECT_NAME)
-            PortableDeviceContent._properties_to_read.Add(WPD_OBJECT_ORIGINAL_FILE_NAME)
-            PortableDeviceContent._properties_to_read.Add(WPD_OBJECT_CONTENT_TYPE)
-            PortableDeviceContent._properties_to_read.Add(WPD_OBJECT_SIZE)
-            PortableDeviceContent._properties_to_read.Add(WPD_OBJECT_DATE_MODIFIED)
-            PortableDeviceContent._properties_to_read.Add(WPD_DEVICE_SERIAL_NUMBER)
+            PortableDeviceContent._properties_to_read.Add(  # pyright: ignore[reportOptionalMemberAccess]
+                WPD_OBJECT_NAME
+            )
+            PortableDeviceContent._properties_to_read.Add(  # pyright: ignore[reportOptionalMemberAccess]
+                WPD_OBJECT_ORIGINAL_FILE_NAME
+            )
+            PortableDeviceContent._properties_to_read.Add(  # pyright: ignore[reportOptionalMemberAccess]
+                WPD_OBJECT_CONTENT_TYPE
+            )
+            PortableDeviceContent._properties_to_read.Add(  # pyright: ignore[reportOptionalMemberAccess]
+                WPD_OBJECT_SIZE
+            )
+            PortableDeviceContent._properties_to_read.Add(  # pyright: ignore[reportOptionalMemberAccess]
+                WPD_OBJECT_DATE_MODIFIED
+            )
+            PortableDeviceContent._properties_to_read.Add(  # pyright: ignore[reportOptionalMemberAccess]
+                WPD_DEVICE_SERIAL_NUMBER
+            )
         self._get_properties()
 
     def _get_properties(
@@ -292,7 +306,7 @@ class PortableDeviceContent:
             >>> dev[0].close()
         """
         try:
-            enumobject_ids = self._content.EnumObjects(
+            enumobject_ids = self._content.EnumObjects(  # pyright: ignore[reportAttributeAccessIssue]
                 ctypes.c_ulong(0),
                 self._object_id,
                 ctypes.POINTER(port.IPortableDeviceValues)(),
@@ -412,7 +426,9 @@ class PortableDeviceContent:
             object_properties.SetStringValue(WPD_OBJECT_NAME, dirname)
             object_properties.SetStringValue(WPD_OBJECT_ORIGINAL_FILE_NAME, dirname)
             object_properties.SetGuidValue(WPD_OBJECT_CONTENT_TYPE, WPD_CONTENT_TYPE_FOLDER_GUID)
-            self._content.CreateObjectWithPropertiesOnly(object_properties, ctypes.POINTER(ctypes.c_wchar_p)())
+            self._content.CreateObjectWithPropertiesOnly(  # pyright: ignore[reportAttributeAccessIssue]
+                object_properties, ctypes.POINTER(ctypes.c_wchar_p)()
+            )
             pdc = self.get_child(dirname)
         except comtypes.COMError as err:
             raise IOError(f"Error creating directory '{dirname}': {err.args[1]}")
@@ -441,10 +457,12 @@ class PortableDeviceContent:
             object_properties.SetStringValue(WPD_OBJECT_ORIGINAL_FILE_NAME, filename)
             object_properties.SetStringValue(WPD_OBJECT_NAME, filename)
             optimal_transfer_size_bytes = ctypes.pointer(ctypes.c_ulong(0))
-            filestream, _, _ = self._content.CreateObjectWithPropertiesAndData(
-                object_properties,
-                optimal_transfer_size_bytes,
-                ctypes.POINTER(ctypes.c_wchar_p)(),
+            filestream, _, _ = (
+                self._content.CreateObjectWithPropertiesAndData(  # pyright: ignore[reportAttributeAccessIssue]
+                    object_properties,
+                    optimal_transfer_size_bytes,
+                    ctypes.POINTER(ctypes.c_wchar_p)(),
+                )
             )
             blocksize = optimal_transfer_size_bytes.contents.value
             while True:
@@ -502,7 +520,7 @@ class PortableDeviceContent:
             outputstream: Open python file for writing
         """
         try:
-            resources = self._content.Transfer()
+            resources = self._content.Transfer()  # pyright: ignore[reportAttributeAccessIssue]
             stgm_read = ctypes.c_uint(0)
             optimal_transfer_size_bytes = ctypes.pointer(ctypes.c_ulong(0))
             optimal_transfer_size_bytes, q_filestream = resources.GetStream(
@@ -587,7 +605,9 @@ class PortableDeviceContent:
                 clsctx=comtypes.CLSCTX_INPROC_SERVER,
                 interface=port.IPortableDevicePropVariantCollection,
             )
-            self._content.Delete(WPD_DELETE_WITH_RECURSION, objects_to_delete, ctypes.pointer(errors))
+            self._content.Delete(  # pyright: ignore[reportAttributeAccessIssue]
+                WPD_DELETE_WITH_RECURSION, objects_to_delete, ctypes.pointer(errors)
+            )
         except comtypes.COMError as err:
             raise IOError(f"Error deleting directory/file '{self.full_filename}': {err.args[1]}")
         finally:
