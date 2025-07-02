@@ -1,71 +1,91 @@
-# mtp
 
-Accessing the filesystem of MTP devices (Smartphones, MP3-Player, etc.) on Windows or Linux with python.
+```markdown
+# MTP Device File Manager
 
-In the mtp directory there are three modules.
-- win_access.py
-- linux_access.py
-- dialog.py
+![MTP Logo](https://img.icons8.com/color/96/000000/usb.png)
 
-For detailed description see [https://Heribert17.github.io/win_mtp/](https://Heribert17.github.io/win_mtp/)
+A Python command-line utility for managing files on MTP devices (Switch, Android,, etc.) via Windows.
 
-Tested with:
-* Python 3.12 and above
-* comptypes 1.4.10 and above
-* Windows 10 / 11
-* Linux Mint, Zorin, Debian 12 with KDE
+## Features
 
+- 📋 List connected MTP devices
+- 📁 Copy files/folders to MTP devices
+- ❓ Check if path exists on device
+- 🗑️ Delete files/folders from device
+- 📏 Get size of files/folders on device
+- ⚙️ Simple CLI for automation and scripting
 
-## win_access.py
-This module implements the access to the Windows WPD functions to read and write MTP devices like smartphones, tablets. etc.
+## Installation
 
-## linux_access.py
-This module implements the access to read and write MTP devices like smartphones, tablets. etc. from Linux.
-Only GNOME based systems are supported due to kio-fuse on KDE doesn't support the mtp protocol and the Python bindings for KIO don't exist yet.
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/mtp-file-manager.git
+cd mtp-file-manager
+```
 
-## dialog.py
-dialog.py implements a directory searcher in tkinter that shows the attached MTP devices and the directories on them.
+2. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
 
+> **Note**: Requires Windows with [Windows Portable Devices API](https://learn.microsoft.com/en-us/windows/win32/mtp/mtp-porting-kit)
 
-# Changelog
-* 2.0.6
-    * Removed the need for modified comtypes files under Windows. The comtypes files to access the windows mtp api are now automatically
-        created in the users temp directory in the comtypes folder.
-    * Switched from PyLint to BasedPyRight
-* 2.0.5
-    * Updated comtypes files for comtypes version 1.4.11
-    * Added comtypes.CoUninitialize to close function to free Windows memory
-* 2.0.4
-    * Fixed remove. It will now raise IOError if remove could not be done
-    * Added create_new_comtype_modules_from_wpd_dlls to automtically create new comtype files.
-        This is only needed if for some reason the Windows WPD library changes.
-    * Removed ProtableDevice.get_properties because all properties are now directly accessible
-    * Updates documentation and doctest
-* 2.0.3
-    * Updated get_path to support relative filenames
-* 2.0.2
-    * Fixed wrong handling of error callback in walk
-    * Modified 'upload' to work with older Gnome versions who don't support direct writing to the virtual filesystem
-* 2.0.1
-    * Deleted a bug when uploading files on a Linux KDE system
-    * Changed returned filenames in content to be consitent with the windows module
-* 2.0.0
-    * Removed PortableDevice.get_description
-      Use PortableDevice.name, PortableDevice.description
-    * removed PortableDeviceContent.upload_stream and .download_stream
-      Please use .upload and .download
-    * get_properties now returns the modification time and not creation time
-    * Corrected calculation of filetime in win_access
-    * Added support for KDE
-* 1.3.0
-    * Eleminated the need for a programm restart after first use of the comtypes library and modifying the generated wpd access files.
-      This requires that you use comtypes 1.4.10 or newer on Windows.
-    * Updated documentation
-* 1.2.0
-    * Access MTP devices from Linux with Gnome as desktop environment
-* 1.0.2
-    * Fixed a bug when an MTP device doesn't have a userfriendly name
-* 1.0.1
-    * Fixed crash when during walk a directory is deleted.
-    * Fixed full_filename for files was not set.
+## Usage
 
+### List connected devices
+```bash
+python mtp_manager.py list-devices
+```
+Example output:
+```
+This PC\ Switch\SD Card |  Switch
+This PC\Galaxy S23\Internal storage | Galaxy S23
+```
+
+### Copy file/folder to device
+```bash
+python mtp_manager.py copy "local_file.txt" "This PC\My Device\Internal storage\Documents"
+```
+
+### Check if path exists
+```bash
+python mtp_manager.py exists "This PC\ Switch\SD Card\atmosphere\config"
+```
+Returns `True` or `False` with exit code 0/1
+
+### Delete file/folder
+```bash
+python mtp_manager.py delete "This PC\My Device\Internal storage\old_file.txt"
+```
+
+### Get item size (bytes)
+```bash
+python mtp_manager.py size "This PC\My Device\Internal storage\large_folder"
+```
+
+## Compatibility
+
+| Device/Software       | Status     | Notes                          |
+|-----------------------|------------|--------------------------------|
+| 🎮 Switch    | ✅ Tested  | Works with Atmosphere-NX USB File Transfer and DBI Installer |
+| 🤖 Android Devices    | ✅ Tested  | Most modern Android devices    |
+| ⚠️ Hekate SD Card     | ❌ Unsupported | SD card mount/unmount in hekate |
+
+## Known Limitations
+
+- Windows-only (due to WPD API dependency)
+- Large file transfers may be slower than dedicated tools
+- Recursive operations on large directories may take time
+
+## Acknowledgments
+
+This project uses components from the [win_mtp](https://github.com/Heribert17/win_mtp) project.
+
+## Contributing
+
+Contributions are welcome! Please open an issue or submit a pull request.
+
+## License
+
+MIT License - see [LICENSE](LICENSE) file for details.
+```
