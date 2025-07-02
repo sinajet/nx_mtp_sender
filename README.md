@@ -14,7 +14,7 @@ A Python command-line utility for managing files on MTP devices (Switch, Android
 
 ## Installation
 
-1.You can download the exe file from release, also you can use the py file but not recomended
+1.You can download the exe file from [Releases](https://github.com/sinajet/nx_mtp_sender/releases), also you can use the py file but not recomended
 
 > **Note**: Requires Windows with [Windows Portable Devices API](https://learn.microsoft.com/en-us/windows/win32/mtp/mtp-porting-kit)
 
