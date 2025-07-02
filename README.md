@@ -1,8 +1,5 @@
 
 ```markdown
-# MTP Device File Manager
-
-![MTP Logo](https://img.icons8.com/color/96/000000/usb.png)
 
 A Python command-line utility for managing files on MTP devices (Switch, Android,, etc.) via Windows.
 
@@ -17,16 +14,7 @@ A Python command-line utility for managing files on MTP devices (Switch, Android
 
 ## Installation
 
-1. Clone the repository:
-```bash
-git clone https://github.com/yourusername/mtp-file-manager.git
-cd mtp-file-manager
-```
-
-2. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
+1.You can download the exe file from release, also you can use the py file but not recomended
 
 > **Note**: Requires Windows with [Windows Portable Devices API](https://learn.microsoft.com/en-us/windows/win32/mtp/mtp-porting-kit)
 
@@ -34,7 +22,7 @@ pip install -r requirements.txt
 
 ### List connected devices
 ```bash
-python mtp_manager.py list-devices
+mtp_manager.exe list-devices
 ```
 Example output:
 ```
@@ -44,23 +32,23 @@ This PC\Galaxy S23\Internal storage | Galaxy S23
 
 ### Copy file/folder to device
 ```bash
-python mtp_manager.py copy "local_file.txt" "This PC\My Device\Internal storage\Documents"
+mtp_manager.exe copy "local_file.txt" "This PC\My Device\Internal storage\Documents"
 ```
 
 ### Check if path exists
 ```bash
-python mtp_manager.py exists "This PC\ Switch\SD Card\atmosphere\config"
+mtp_manager.exe exists "This PC\ Switch\SD Card\atmosphere\config"
 ```
 Returns `True` or `False` with exit code 0/1
 
 ### Delete file/folder
 ```bash
-python mtp_manager.py delete "This PC\My Device\Internal storage\old_file.txt"
+mtp_manager.exe delete "This PC\My Device\Internal storage\old_file.txt"
 ```
 
 ### Get item size (bytes)
 ```bash
-python mtp_manager.py size "This PC\My Device\Internal storage\large_folder"
+mtp_manager.exe size "This PC\My Device\Internal storage\large_folder"
 ```
 
 ## Compatibility
